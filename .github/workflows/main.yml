@@ -26,6 +26,7 @@ jobs:
         uses: actions/checkout@v2
       - name: check env
         run: env
+      - run: pwd
       - name: Deploy to website.cs350.melvinauvray.com
         run: |
-          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete /home/runner/work/CS350/website/ pjywaxcr@nodels42-eu.n0c.com:website.cs350.melvinauvray.com
+          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete website/ pjywaxcr@nodels42-eu.n0c.com:website.cs350.melvinauvray.com

@@ -11,8 +11,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y openssh-client rsync
+      - name: Start ssh-agent
+        run: eval "$(ssh-agent -s)"
       - name: Add SSH key
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -
       - name: Deploy to QA
         run: |
           rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete website/ pjywaxcr@nodels42-eu.n0c.com:website.cs350.melvinauvray.com
+      - name: kill ssh-agent
+        run: ssh-agent -k

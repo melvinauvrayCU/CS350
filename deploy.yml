@@ -1,0 +1,18 @@
+name: Deploy to Main
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update and install packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openssh-client rsync
+      - name: Add SSH key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -
+      - name: Deploy to QA
+        run: |
+          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete website/ pjywaxcr@nodels42-eu.n0c.com:website.cs350.melvinauvray.com

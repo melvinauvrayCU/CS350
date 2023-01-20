@@ -18,4 +18,4 @@ jobs:
           known_hosts: "just-a-placeholder-so-we-dont-get-errors"
       - name: Deploy to website.cs350.melvinauvray.com
         run: |
-          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete ./website/ pjywaxcr@nodels42-eu.n0c.com:website.cs350.melvinauvray.com
+          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete /home/runner/work/CS350/website/ pjywaxcr@nodels42-eu.n0c.com:website.cs350.melvinauvray.com

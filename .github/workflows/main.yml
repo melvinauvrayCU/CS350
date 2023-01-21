@@ -1,4 +1,4 @@
-name: Deploy to Main
+name: Deploy to Online Website
 on:
   push:
     branches:
@@ -16,17 +16,8 @@ jobs:
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: "just-a-placeholder-so-we-dont-get-errors"
-      - run: ls
-      - run: pwd
-      - run: ls
-      - run: cd ../
-      - run: pwd
-      - run: ls
       - name: Checkout
         uses: actions/checkout@v2
-      - name: check env
-        run: env
-      - run: pwd
       - name: Deploy to website.cs350.melvinauvray.com
         run: |
           rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete website/ pjywaxcr@nodels42-eu.n0c.com:website.cs350.melvinauvray.com

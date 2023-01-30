@@ -3,6 +3,7 @@ header {
     display: flex;
     flex-direction: row;
     width: 100%;
+    margin-bottom: 50px;
 }
 header h2{
     color: rgb(255, 255, 255);
@@ -17,7 +18,7 @@ header nav{
     display: flex;
 }
 header nav div.dropdowncontainer{
-    display: inline-block;
+    justify-content: space-evenly;
     
 }
 
@@ -26,7 +27,7 @@ header nav div.dropdowncontainer:hover div.dropdowncontent{
 }
 
 header nav div.dropdowntitle{
-
+    font-size: 50px;
 }
 
 header nav div.dropdowncontent{

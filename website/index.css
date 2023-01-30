@@ -1,11 +1,11 @@
 header {
-    background-color: aqua;
+    background-color: rgb(125, 151, 151);
     display: flex;
     flex-direction: row;
     width: 100%;
 }
 header h2{
-    color: red;
+    color: rgb(255, 255, 255);
 }
 
 header div.emptyflex{

@@ -1,0 +1,50 @@
+article.aboutusContainer {
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+div.aboutusRow:nth-child(2n) {
+    direction: rtl;
+}
+
+div.aboutusRow {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 300px;
+    padding: 15px;
+}
+
+div.aboutusRow p {
+    flex: 1;
+    font-size: 1.3em;
+}
+
+div.aboutusRow div.imageTitle {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    align-items: center;
+    justify-content: center;
+    margin: 0 30px;
+    height: 100%;
+}
+
+div.aboutusRow div.imageTitle img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 5%;
+}
+
+div.aboutusRow div.imageTitle h3 {
+    margin: 0;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    width: 90%;
+    text-align: center;
+    justify-content: center;
+}

@@ -1,0 +1,25 @@
+/* Colors */
+:root {
+    --dk-gr: #004f42;
+    --lt-gr: #709302;
+    --yellow: #ffce00;
+    --lt-grey: #efefef;
+    --dk-grey: #333;
+    --white: #ffffff;
+}
+
+body,html {
+    background-color: var(--white);
+    margin: 0;
+    padding: 0;
+    
+}
+
+*{
+    box-sizing: border-box;
+    font-family: 'Montserrat';
+}
+
+section {
+    padding: 20px;
+}

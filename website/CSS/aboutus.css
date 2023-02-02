@@ -20,6 +20,8 @@ div.aboutusRow {
 div.aboutusRow p {
     flex: 1;
     font-size: 1.3em;
+    text-align: justify;
+    direction: ltr;
 }
 
 div.aboutusRow div.imageTitle {

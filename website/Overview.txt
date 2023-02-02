@@ -1,0 +1,65 @@
+Questions and Answers: 
+1.	Should we do a Website or an app?
+    a.	Up to the usage. We will create a website
+2.	Should Recipe Buddy have Mobile Support
+    a.	Is a stretch Goal
+3.	Should there be specific language we use for front and back end?
+    a.	We can use any programming language desired
+4.	How much authentication does there need to be?
+    a.	What fields are required for signing up?
+        i.	Users will only need a username and password to login
+    b.	Do we need to implement a password reset feature?
+        i.	Yes
+    c.	Do we need email verification?
+        i.	No
+5.	Should users be limited to how many recipes they can store?
+    a.	Users should not have a limit. There should be 2 different users. Each user has 4-5 recipes and show one being edited, some can be deleted and some are made from scratch
+6.	Do we need a profile page?
+    a.	As a stretch goal, Recipe Buddy can be used as a “social network”, otherwise users set personalized information (allergies, equipment, etc.) that will be used for searches
+7.	Does Recipe Buddy need to perform weekly reports?
+    a.	No. 
+8.	What functions can the website do?
+    a.	Users will be creating, editing, deleting and making recipes.
+        i.	When creating the recipe, the user should be able to provide a recipe title, a photo, ingredients and any steps and quality for those ingredients. Users should be able to create a textual description for the steps. Users should be able to add in a timer if there is a timer needed for a section. They should have a section where if there is an ingredient that is an allergen, they should be able to mark it for themselves or if they are cooking for other people. 
+    b.	What attributes need to be linked to recipes?
+        i.	Title
+        ii.	Photo
+        iii.	Line by line ingredients
+        iv.	quantities
+        v.	Cook instruction
+        vi.	Prep time
+        vii.	Cook time
+        viii.	Video instructions
+        ix.	Image
+        x.	List of ingredients
+        xi.	Price of ingredients 
+        xii.	Rating
+        xiii.	Number of time user has cooked
+    c.	Can users edit recipes?
+        i.	Yes, Users can edit every field.
+    d.	How will users sort and search?
+        i.	Will be decided farther as a group
+        ii.	Website will sort results from list alphabetically
+    e.	How will the rating system, work?
+        i.	Users will rate recipes based on a scale of 1-5 stars
+9.	Will users be able to make their own folders or bookmarks?
+    a.	No, users will not be able to make their own folders or bookmarks
+10.	Should the website have its own instructional video?
+    a.	No, the website does not need to have its own instructional video
+11.	Will users be able to print out recipes or link them?
+    a.	No, users will not be able to print out recipes or link them
+12.	Will each recipe have it’s own page?
+    a.	The main page should look like an Instagram Layout containing various stories.
+    b.	The top of the page should be organized by popularity, number of times the user cooked it, ratings, etc.
+    c.	Recipes should have the capability to be sorted by time of day
+        i.	Example: At 3pm website provides snack ideas between lunch and dinner. At 7pm website provides recipe ideas for dinner.
+13.	Should there be a history of how a user edited a recipe?
+    a.	This will be a stretch goal.
+14.	How will users add ingredients?
+    a.	Users should have a dropdown menu to add ingredients as well as a plus button option for users to add ingredients. Users have the capability to go to their profile page and add in ingredients they have at home.
+15.	Should users have an online pantry to store ingredients they own?
+    a.	Yes. Users should be able to go into their pantry to edit and delete ingredients and utensils.
+        i.	If a certain recipe requires a certain item and the user does not have the item, the recipe should not be shown to the user.
+    b.	Pantry should include:
+        i.	Conversion unit system
+        ii.	Scaling the recipe for n number of people

@@ -21,3 +21,6 @@ jobs:
       - name: Deploy to website.cs350.melvinauvray.com
         run: |
           rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete website/ pjywaxcr@nodels42-eu.n0c.com:website.cs350.melvinauvray.com
+      - name: Deploy to recipebuddy.cs350.melvinauvray.com
+        run: |
+          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete Frontend/Frontend/ pjywaxcr@nodels42-eu.n0c.com:recipebuddy.cs350.melvinauvray.com

@@ -23,15 +23,18 @@ jobs:
         with:
           node-version: 16
       - name: Installing all node packages
-        run: npm ci
+        run: |
+          ls
+          cd Frontend/Frontend
+          npm ci
       - name: Building the frontend app
         run: npm run build
-      - name: Deploy website to website.cs350.melvinauvray.com
-        run: |
-          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete website/ pjywaxcr@nodels42-eu.n0c.com:website.cs350.melvinauvray.com
-      - name: Deploy Frontend to recipebuddy.cs350.melvinauvray.com
-        run: |
-          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete Frontend/Frontend/dist/ pjywaxcr@nodels42-eu.n0c.com:recipebuddy.cs350.melvinauvray.com
-      - name: Deploy Backend to api.cs350.melvinauvray.com
-        run: |
-          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete Backend/app/ pjywaxcr@nodels42-eu.n0c.com:api.cs350.melvinauvray.com
+      # - name: Deploy website to website.cs350.melvinauvray.com
+      #   run: |
+      #     rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete website/ pjywaxcr@nodels42-eu.n0c.com:website.cs350.melvinauvray.com
+      # - name: Deploy Frontend to recipebuddy.cs350.melvinauvray.com
+      #   run: |
+      #     rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete Frontend/Frontend/dist/ pjywaxcr@nodels42-eu.n0c.com:recipebuddy.cs350.melvinauvray.com
+      # - name: Deploy Backend to api.cs350.melvinauvray.com
+      #   run: |
+      #     rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete Backend/app/ pjywaxcr@nodels42-eu.n0c.com:api.cs350.melvinauvray.com

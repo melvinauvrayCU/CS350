@@ -1,15 +1,14 @@
 version: "3.3"
 services:
-  php:
+  web:
+    environment:
+      - APACHE_RUN_USER=#1000
     build:
-      context: .
-      dockerfile: PHP.Dockerfile
-    image: php:8.1-apache
-    volumes:
-      - ./app/:/var/www
-      - ./app/configPHP/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      context: ./docker/web
     ports:
-      - "80:80"
+      - 80:80
+    volumes:
+      - ./app/:/var/www/html
   mysql:
     image: mariadb:latest
     environment:
@@ -18,7 +17,7 @@ services:
       MYSQL_PASSWORD: "root"
       MYSQL_DATABASE: "recipebuddy"
     volumes:
-      - mysqldata:/var/lib/mysql
+      - ./docker/database:/var/lib/mysql
     ports:
       - 3306:3306
   phpmyadmin:

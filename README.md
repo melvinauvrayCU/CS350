@@ -71,5 +71,18 @@ git push
 When your feature is ready, you will need to merge your code with main branch so your feature will be part of the project.
 To do that, you'll create a Pull request.
 From GitHub, click on the **Pull requests** tab and click on **New pull request**.
+
 Keep main as base branch and choose your branch for the compare section. Then, click on **Create pull request**.
 Keep the same default name, but make sure to assign the pull request to yourself.
+
+Then click again on create pull request.
+
+Now that your Pull Request has been created, you can still make changes to your branch if you need it. When you're done, you'll need at least one **approval** by another member of the team in order to be able to merge your code into main.
+
+To get the approval, assign another member as a reviewer from the right menu on the Pull Request.
+
+The reviewer will review your code and eventually accept your changes. Now, you will be able to merge your feature on main by pressing the **Merge pull request** button on your Pull Request page.
+
+This will push all of your code into main branch, and start the GitHub actions script we talked earlier.
+
+---

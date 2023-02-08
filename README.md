@@ -14,7 +14,21 @@ This repository is split into 3 parts:
   - [recipebuddy.cs350.melvinauvray.com](https://recipebuddy.cs350.melvinauvray.com)
   - Written in Vue.JS & TypeScript
 
+---
+
 ## Contents
+
+1. [Deployment system](#deployment-system)
+2. [Git usage](#git-usage)
+   1. [Create a new branch](#create-a-new-branch)
+   2. [Make changes](#make-changes)
+   3. [Pull Request](#pull-request)
+3. [Local testing](#local-testing)
+   1. [Website](#website)
+   2. [Backend](#backend)
+   3. [Webapp](#webapp)
+
+---
 
 ## Deployment system
 
@@ -26,6 +40,8 @@ The script is being run when changes are being made on **main** branch.
 For website and backend, the script is simply copying all the files via ftp to the remote server.
 
 For the frontend however, the script is compiling the Vue files by running `npm run build`. Only then it is sending the generated files via ftp to the remote server.
+
+---
 
 ## Git usage
 
@@ -86,3 +102,87 @@ The reviewer will review your code and eventually accept your changes. Now, you 
 This will push all of your code into main branch, and start the GitHub actions script we talked earlier.
 
 ---
+
+## Local testing
+
+You don't need to wait for your feature to be deployed online to test your code. Here is how you can see your changes in local.
+
+### Website
+
+For the website, simply open the **index.html** file in the website folder and the website should open in your web browser.
+
+### Backend
+
+#### Dependencies
+
+You will need [Docker](https://www.docker.com/) installed on your computer.
+
+#### Steps
+
+Starting from the root path of the GitHub project on VSCode, open a terminal and navigate into the Backend folder:
+
+```bash
+cd Backend
+```
+
+From here, start the docker which will contain our project, the database and PhpMyAdmin:
+
+```bash
+docker-compose up
+```
+
+> **Note**: This may take a while the first time
+
+The docker service should start, and you should be able to see the backend app in your web browser, at the address: [127.0.0.1](127.0.0.1).
+
+In the docker, a MariaDB Database is present, credentials are the following:
+
+```yml
+MYSQL_ROOT_PASSWORD: "root"
+MYSQL_USER: "admin"
+MYSQL_PASSWORD: "root"
+MYSQL_DATABASE: "recipebuddy"
+```
+
+In the docker, you will also have PhpMyAdmin installed, which is a tool used to see and interact with the Database manually. You can access PhpMyAdmin at the address: [127.0.0.1:8000](127.0.0.1:8000). To connect, you don't need to specify any server, and the user and password are given above.
+
+To stop the docker from running, go back to the terminal and press `ctrl+C`
+
+### Frontend
+
+#### Dependencies
+
+You will need [NodeJS](https://nodejs.org/en/download/) installed on your computer.
+
+#### Steps
+
+Starting from the root path of the GitHub project on VSCode, open a terminal and navigate into the Frontend folder:
+
+```bash
+cd Frontend
+```
+
+From here, if it's the first time you're doing this, you'll need to install the packages of the project. To do this, run:
+
+```bash
+npm ci
+```
+
+> **Note**: This may take a while the first time.
+
+Now, before even starting making changes to the code, run:
+
+```bash
+npm run lint
+```
+
+This will permit to make some verification to your code while you're making updates, such as errors verification.
+
+Then, in order to simply launch the app, run:
+
+```bash
+npm run dev
+```
+
+Now, the project should be accessible in your web browser, at the address given to you in the terminal.
+In order to stop the service from running, simply press `ctrl+C`.

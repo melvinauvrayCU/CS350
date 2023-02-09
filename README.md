@@ -6,13 +6,13 @@ This repository is split into 3 parts:
 
 - Our **website**, located inside the "website" folder
   - [website.cs350.melvinauvray.com](https://www.website.cs350.melvinauvray.com)
-  - Written in HTML/CSS
+  - Written in HTML/CSS.
 - RecipeBuddy's **api**, located inside the "Backend" folder
   - [api.cs350.melvinauvray.com](https://www.api.cs350.melvinauvray.com)
-  - Written in Laravel
+  - Written in Laravel.
 - RecipeBuddy **webapp**, located inside the "Frontend" folder
   - [recipebuddy.cs350.melvinauvray.com](https://recipebuddy.cs350.melvinauvray.com)
-  - Written in Vue.JS & TypeScript
+  - Written in Vue.JS & TypeScript.
 
 ---
 

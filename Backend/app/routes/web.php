@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Models\User;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,4 +19,8 @@ Route::get('/', function () {
 
 Route::get('/hello', function () {
     return view('hello');
+});
+
+Route::get('/users', function () {
+    return User::all();
 });

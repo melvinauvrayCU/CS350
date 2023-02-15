@@ -38,4 +38,4 @@ jobs:
           rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete Frontend/dist/ pjywaxcr@nodels42-eu.n0c.com:recipebuddy.cs350.melvinauvray.com
       - name: Deploy Backend to api.cs350.melvinauvray.com
         run: |
-          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete Backend/app/ pjywaxcr@nodels42-eu.n0c.com:api.cs350.melvinauvray.com
+          rsync -atv -e 'ssh -p 5022 -o StrictHostKeyChecking=no' --progress --delete --exclude 'Backend/app/.env' Backend/app/ pjywaxcr@nodels42-eu.n0c.com:api.cs350.melvinauvray.com

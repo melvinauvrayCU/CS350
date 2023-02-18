@@ -1,10 +1,12 @@
-/* color palette from <https://github.com/vuejs/theme> */
+/* base.css file contains all the most basic css rules used everywhere in the app */
 
-/* semantic color variables for this project */
+/* Colors */
 :root {
   --color-background: white;
   --color-text: #2f2e2e;
+  --color-accent: yellow;
   --color-primary: green;
+  --color-background-light: lightgray;
 }
 
 *,
@@ -22,6 +24,7 @@ body {
   background: var(--color-background);
 }
 
+/* Generic class used in a lot of components, used to fill some space with flexbox */
 .flexFill {
   flex: 1;
 }

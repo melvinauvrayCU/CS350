@@ -32,5 +32,8 @@ export default {
         <!-- Each RecipeComponent requires a recipe props (see the component's file), so we are giving it through this property. -->
         <RecipeComponent @delete-recipe="(id) => $emit('delete-recipe', id)" v-for="recipe in recipes" :key="recipe.id"
             :recipe="recipe" />
+
+
+        login page
     </div>
 </template>

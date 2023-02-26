@@ -1,13 +1,22 @@
 <script lang="ts">
 import { API } from "@/model/apiCalls";
+import PageTitle from "@/components/PageTitleComponent.vue";
+import InputField from "@/components/InputFieldComponent.vue";
+import CustomButton from "@/components/CustomButtonComponent.vue";
 
 export default {
   name: "CreateRecipePage",
+  components: {
+    PageTitle,
+    InputField,
+    CustomButton
+  },
   // In the first bracket, we define the types of the variables we will use,
   // And in the second bracket we define the initiale values.
   data(): {
     title: string,
     description: string,
+    numberPeople: number,
     created: boolean,
   } {
     // We are setting the title and description datas that will be linked to the form.
@@ -15,6 +24,7 @@ export default {
     return {
       title: "",
       description: "",
+      numberPeople: 1,
       created: false
     };
   },
@@ -49,41 +59,73 @@ export default {
 <template>
   <div class="CreateRecipePage">
 
-    <!-- @submit.prevent prevent the normal html submitting behavior for a form, which cause the page to reload. -->
-    <!-- We don't want this behavior so we remove it with this property. -->
-    <form @submit.prevent>
-      <label for="title">Recipe title</label>
-      <!-- The v-model property will link the value of this input with the this.title data declared above. -->
-      <input type="text" id="title" v-model="title" required>
+    <div class="contentConainer">
 
-      <label for="description">Recipe description</label>
-      <!-- The v-model property will link the value of this input with the this.description data declared above. -->
-      <input type="text" id="description" v-model="description" required>
+      <PageTitle text="Create a new recipe !" />
 
-      <!-- On clicking on this button,we call the createRecipe method. -->
-      <button @click="createRecipe">Create recipe</button>
+      <div class="flexHorizontal">
+        <InputField id="recipeTitle" labelText="Recipe Title:" placeholder="Please enter the recipe title..."
+          v-model="title" :mandatory="true" />
+        <InputField id="numberPeople" labelText="Number of people:"
+          placeholder="Please enter the number of people this recipe is for..." v-model="numberPeople" inputType="number"
+          min="1" :mandatory="true" />
+      </div>
+
+      <InputField id="recipeDescription" labelText="Recipe description:"
+        placeholder="Tell us some global informations about your recipe..." v-model="description" :mandatory="true"
+        inputType="textarea" initialHeight="100" maxLength="650" />
+
+
+      <CustomButton text="Create the recipe !" @clicked="createRecipe" />
 
       <!-- This is the confirmation message, that we display only if the created variable is set to true ! -->
       <p v-if="created">Recipe created !</p>
-    </form>
+
+    </div>
+
   </div>
 </template>
 
 <style scoped>
 .CreateRecipePage {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contentConainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  width: 40%;
+  width: 100%;
   background-color: var(--color-background-light);
   padding: 30px;
 }
 
 form input {
   margin-bottom: 15px;
+}
+
+.flexHorizontal {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+
+.flexHorizontal div:nth-child(1) {
+  flex: 2;
+  margin-right: 20px;
+}
+
+.flexHorizontal div:nth-child(2) {
+  flex: 1;
+  margin-left: 20px;
 }
 </style>

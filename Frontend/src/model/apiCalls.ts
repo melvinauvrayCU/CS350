@@ -47,6 +47,20 @@ export class API {
 		return this.recipeList;
 	}
 
+	/**Given the id number it gives back which recipe you are looking for 
+	 * looks through the entire array and finds recipies using their id number
+	 * If no id number matches then it returns id:0 which will be an error page
+	 */
+	getRecipe(id : number){
+		for(let i=0; i<this.recipeList.length; i++){
+			if (this.recipeList[i].id == id){
+				return this.recipeList[i];
+			}
+
+		}
+		return this.recipeList[0];
+	}
+
 	/**
 	 * Remove a recipe with the specified id in paramter and returns the new full list of recipes. 
 	 * @param id The id of the recipe you want to delete
@@ -65,4 +79,7 @@ export class API {
 	createRecipe(title: string, description: string): void {
 		this.recipeList.push(new Recipe(title, description));
 	}
+
+	
+
 }

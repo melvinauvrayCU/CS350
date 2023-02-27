@@ -3,6 +3,7 @@ import type { Recipe } from "@/model/recipeModel";
 import { API } from "../model/apiCalls";
 import RecipeListComponent from "../components/RecipeListComponent.vue";
 
+
 export default {
   name: "HomePage",
   // We using the recipe list component in this page
@@ -28,16 +29,21 @@ export default {
      * @param id id of the recipe you want to delete
      */
     deleteRecipe(id: number) {
+      console.log("Recipe Deleted");
       this.recipes = API.instance.removeRecipe(id);
-    }
+    },
+    
+    
+
   },
+
   /**
    * This method is called when this page is displayed.
    * We want to load the datas from the API, so we retrieve the list of recipes.
    */
   created() {
     this.recipes = API.instance.getRecipes();
-  }
+  },
 };
 
 </script>
@@ -46,8 +52,10 @@ export default {
   <main>
     <!-- We call the recipe list component. -->
     <!-- We make sure to listen to the delete-recipe signal. We call the deleteRecipe method when we receive it. -->
+    <!-- We also make sure to listen to the view recipe signal we call the view recipe method when we recieve it-->
     <!-- We pass the recipe list as a property -->
     <RecipeListComponent @delete-recipe="deleteRecipe" :recipes="recipes" />
+    
   </main>
 </template>
 

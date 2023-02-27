@@ -1,4 +1,5 @@
 import { Recipe } from "./recipeModel";
+import { User } from "./userModel";
 
 /**
  * API Class, it will contain all the methods that will interact with the Backend / Datas.
@@ -38,6 +39,15 @@ export class API {
 		new Recipe("French burger", "Same burger, but better"),
 	];
 
+	/*
+	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
+	and if a user is not defined then we need tell the user they need to sign up
+	*/
+	userList: User[] = [
+		new User("Ava.Megyeri", "Password", "megyeram@clarkson.edu"),
+		new User("Bob Smith", "bobby123", "bobsmith@gmail.com"),
+	];
+
 	// * ------------------- Start of the API call methods ------------------------
 
 	/**
@@ -65,4 +75,64 @@ export class API {
 	createRecipe(title: string, description: string): void {
 		this.recipeList.push(new Recipe(title, description));
 	}
+
+
+	/**
+	 * Login a user: The user needs to enter their username and password. If username matches the password they are logged in
+	 * @param username username 
+	 * @param password password 
+	 */
+	login(username: string, password: string): boolean{
+		if(this.userList.find(user => user.username === username)){
+			if(this.userList.find(pass => pass.password === password)){
+				console.warn(`Welcome back ${username}`);
+				return true;
+			}else{
+				console.warn("Wrong Password!");
+				return false;
+			}
+		}else {
+			console.warn("Username does not exist, please sign up");
+			return false;
+		}
+		
+		
+		
+	}
+
+
+	/**
+	 * Signup a user: User needs to enter the username, password, and email. If the username is already taken then
+	 * they need a new username. Password must be longer than 6 characters long
+	 * @param username username user creates
+	 * @param password password the user creates
+	 * @param email email the user puts it
+	 */
+	signup(email: string, username: string, password: string): boolean{
+		if(this.userList.find(user => user.email === email)){
+			console.log("email already in use, press login to login");
+			return false;
+		}else{
+			if(this.userList.find(user=> user.username === username))
+			{
+				console.log("username already taken");
+				return false;
+			}else{
+				
+				this.userList.push(new User(email,username,password));
+				console.log("User created!");
+				return true;	
+			}
+			
+
+		}
+		
+
+		
+
+
+	}
+
+
 }
+

@@ -19,6 +19,8 @@ export default {
     <nav>
       <RouterLink to="/" exact>Home</RouterLink>
       <RouterLink to="/createRecipe" exact>Create Recipe</RouterLink>
+      <RouterLink to = "/login" exact>Login</RouterLink>
+      <RouterLink to = "/signup" exact>Signup</RouterLink>
     </nav>
   </header>
 </template>

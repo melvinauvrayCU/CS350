@@ -12,7 +12,7 @@ export default {
             required: true
         },
         inputType: {
-            type: String as () => "text" | "number" | "textarea",
+            type: String as () => "text" | "number" | "textarea" | "time",
             default: "text"
         },
         modelValue: {
@@ -159,7 +159,7 @@ textarea {
     display: block;
     margin-top: 5px;
     border: 1px solid var(--color-background-light);
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     padding: 10px 20px;
     font-size: 1.2em;
     border-radius: 5px;
@@ -196,12 +196,12 @@ textarea:focus {
 
 input:focus,
 textarea:focus {
-    animation: shadowOnFocusBlack 0.4s ease forwards;
+    animation: shadowOnFocusBlack 0.2s ease forwards;
 }
 
 input.errorBorder:focus,
 textarea.errorBorder:focus {
-    animation: shadowOnFocusRed 0.4s ease forwards;
+    animation: shadowOnFocusRed 0.2s ease forwards;
 }
 
 

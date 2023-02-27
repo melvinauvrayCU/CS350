@@ -1,16 +1,21 @@
-<script lang="ts"> 
+<script lang="ts">
 import { API } from "@/model/apiCalls";
+import MessageComponent from "@/components/MessageComponent.vue";
 
 
 
-export default{
-    name: "CreateLoginPage",
+export default {
+  name: "CreateLoginPage",
+  components: {
+    MessageComponent
+  },
 
-   data(): {
+  data(): {
     username: string,
     password: string,
     loggedin: boolean,
-    passerror: string
+    passerror: string,
+    messageType: "success" | "warning",
   } {
     // We are setting the title and description datas that will be linked to the form.
     // And a boolean created variable, which will be true when a user has logged in
@@ -18,37 +23,41 @@ export default{
       username: "",
       password: "",
       loggedin: false,
-      passerror: ""
+      passerror: "",
+      messageType: "success"
     };
   },
 
   methods: {
-    login(){
-        if (this.username !== "" && this.password !== "") {
+    login() {
+      if (this.username !== "" && this.password !== "") {
 
-            // We do the API call to login the user
-             var ifLoggedin = API.instance.login(this.username, this.password);
+        // We do the API call to login the user
+        var ifLoggedin = API.instance.login(this.username, this.password);
 
-            // reset forms
-            this.username = "";
-            this.password = "";
-            
-           if(ifLoggedin === true){
-            this.loggedin = true;
-            this.passerror = "Welcome back!";
-            }else{
-              this.loggedin = false;
-              this.passerror = "Username or Password incorrect";
-            }
 
-        
+        // reset forms
+        this.username = "";
+        this.password = "";
+
+        if (ifLoggedin === true) {
+          this.loggedin = true;
+          this.messageType = "success";
+          this.passerror = "Welcome back!";
+        } else {
+          this.loggedin = false;
+          this.messageType = "warning";
+          this.passerror = "Username or Password incorrect";
+        }
+
+
         //     setTimeout(() => {
         //     this.loggedin = false;
         // }, 2000);
 
-  
 
-        }
+
+      }
     }
   },
 };
@@ -58,68 +67,71 @@ export default{
 </script>
 
 <template>
-  <div class = "welcome">
+  <div class="welcome">
     <h2>Welcome to Recipe Buddy</h2>
   </div>
 
 
 
-    <div class="CreateLoginPage">
-  
-      <form @submit.prevent>
-        <label for="username">Username or email</label>
-        
-        <input type="text" id="username" v-model="username" required>
-  
-        <label for="password">Password</label>
-        
-        <input type="password" id="password" v-model="password" required>
-  
-        
-        <button @click="login">Login</button>
-        
-      
-        <p class = "forgot_password"> 
-          <router-link to ="/">Forgot Password?</router-link>
-        </p>
+  <div class="CreateLoginPage">
 
-        <p class = "create_account"> 
-          Don't have an account?
-          <router-link to ="signup">Sign up</router-link>
-        </p>
+    <form @submit.prevent>
+      <label for="username">Username or email</label>
 
-      
-        <p v-if="loggedin">{{passerror}}!</p>
-        <p v-if="!loggedin"> {{ passerror }}</p>
-      </form>
-    </div>
-  </template>
+      <input type="text" id="username" v-model="username" required>
+
+      <label for="password">Password</label>
+
+      <input type="password" id="password" v-model="password" required>
+
+
+      <button @click="login">Login</button>
+
+
+      <p class="forgot_password">
+        <router-link to="/">Forgot Password?</router-link>
+      </p>
+
+      <p class="create_account">
+        Don't have an account?
+        <router-link to="signup">Sign up</router-link>
+      </p>
+
+
+      <!-- <p v-if="loggedin">{{ passerror }}!</p> -->
+      <!-- <p v-if="!loggedin"> {{ passerror }}</p> -->
+      <MessageComponent v-if="passerror !== ''" :type="messageType" :message="passerror" />
+    </form>
+  </div>
+</template>
 
 <style scoped>
-
-.welcome{
+.welcome {
   display: flex;
   justify-content: center;
   color: #331832;
   background-color: #694D75;
   padding: 30px;
   width: 40%;
-  margin: 10px auto;  
+  margin: 10px auto;
   flex-wrap: nowrap;
 }
+
 .CreateLoginPage {
   display: flex;
   justify-content: center;
   /* background-color: #F1ECCE; */
 }
-label{
+
+label {
   color: #1B5299;
 }
 
 button {
-    background-color: #694D75;
-    color: #331832;
+  background-color: #694D75;
+  color: #331832;
 }
+
 /* input#username  {
   background-color: #F1ECCE 
 }
@@ -139,11 +151,13 @@ form {
 form input {
   margin-bottom: 15px;
 }
-.create_account{
+
+.create_account {
   text-align: center;
   margin: 10px;
 }
-.forgot_password{
+
+.forgot_password {
   text-align: center;
   margin-top: 10px;
 }

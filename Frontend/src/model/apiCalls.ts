@@ -82,22 +82,22 @@ export class API {
 	 * @param username username 
 	 * @param password password 
 	 */
-	login(username: string, password: string): boolean{
-		if(this.userList.find(user => user.username === username) || this.userList.find(user => user.email === username)){
-			if(this.userList.find(pass => pass.password === password)){
+	login(username: string, password: string): boolean {
+		if (this.userList.find(user => user.username === username) || this.userList.find(user => user.email === username)) {
+			if (this.userList.find(pass => pass.password === password)) {
 				console.warn(`Welcome back ${username}`);
 				return true;
-			}else{
+			} else {
 				console.warn("Wrong Password!");
 				return false;
 			}
-		}else {
+		} else {
 			console.warn("Wrong email or username, please sign up");
 			return false;
 		}
-		
-		
-		
+
+
+
 	}
 
 
@@ -108,27 +108,26 @@ export class API {
 	 * @param password password the user creates
 	 * @param email email the user puts it
 	 */
-	signup(email: string, username: string, password: string): boolean{
-		if(this.userList.find(user => user.email === email)){
+	signup(email: string, username: string, password: string): boolean {
+		if (this.userList.find(user => user.email === email)) {
 			console.log("email already in use, press login to login");
 			return false;
-		}else{
-			if(this.userList.find(user=> user.username === username))
-			{
+		} else {
+			if (this.userList.find(user => user.username === username)) {
 				console.log("username already taken");
 				return false;
-			}else{
-				
-				this.userList.push(new User(email,username,password));
+			} else {
+
+				this.userList.push(new User(email, username, password));
 				console.log("User created!");
-				return true;	
+				return true;
 			}
-			
+
 
 		}
-		
 
-		
+
+
 
 
 	}

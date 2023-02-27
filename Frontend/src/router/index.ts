@@ -22,12 +22,19 @@ const router = createRouter({
       name: "Login",
     
       component: () => import("../views/CreateLoginPage.vue"),
+      meta: {
+        hideNavbar: true,
+      }
     },
     {
       path: "/signup",
       name: "Signup",
     
       component: () => import("../views/CreateSignupPage.vue"),
+      meta: {
+        hideNavbar: true,
+      }
+      
     },
   ],
 });

@@ -16,7 +16,7 @@ export default {
 
     <div class="flexFill"></div>
 
-    <nav>
+    <nav v-if="!$route.meta.hideNavbar">
       <RouterLink to="/" exact>Home</RouterLink>
       <RouterLink to="/createRecipe" exact>Create Recipe</RouterLink>
       <RouterLink to = "/login" exact>Login</RouterLink>

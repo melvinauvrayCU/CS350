@@ -83,7 +83,7 @@ export class API {
 	 * @param password password 
 	 */
 	login(username: string, password: string): boolean{
-		if(this.userList.find(user => user.username === username)){
+		if(this.userList.find(user => user.username === username) || this.userList.find(user => user.email === username)){
 			if(this.userList.find(pass => pass.password === password)){
 				console.warn(`Welcome back ${username}`);
 				return true;
@@ -92,7 +92,7 @@ export class API {
 				return false;
 			}
 		}else {
-			console.warn("Username does not exist, please sign up");
+			console.warn("Wrong email or username, please sign up");
 			return false;
 		}
 		

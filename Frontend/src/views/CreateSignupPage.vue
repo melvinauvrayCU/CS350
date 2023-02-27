@@ -28,12 +28,21 @@ export default{
       if(this.username !== "" && this.password !== "" && this.email !== ""){
 
         //API call to signup a user
-        API.instance.signup(this.email, this.username, this.password);
+        var signedUp = API.instance.signup(this.email, this.username, this.password);
 
         //reset forms
         this.username = "";
         this.password = "";
         this.email = "";
+
+        if(signedUp === false)
+        {
+          this.signedup = false;
+          this.passerror = "Username or Email already in use";
+        }else{
+          this.signedup = true;
+          this.passerror = "Welcome!"
+        }
 
       }
     }
@@ -68,9 +77,14 @@ export default{
   
         
         <button @click="signup">Signup</button>
+
+        <p class = "login"> 
+          Already have an account?
+          <router-link to ="login">Login</router-link>
+        </p>
       
-        <!-- <p v-if="loggedin">Logged In!</p>
-        <p v-if="!loggedin"> {{ passerror }}</p> -->
+        <p v-if="signedup">{{passerror}}</p>
+        <p v-if="!signedup"> {{ passerror }}</p>
       </form>
     </div>
   </template>
@@ -108,6 +122,10 @@ export default{
     
     form input {
       margin-bottom: 15px;
+    }
+    .login{
+      text-align: center;
+      margin-top: 15px;
     }
     </style>
     

@@ -29,13 +29,13 @@ export default{
             // We do the API call to login the user
              var ifLoggedin = API.instance.login(this.username, this.password);
 
-            // reset
+            // reset forms
             this.username = "";
             this.password = "";
             
            if(ifLoggedin === true){
             this.loggedin = true;
-            this.passerror = "";
+            this.passerror = "Welcome back!";
             }else{
               this.loggedin = false;
               this.passerror = "Username or Password incorrect";
@@ -58,10 +58,16 @@ export default{
 </script>
 
 <template>
+  <div class = "welcome">
+    <h2>Welcome to Recipe Buddy</h2>
+  </div>
+
+
+
     <div class="CreateLoginPage">
   
       <form @submit.prevent>
-        <label for="username">Username</label>
+        <label for="username">Username or email</label>
         
         <input type="text" id="username" v-model="username" required>
   
@@ -71,14 +77,36 @@ export default{
   
         
         <button @click="login">Login</button>
+        
       
-        <p v-if="loggedin">Logged In!</p>
+        <p class = "forgot_password"> 
+          <router-link to ="/">Forgot Password?</router-link>
+        </p>
+
+        <p class = "create_account"> 
+          Don't have an account?
+          <router-link to ="signup">Sign up</router-link>
+        </p>
+
+      
+        <p v-if="loggedin">{{passerror}}!</p>
         <p v-if="!loggedin"> {{ passerror }}</p>
       </form>
     </div>
   </template>
 
 <style scoped>
+
+.welcome{
+  display: flex;
+  justify-content: center;
+  color: #331832;
+  background-color: #694D75;
+  padding: 30px;
+  width: 40%;
+  margin: 10px auto;  
+  flex-wrap: nowrap;
+}
 .CreateLoginPage {
   display: flex;
   justify-content: center;
@@ -110,5 +138,13 @@ form {
 
 form input {
   margin-bottom: 15px;
+}
+.create_account{
+  text-align: center;
+  margin: 10px;
+}
+.forgot_password{
+  text-align: center;
+  margin-top: 10px;
 }
 </style>

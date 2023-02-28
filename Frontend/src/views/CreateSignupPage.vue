@@ -41,7 +41,7 @@ export default{
           this.passerror = "Username or Email already in use";
         }else{
           this.signedup = true;
-          this.passerror = "Welcome!"
+          this.passerror = "Welcome!";
         }
 
       }
@@ -63,18 +63,18 @@ export default{
     <div class="CreateSignupPage">
   
       <form @submit.prevent>
-        <label for="email">Email</label>
+        <label for="email"></label>
         
-        <input type="text" id="email" v-model="email" required>
+        <input type="email" id="email" placeholder="Email" v-model="email" required>
 
-        <label for="username">Username</label>
+        <label for="username"></label>
         
-        <input type="text" id="username" v-model="username" required>
+        <input type="text" id="username" placeholder = "Username" v-model="username" required>
   
-        <label for="password">Password</label>
+        <label for="password"></label>
         
-        <input type="password" id="password" v-model="password" required>
-  
+        <input type="password" id="password" placeholder = "Password" v-model="password" required>
+   
         
         <button @click="signup">Signup</button>
 

@@ -72,17 +72,17 @@ export default {
   </div>
 
 
-
+<div class ="border">
   <div class="CreateLoginPage">
 
     <form @submit.prevent>
-      <label for="username">Username or email</label>
+      <label for="username"></label>
 
-      <input type="text" id="username" v-model="username" required>
+      <input type="text" id="username" placeholder="Username or Email" v-model="username" required>
 
-      <label for="password">Password</label>
+      <label for="password"></label>
 
-      <input type="password" id="password" v-model="password" required>
+      <input type="password" id="password" placeholder="Password" v-model="password" required>
 
 
       <button @click="login">Login</button>
@@ -103,16 +103,18 @@ export default {
       <MessageComponent v-if="passerror !== ''" :type="messageType" :message="passerror" />
     </form>
   </div>
+</div>
+
 </template>
 
 <style scoped>
 .welcome {
   display: flex;
   justify-content: center;
-  color: #331832;
-  background-color: #694D75;
+  /* color: #331832; */
+  /* background-color: #694D75; */
   padding: 30px;
-  width: 40%;
+  width: 60%;
   margin: 10px auto;
   flex-wrap: nowrap;
 }
@@ -120,7 +122,13 @@ export default {
 .CreateLoginPage {
   display: flex;
   justify-content: center;
-  /* background-color: #F1ECCE; */
+  border: 1px solid black;
+  height: 500px;
+
+}
+.border{
+  width: 100%xs;
+  margin: auto 75px;
 }
 
 label {
@@ -128,28 +136,40 @@ label {
 }
 
 button {
-  background-color: #694D75;
-  color: #331832;
-}
+  /* background-color: var(--color-salmon-test); */
+  border-radius: 12px;
+  transition-duration: .4s;
+  width: 250px;
+  height: 50px;
+  margin: 0px auto 35px;
+  color: var(--color-background);
+  font-weight: 600;
+  font-size: 15px;
+  text-transform: uppercase;
+  background-color: var(--color-salmon-test);
+  border-radius: 33px;
 
-/* input#username  {
-  background-color: #F1ECCE 
 }
+button :hover{
+  background-color: var(--color-background);
+  color:black;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 
-input#password {
-  background-color: #F1ECCE;
-} */
+
+}
 
 form {
   display: flex;
   flex-direction: column;
   width: 40%;
-  background-color: #9FC2CC;
+  background-color: white;
   padding: 30px;
 }
 
 form input {
-  margin-bottom: 15px;
+  height: 40px;
+  width: 250px;
+  margin: 10px auto;
 }
 
 .create_account {

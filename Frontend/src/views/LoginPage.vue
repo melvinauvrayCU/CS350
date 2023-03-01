@@ -39,11 +39,11 @@ export default {
         this.password = "";
 
         if (ifLoggedin === true) {
-        
+
           this.messageType = "success";
           this.messageText = `Welcome back ${this.username}!`;
         } else {
-  
+
           this.messageType = "warning";
           this.messageText = "Username or Password incorrect";
         }
@@ -66,50 +66,48 @@ export default {
     <h1>Welcome to Recipe Buddy</h1>
   </div>
 
-<section>
-  <div class ="border">
-    <div class="CreateLoginPage">
+  <section>
+    <div class="border">
+      <div class="CreateLoginPage">
 
-      <form @submit.prevent>
-        <div class = "inputbox"> 
-          
-          <label for="username"></label>
+        <form @submit.prevent>
+          <div class="inputbox">
 
-          <input type="text" id="username" placeholder="Username or Email" v-model="username" required>
-        </div>
-        <div class = "inputbox">
-        <label for="password"></label>
+            <label for="username"></label>
 
-        <input type="password" id="password" placeholder="Password" v-model="password" required>
-        </div>  
+            <input type="text" id="username" placeholder="Username or Email" v-model="username" required>
+          </div>
+          <div class="inputbox">
+            <label for="password"></label>
 
-
-        <button @click="login">Login</button>
-
-        <div class = "forgot">
-        <p>
-          <router-link to="/">Forgot Password?</router-link>
-        </p>
-        </div>
-
-        <div class = "create">
-        <p>
-          Don't have an account?
-          <router-link to="signup">Sign up</router-link>
-        </p>
-        </div>
+            <input type="password" id="password" placeholder="Password" v-model="password" required>
+          </div>
 
 
-        <MessageComponent v-if="messageText !== ''" :type="messageType" :message="messageText" />
-      </form>
+          <button @click="login">Login</button>
+
+          <div class="forgot">
+            <p>
+              <router-link to="/">Forgot Password?</router-link>
+            </p>
+          </div>
+
+          <div class="create">
+            <p>
+              Don't have an account?
+              <router-link to="signup">Sign up</router-link>
+            </p>
+          </div>
+
+
+          <MessageComponent v-if="messageText !== ''" :type="messageType" :message="messageText" />
+        </form>
+      </div>
     </div>
-  </div>
-</section>
-
+  </section>
 </template>
 
 <style scoped>
-
 .welcome {
   display: flex;
   justify-content: center;
@@ -118,14 +116,16 @@ export default {
   margin: 10px auto;
   flex-wrap: nowrap;
 }
-.welcome h1{
+
+.welcome h1 {
   color: var(--color-text);
   font-weight: 600;
   font-size: 32px;
   font-family: Helvetica;
 
 }
-section{
+
+section {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -139,7 +139,8 @@ section{
   height: 500px;
 
 }
-.border{
+
+.border {
   position: relative;
   width: 400px;
   height: 475px;
@@ -152,14 +153,15 @@ section{
   align-items: center;
 }
 
-.inputbox{
+.inputbox {
   position: relative;
   margin: 30px 0;
   width: 310px;
   border-bottom: 2px solid var(--color-text);
 
 }
-.inputbox label{
+
+.inputbox label {
   position: absolute;
   top: 50%;
   left: 5px;
@@ -176,20 +178,22 @@ section{
   border: none;
   outline: none;
   font-size: 1em;
-  padding:0 35px 0 5px;
+  padding: 0 35px 0 5px;
   color: black;
 }
-.forgot{
+
+.forgot {
   margin: 20px;
   color: var(--color-text);
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
-.create{
+
+.create {
   margin: 20px;
   color: var(--color-text);
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 
 
@@ -206,10 +210,8 @@ button {
   transition-duration: .4s;
 
 }
-button:hover{
-  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+
+button:hover {
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
-
-
-
 </style>

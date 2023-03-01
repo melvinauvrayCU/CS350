@@ -41,12 +41,18 @@ export default {
         if (ifLoggedin === true) {
 
           this.messageType = "success";
-          this.messageText = `Welcome back ${this.username}!`;
+          this.messageText = "Welcome back!";
+
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 1000);
         } else {
 
           this.messageType = "warning";
           this.messageText = "Username or Password incorrect";
         }
+
+
 
 
 

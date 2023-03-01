@@ -49,6 +49,11 @@ export class API {
 
 	];
 
+	/** 
+	 * variable to check if a user is logged in or not 
+	 */
+	loggedIn: boolean = false;
+
 	// * ------------------- Start of the API call methods ------------------------
 
 	/**
@@ -86,6 +91,7 @@ export class API {
 	login(username: string, password: string): boolean {
 		if (this.userList.find(user => user.password === password && (user.username === username || user.email === username))) {
 			console.warn(`Welcome back ${username}`);
+			this.loggedIn = true;
 			return true;
 		} else {
 			console.warn("Error!");
@@ -112,10 +118,19 @@ export class API {
 
 			this.userList.push(new User(email, username, password));
 			console.log("User created!");
+			this.loggedIn = true;
 			return true;
 		}
 
 
+	}
+
+	/**
+	 * checks if the user is logged in or not
+	 * 
+	 */
+	isLoggedIn(): boolean {
+		return this.loggedIn;
 	}
 
 }

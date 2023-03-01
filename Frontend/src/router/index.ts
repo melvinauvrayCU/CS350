@@ -8,6 +8,7 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomePage,
+     
     },
     {
       path: "/createRecipe",
@@ -16,25 +17,29 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import("../views/CreateRecipePage.vue"),
+     
     },
     {
       path: "/login",
       name: "Login",
-    
+
       component: () => import("../views/LoginPage.vue"),
       meta: {
         hideNavbar: true,
+        
+
       }
     },
     {
       path: "/signup",
       name: "Signup",
-    
+
       component: () => import("../views/SignupPage.vue"),
       meta: {
         hideNavbar: true,
+        
       }
-      
+
     },
   ],
 });

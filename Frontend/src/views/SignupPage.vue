@@ -48,6 +48,9 @@ export default {
 
           this.messageText = "Welcome!";
           this.messageType = "success";
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 1000);
         }
 
       }

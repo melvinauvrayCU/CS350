@@ -1,10 +1,23 @@
 <script lang="ts">
 import { RouterLink } from "vue-router";
+import { API } from "@/model/apiCalls";
 
 export default {
   name: "HeaderMenuComponent",
   components: {
     RouterLink,
+  },
+  methods: {
+    clickLogout() {
+      // We call the API to logout
+      if (API.instance.logout()) {
+        // We force the refresh of the menu component to it recall the checkIfLoggedIn method.
+        this.$forceUpdate();
+      }
+    },
+    checkIfLoggedIn() {
+      return API.instance.isLoggedIn();
+    }
   }
 };
 </script>
@@ -16,9 +29,13 @@ export default {
 
     <div class="flexFill"></div>
 
-    <nav>
+    <nav v-if="!$route.meta.hideNavbar">
       <RouterLink to="/" exact>Home</RouterLink>
       <RouterLink to="/createRecipe" exact>Create Recipe</RouterLink>
+      <RouterLink v-if="!checkIfLoggedIn()" to="/login" exact>Login</RouterLink>
+      <a v-if="checkIfLoggedIn()" @click="clickLogout">Logout</a>
+      <RouterLink to="/signup" v-if="!checkIfLoggedIn()" exact>Signup</RouterLink>
+
     </nav>
   </header>
 </template>
@@ -44,6 +61,7 @@ nav {
 a {
   text-decoration: none;
   color: var(--color-text);
+  cursor: pointer;
 }
 
 nav a {

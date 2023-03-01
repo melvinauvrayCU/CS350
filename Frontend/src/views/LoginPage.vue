@@ -41,7 +41,7 @@ export default {
         if (ifLoggedin === true) {
         
           this.messageType = "success";
-          this.messageText = "Welcome back!";
+          this.messageText = `Welcome back ${this.username}!`;
         } else {
   
           this.messageType = "warning";

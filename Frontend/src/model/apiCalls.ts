@@ -45,7 +45,8 @@ export class API {
 	*/
 	userList: User[] = [
 		new User("Ava.Megyeri", "Password", "megyeram@clarkson.edu"),
-		new User("Bob Smith", "bobby123", "bobsmith@gmail.com"),
+		new User("petesupreme", "password1", "dorovip@clarkson.edu"),
+
 	];
 
 	// * ------------------- Start of the API call methods ------------------------
@@ -85,8 +86,7 @@ export class API {
 	login(username: string, password: string): boolean {
 		if (this.userList.find(user => user.username === username) || this.userList.find(user => user.email === username)) {
 			const personUser = username;
-			if (this.userList.find(pass => pass.password === password && pass.username === personUser)) {
-				console.warn(`${password}`);
+			if (this.userList.find(pass => pass.password === password && (pass.username === personUser || pass.email === personUser))) {
 				console.warn(`Welcome back ${username}`);
 				return true;
 			} else {

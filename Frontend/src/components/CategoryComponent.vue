@@ -23,11 +23,12 @@ export default {
 </template>
 
 <style scoped>
+
 .CategoryComponent {
     background-color: grey;
     width: 200px;
     border-radius: 5px;
-    padding: 5px;
+    padding: 2px;
     margin: 20px;
     flex-direction: row;
 }

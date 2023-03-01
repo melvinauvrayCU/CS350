@@ -1,5 +1,6 @@
 <script lang="ts">
 import { Recipe } from "@/model/recipeModel";
+//import { RatingComponent } from "@/components/RatingComponent.vue"
 
 export default {
     name: "RecipeComponent",
@@ -9,6 +10,8 @@ export default {
             type: Recipe,
             required: true
         },
+        
+
     }
 };
 </script>
@@ -38,40 +41,43 @@ export default {
     border: 3px solid lightgrey;
     border-color: lightgrey;
     border-radius: 5px;
-    width: 500px;
+    width: 300px;
     display: flex;
-    padding: 30px;
+    padding: 40px;
     margin: 20px;
     flex-direction: row;
 }
 
 .containerText {
-    display: flex;
     text-decoration-color: white;
     flex-direction: column;
+    margin-left: -30px;
+}
+
+.recipe-title {
+    margin-top: -30px;
+}
+
+.recipe-descrip {
+    margin-top: 10px;
 }
 
 .delete-button {
     display: flex;
     cursor: pointer;
-    font-size: 16px;
+    width: 40px;
+    height: 30px;
+    margin-right: -20px;
+    margin-top: -30px;
 }
 
 .delete-button__button {
     background-color: red;
     border: 1px solid red;
     border-radius: 3px;
-    margin-left: auto;
-    margin-top: -10px;
-    font-size: 16px;
+
+    font-size: 10px;
     color: white;
-}
-
-.recipe-title {
-    font-size: 20px;
-
-    margin-right: auto;
-    margin-top: -10px;
 }
 
 .delete-button__button:hover {

@@ -35,6 +35,10 @@ export default {
             type: String,
             default: ""
         },
+        max: {
+            type: String,
+            default: ""
+        },
         initialHeight: {
             type: String,
             default: "80"
@@ -94,7 +98,7 @@ export default {
 };
 </script>
 <template>
-    <div>
+    <div class="InputFieldComponent">
         <label :for="id">{{ labelText }}<span v-if="mandatory" style="color: red;"> *</span>
             <Transition>
                 <span style="color: red;" v-if="classError !== ''"> - This field is mandatory</span>
@@ -102,19 +106,23 @@ export default {
         </label>
 
         <input v-if="inputType !== 'textarea'" :type="inputType" :value="modelValue" @input="onInput"
-            :placeholder="placeholder" :class="classList + classError" :min="min" :id="id" />
+            :placeholder="placeholder" :class="classList + classError" :min="min" :max="max" :id="id" />
 
         <textarea v-else :id="id" :value="modelValue" @input="onInput" :class="classList + classError"
             :placeholder="placeholder" :style="{
                 minHeight: initialHeight + 'px',
             }" :maxlength="maxLength"></textarea>
 
-        <Transition>
-            <label :class="'counterLabel ' + labelCounterError" v-if="maxLength !== '' && lengthCounter > 0">{{
-                lengthCounter +
-                " / " + maxLength
-            }}</label>
-        </Transition>
+        <div>
+            <Transition>
+
+                <label :class="'counterLabel ' + labelCounterError" v-show="maxLength !== '' && lengthCounter > 0">{{
+                    lengthCounter +
+                    " / " + maxLength
+                }}</label>
+            </Transition>
+
+        </div>
     </div>
 </template>
 
@@ -130,11 +138,11 @@ export default {
 }
 
 
-div {
+.InputFieldComponent {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin: 15px 0;
+    margin: 20px 0;
 }
 
 label {
@@ -152,6 +160,7 @@ label.counterLabel {
     font-size: 1em;
     color: var(--color-text-light);
     margin-top: 2px;
+    position: absolute;
 }
 
 input,

@@ -117,11 +117,11 @@ export default {
       <PageSeparator title="🍔 Global informations about your recipe" />
 
       <div class="flexHorizontal">
-        <InputField id="recipeTitle" labelText="Recipe Title:" placeholder="Please enter the recipe title..."
-          v-model="title" :mandatory="true" />
+        <InputField id="recipeTitle" labelText="Recipe Title:" max-length="200"
+          placeholder="Please enter the recipe title..." v-model="title" :mandatory="true" />
         <InputField id="numberPeople" labelText="Number of people:"
           placeholder="Please enter the number of people this recipe is for..." v-model="numberPeople" inputType="number"
-          min="1" :mandatory="true" />
+          min="1" max="50" :mandatory="true" />
       </div>
 
       <InputField id="recipeDescription" labelText="Recipe description:"

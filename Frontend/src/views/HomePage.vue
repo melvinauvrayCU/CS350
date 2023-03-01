@@ -12,6 +12,7 @@ export default {
   components: {
     RecipeListComponent,
     CategoryListComponent,
+    SearchBarComponent,
   },
   // For the data we will use the list of recipe.
   // This may have a strange look at first:
@@ -35,6 +36,9 @@ export default {
      */
     deleteRecipe(id: number) {
       this.recipes = API.instance.removeRecipe(id);
+    },
+    handleSearch(searchText: string) {
+      console.log('Performing search for:', searchText);
     }
   },
   /**
@@ -51,10 +55,7 @@ export default {
 <template>
   <main>
     <div >
-      <form action="https://www.example.com/search">
-          <input type="text" name="q" />
-          <input type="submit" value="Search"/>
-      </form>
+      <SearchBarComponent @search="handleSearch"/>
     </div>
     <CategoryListComponent type="text" v-bind:categories="categories" />
     <!-- We call the recipe list component. -->

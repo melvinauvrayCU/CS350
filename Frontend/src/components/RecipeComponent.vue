@@ -19,16 +19,19 @@ export default {
             <h3>{{ recipe.title }}</h3>
             <p>{{ recipe.description }}</p>
         </div>
-
-        <div class="flexFill"></div>
-
-        <!-- On clicking on the button, we want to delete the recipe,-->
-        <!-- Since we are in the component file, we can't touch the API, we are allowed to do so only in Page files, -->
-        <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
-        <!-- and we don't forget to attach the id of the recipe we want to delete. -->
-        <button @click="$emit('delete-recipe', recipe.id)">
+        <div class="flexFill">
+        </div>
+        <div class="delete-button">
+            <!-- On clicking on the button, we want to delete the recipe,-->
+            <!-- Since we are in the component file, we can't touch the API, we are allowed to do so only in Page files, -->
+            <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
+            <!-- and we don't forget to attach the id of the recipe we want to delete. -->
+            <button @click="$emit('delete-recipe', recipe.id)">
             Delete Recipe
         </button>
+        </div>
+        
+        
 
     </div>
 </template>
@@ -46,5 +49,20 @@ export default {
 .containerText {
     display: flex;
     flex-direction: column;
+}
+
+.delete-button {
+    background-color: red;
+    border: none;
+    color: red;
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+
 }
 </style>

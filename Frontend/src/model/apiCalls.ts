@@ -46,7 +46,10 @@ export class API {
 	 */
 	categoryList: Category[] = [
 		new Category("Recommneded"),
-		new Category("Highest Rated")
+		new Category("Highest Rated"),
+		new Category("Breakfast"),
+		new Category("Lunch"),
+		new Category("Dinner"),
 	]
 
 	// * ------------------- Start of the API call methods ------------------------

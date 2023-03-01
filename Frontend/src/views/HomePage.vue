@@ -50,11 +50,13 @@ export default {
 
 <template>
   <main>
+    <div ></div>
+    <CategoryListComponent type="text" v-bind:categories="categories" />
     <!-- We call the recipe list component. -->
     <!-- We make sure to listen to the delete-recipe signal. We call the deleteRecipe method when we receive it. -->
     <!-- We pass the recipe list as a property -->
     <RecipeListComponent @delete-recipe="deleteRecipe" :recipes="recipes" />
-    <CategoryListComponent type="text" v-bind:categories="categories" />
+    
   </main>
 </template>
 

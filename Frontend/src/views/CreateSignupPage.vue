@@ -1,15 +1,21 @@
 <script lang="ts">
 import { API } from "@/model/apiCalls";
+import MessageComponent from "@/components/MessageComponent.vue";
+
 
 export default{
     name: "CreateSignupPage",
+    components:{
+      MessageComponent
+    },
 
    data(): {
     email: string,
     username: string,
     password: string,
-    passerror: string
-    signedup: boolean
+    passerror: string,
+    signedup: boolean,
+    messageType: "success" | "warning",
 
    }{
     // We are setting the title and description datas that will be linked to the form.
@@ -19,7 +25,8 @@ export default{
       password: "",
       email: "",
       passerror: "",
-      signedup: false
+      signedup: false,
+      messageType: "success",
     };
   },
   methods: {
@@ -39,9 +46,11 @@ export default{
         {
           this.signedup = false;
           this.passerror = "Username or Email already in use";
+          this.messageType = "warning";
         }else{
           this.signedup = true;
           this.passerror = "Welcome!";
+          this.messageType = "success";
         }
 
       }
@@ -60,73 +69,150 @@ export default{
 
 
 <template>
-    <div class="CreateSignupPage">
-  
-      <form @submit.prevent>
-        <label for="email"></label>
-        
-        <input type="email" id="email" placeholder="Email" v-model="email" required>
+  <div class="welcome">
+    <h1>Welcome to Recipe Buddy</h1>
+  </div>
 
-        <label for="username"></label>
-        
-        <input type="text" id="username" placeholder = "Username" v-model="username" required>
+  <section>
+    <div class = "border">
+      <div class="CreateSignupPage">
   
-        <label for="password"></label>
-        
-        <input type="password" id="password" placeholder = "Password" v-model="password" required>
-   
-        
-        <button @click="signup">Signup</button>
+        <form @submit.prevent>
+          <div class = "inputbox">
+            <label for="email"></label>
+          
+            <input type="email" id="email" placeholder="Email*" v-model="email" required>
+          </div>
 
-        <p class = "login"> 
-          Already have an account?
-          <router-link to ="login">Login</router-link>
-        </p>
-      
-        <p v-if="signedup">{{passerror}}</p>
-        <p v-if="!signedup"> {{ passerror }}</p>
-      </form>
-    </div>
+
+          <div  class = "inputbox">
+            <label for="username"></label>
+          
+            <input type="text" id="username" placeholder = "Username*" maxlength="15" v-model="username" required>
+          </div>
+
+          <div class = "inputbox">
+            <label for="password"></label>
+          
+            <input type="password" id="password" placeholder = "Password*" v-model="password" required>
+          </div>
+          
+          <button @click="signup">Signup</button>
+
+          <div class = "login">
+            <p> 
+              Already have an account?
+              <router-link to ="login">Login</router-link>
+            </p>
+          </div>
+        
+          <!-- <p v-if="signedup">{{passerror}}</p>
+          <p v-if="!signedup"> {{ passerror }}</p> -->
+          <MessageComponent v-if="passerror !== ''" :type="messageType" :message="passerror" />
+        </form>
+      </div>
+  </div>
+  </section>
   </template>
 
 
 <style scoped>
-    .CreateSignupPage {
-      display: flex;
-      justify-content: center;
-      /* background-color: #F1ECCE; */
-    }
-    label{
-      color: #1B5299;
-    }
-    
-    button {
-        background-color: #694D75;
-        color: #331832;
-    }
-    /* input#username  {
-      background-color: #F1ECCE 
-    }
-    
-    input#password {
-      background-color: #F1ECCE;
-    } */
-    
-    form {
-      display: flex;
-      flex-direction: column;
-      width: 40%;
-      background-color: #9FC2CC;
-      padding: 30px;
-    }
-    
-    form input {
-      margin-bottom: 15px;
-    }
-    .login{
-      text-align: center;
-      margin-top: 15px;
-    }
+.welcome {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  width: 60%;
+  margin: 10px auto;
+  flex-wrap: nowrap;
+}
+
+.welcome h1{
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 32px;
+  font-family: Helvetica;
+
+}
+
+section{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  width: 100%;
+}
+  .CreateSignupPage  {
+  display: flex;
+  justify-content: center;
+  height: 500px;
+
+}
+.border{
+  position: relative;
+  width: 400px;
+  height: 475px;
+  background: transparent;
+  border: 2px solid black;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputbox{
+  position: relative;
+  margin: 30px 0;
+  width: 310px;
+  border-bottom: 2px solid var(--color-text);
+
+}
+.inputbox label{
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  color: var(--color-text);
+  font-size: 1em;
+  pointer-events: none;
+  transition: .5s;
+}
+
+.inputbox input {
+  width: 100%;
+  height: 50px;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  padding:0 35px 0 5px;
+  color: black;
+}
+
+.login{
+  margin-top: 15px;
+  color: var(--color-text);
+  display: flex;
+  justify-content: space-between; 
+}
+
+
+
+button {
+  width: 100%;
+  height: 40px;
+  border-radius: 40px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  background-color: var(--color-salmon-test);
+  transition-duration: .4s;
+
+}
+button:hover{
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
     </style>
     
 

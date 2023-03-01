@@ -68,117 +68,155 @@ export default {
 
 <template>
   <div class="welcome">
-    <h2>Welcome to Recipe Buddy</h2>
+    <h1>Welcome to Recipe Buddy</h1>
   </div>
 
+<section>
+  <div class ="border">
+    <div class="CreateLoginPage">
 
-<div class ="border">
-  <div class="CreateLoginPage">
+      <form @submit.prevent>
+        <div class = "inputbox"> 
+          
+          <label for="username"></label>
 
-    <form @submit.prevent>
-      <label for="username"></label>
+          <input type="text" id="username" placeholder="Username or Email" v-model="username" required>
+        </div>
+        <div class = "inputbox">
+        <label for="password"></label>
 
-      <input type="text" id="username" placeholder="Username or Email" v-model="username" required>
-
-      <label for="password"></label>
-
-      <input type="password" id="password" placeholder="Password" v-model="password" required>
-
-
-      <button @click="login">Login</button>
-
-
-      <p class="forgot_password">
-        <router-link to="/">Forgot Password?</router-link>
-      </p>
-
-      <p class="create_account">
-        Don't have an account?
-        <router-link to="signup">Sign up</router-link>
-      </p>
+        <input type="password" id="password" placeholder="Password" v-model="password" required>
+        </div>  
 
 
-      <!-- <p v-if="loggedin">{{ passerror }}!</p> -->
-      <!-- <p v-if="!loggedin"> {{ passerror }}</p> -->
-      <MessageComponent v-if="passerror !== ''" :type="messageType" :message="passerror" />
-    </form>
+        <button @click="login">Login</button>
+
+        <div class = "forgot">
+        <p>
+          <router-link to="/">Forgot Password?</router-link>
+        </p>
+        </div>
+
+        <div class = "create">
+        <p>
+          Don't have an account?
+          <router-link to="signup">Sign up</router-link>
+        </p>
+        </div>
+
+
+        <!-- <p v-if="loggedin">{{ passerror }}!</p> -->
+        <!-- <p v-if="!loggedin"> {{ passerror }}</p> -->
+        <MessageComponent v-if="passerror !== ''" :type="messageType" :message="passerror" />
+      </form>
+    </div>
   </div>
-</div>
+</section>
 
 </template>
 
 <style scoped>
+
 .welcome {
   display: flex;
   justify-content: center;
-  /* color: #331832; */
-  /* background-color: #694D75; */
   padding: 30px;
   width: 60%;
   margin: 10px auto;
   flex-wrap: nowrap;
 }
+.welcome h1{
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 32px;
+  font-family: Helvetica;
+
+}
+section{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  width: 100%;
+}
 
 .CreateLoginPage {
   display: flex;
   justify-content: center;
-  border: 1px solid black;
   height: 500px;
 
 }
 .border{
-  width: 100%xs;
-  margin: auto 75px;
+  position: relative;
+  width: 400px;
+  height: 475px;
+  background: transparent;
+  border: 2px solid black;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-label {
-  color: #1B5299;
+.inputbox{
+  position: relative;
+  margin: 30px 0;
+  width: 310px;
+  border-bottom: 2px solid var(--color-text);
+
 }
+.inputbox label{
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  color: var(--color-text);
+  font-size: 1em;
+  pointer-events: none;
+  transition: .5s;
+}
+
+.inputbox input {
+  width: 100%;
+  height: 50px;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  padding:0 35px 0 5px;
+  color: black;
+}
+.forgot{
+  margin: 20px;
+  color: var(--color-text);
+  display: flex;
+  justify-content: space-between; 
+}
+.create{
+  margin: 20px;
+  color: var(--color-text);
+  display: flex;
+  justify-content: space-between; 
+}
+
 
 button {
-  /* background-color: var(--color-salmon-test); */
-  border-radius: 12px;
-  transition-duration: .4s;
-  width: 250px;
-  height: 50px;
-  margin: 0px auto 35px;
-  color: var(--color-background);
-  font-weight: 600;
-  font-size: 15px;
-  text-transform: uppercase;
-  background-color: var(--color-salmon-test);
-  border-radius: 33px;
-
-}
-button :hover{
-  background-color: var(--color-background);
-  color:black;
-  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-
-
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  width: 40%;
-  background-color: white;
-  padding: 30px;
-}
-
-form input {
+  width: 100%;
   height: 40px;
-  width: 250px;
-  margin: 10px auto;
+  border-radius: 40px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  background-color: var(--color-salmon-test);
+  transition-duration: .4s;
+
+}
+button:hover{
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
-.create_account {
-  text-align: center;
-  margin: 10px;
-}
 
-.forgot_password {
-  text-align: center;
-  margin-top: 10px;
-}
+
 </style>

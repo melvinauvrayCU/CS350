@@ -31,12 +31,11 @@ div {
 }
 
 .success {
-    color: white;
-    background-color: green;
+    color: green;
 }
 
 .warning {
-    color: white;
-    background-color: red;
+    color: red;
+    
 }
 </style>

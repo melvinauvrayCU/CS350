@@ -5,11 +5,11 @@ export default {
 </script>
 <template>
     <div>
-        <img src="@/assets/foodIcons/banana.png">
-        <img src="@/assets/foodIcons/cheese.png">
-        <img src="@/assets/foodIcons/meat.png">
-        <img src="@/assets/foodIcons/pepper.png">
-        <img src="@/assets/foodIcons/lemon.png">
+        <img draggable="false" src="@/assets/foodIcons/cheese.png">
+        <img draggable="false" src="@/assets/foodIcons/banana.png">
+        <img draggable="false" src="@/assets/foodIcons/meat.png">
+        <img draggable="false" src="@/assets/foodIcons/pepper.png">
+        <img draggable="false" src="@/assets/foodIcons/lemon.png">
     </div>
 </template>
 
@@ -23,7 +23,12 @@ div {
 
 img {
     width: 80px;
-    position: absolute
+    position: absolute;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 img:nth-child(1) {

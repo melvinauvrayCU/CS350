@@ -159,7 +159,7 @@ textarea {
     display: block;
     margin-top: 5px;
     border: 1px solid var(--color-background-light);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
     padding: 10px 20px;
     font-size: 1.2em;
     border-radius: 5px;

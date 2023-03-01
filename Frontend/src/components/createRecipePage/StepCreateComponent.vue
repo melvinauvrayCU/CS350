@@ -1,7 +1,7 @@
 <script lang="ts">
-import CustomButton from "@/components/CustomButtonComponent.vue";
-import InputField from "@/components/InputFieldComponent.vue";
-import type { Step } from "@/views/CreateRecipePage.vue";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
+import InputField from "@/components/formComponents/InputFieldComponent.vue";
+import type { Step } from "@/model/recipeModel";
 import type { PropType } from "vue";
 
 export default {
@@ -11,18 +11,24 @@ export default {
             type: Object as PropType<Step>,
             required: true
         },
-        descriptionModelValue: {
-            type: String,
+        stepIndex: {
+            type: Number,
+            required: true
+        },
+        stepIndexLength: {
+            type: Number,
             required: true
         }
     },
     data(): {
         descriptionPrivateValue: string
         cooktimePrivateValue: string
+        preptimePrivateValue: string
     } {
         return {
             descriptionPrivateValue: "",
             cooktimePrivateValue: "",
+            preptimePrivateValue: "",
         };
     },
     components: {
@@ -35,11 +41,15 @@ export default {
         },
         updateCooktime() {
             this.$emit("update:cooktimeModelValue", this.cooktimePrivateValue);
+        },
+        updatePreptime() {
+            this.$emit("update:preptimeModelValue", this.preptimePrivateValue);
         }
     },
     created() {
-        this.descriptionPrivateValue = this.descriptionModelValue;
+        this.descriptionPrivateValue = this.stepObject.descriptionValue;
         this.cooktimePrivateValue = this.stepObject.cooktimeValue;
+        this.preptimePrivateValue = this.stepObject.preptimeValue;
     }
 };
 </script>
@@ -47,36 +57,42 @@ export default {
 <template>
     <div class="StepCreateComponent">
         <div class="containerTitle">
-            <h4>Step {{ stepObject.stepNumber }}</h4>
-            <CustomButton text="Delete" />
+            <h4>Step {{ stepIndex }}</h4>
+            <hr>
+            <CustomButton type="danger" effect="plain" icon="trash" text="Delete" v-if="stepIndexLength !== 1"
+                @clicked="$emit('stepDeleted', stepObject)" :titleText="'Click to delete step ' + stepIndex" />
         </div>
-        <InputField id="stepDescription" labelText="Step description:"
-            placeholder="Tell us some detailed informations about this step..." :mandatory="true" inputType="textarea"
-            initialHeight="100" maxLength="650" v-model="descriptionPrivateValue" @update:modelValue="updateDescription" />
+        <div class="containerContent">
+            <InputField id="stepDescription" labelText="Step description:"
+                placeholder="Tell us some detailed informations about this step..." :mandatory="true" inputType="textarea"
+                initialHeight="100" maxLength="650" v-model="descriptionPrivateValue"
+                @update:modelValue="updateDescription" />
 
-        <div class="flexHorizontal">
-            <InputField :id="'cooktime' + stepObject.stepNumber" labelText="Cook time:" inputType="time"
-                :v-model="stepObject.cooktimeValue" v-model="cooktimePrivateValue" @update:modelValue="updateCooktime" />
-            <InputField :id="'preptime' + stepObject.stepNumber" labelText="Preparation time:" inputType="time"
-                :v-model="stepObject.preptimeValue" />
+            <div class="flexHorizontal">
+                <InputField :id="'cooktime' + stepObject.stepId" labelText="Cook time:" inputType="time"
+                    v-model="cooktimePrivateValue" @update:modelValue="updateCooktime" />
+
+                <InputField :id="'preptime' + stepObject.stepId" labelText="Preparation time:" inputType="time"
+                    v-model="preptimePrivateValue" @update:modelValue="updatePreptime" />
+            </div>
         </div>
     </div>
 </template>
 
 <style scoped>
 .StepCreateComponent {
-    background-color: var(--color-background-light);
     display: flex;
     flex-direction: column;
-    padding: 15px;
     width: 100%;
+    margin-bottom: 30px;
 }
 
 .containerTitle {
     display: flex;
     flex-direction: row;
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
 }
 
 .containerTitle h4 {
@@ -84,5 +100,17 @@ export default {
     font-weight: bold;
     color: var(--color-text);
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.containerTitle hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--color-background-light);
+    flex: 1;
+    margin: 0 20px;
+}
+
+.containerContent {
+    padding: 0 20px;
 }
 </style>

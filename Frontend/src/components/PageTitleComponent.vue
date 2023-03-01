@@ -18,5 +18,6 @@ export default {
 h1 {
     margin: 20px 0;
     color: var(--color-text);
+    font-weight: bold;
 }
 </style>

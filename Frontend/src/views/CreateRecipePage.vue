@@ -1,17 +1,12 @@
 <script lang="ts">
 import { API } from "@/model/apiCalls";
 import PageTitle from "@/components/PageTitleComponent.vue";
-import InputField from "@/components/InputFieldComponent.vue";
-import CustomButton from "@/components/CustomButtonComponent.vue";
+import InputField from "@/components/formComponents/InputFieldComponent.vue";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import StepCreate from "@/components/createRecipePage/StepCreateComponent.vue";
-
-export type Step = {
-  stepNumber: number,
-  descriptionValue: string,
-  cooktimeValue: string,
-  preptimeValue: string,
-}
-
+import PageSeparator from "@/components/PageSeparatorComponent.vue";
+import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
+import { Recipe, type Step } from "@/model/recipeModel";
 
 export default {
   name: "CreateRecipePage",
@@ -20,6 +15,8 @@ export default {
     InputField,
     CustomButton,
     StepCreate,
+    PageSeparator,
+    BackgroundIcons,
   },
   // In the first bracket, we define the types of the variables we will use,
   // And in the second bracket we define the initiale values.
@@ -45,42 +42,79 @@ export default {
      * Method called when clicking on the create recipe button.
      */
     createRecipe(): void {
-      // We make sure that users have filled all fields
-      if (this.title !== "" && this.description !== "") {
 
-        // We do the API call to create a recipe.
-        API.instance.createRecipe(this.title, this.description);
+      /** 
+       * Data validation 
+       */
+      let error: boolean = false;
+      if (this.title === ""
+        || this.description === "" || this.description.length > 650
+        || this.numberPeople < 1)
+        error = true;
 
-        // We reset the form
-        this.title = "";
-        this.description = "";
+      this.steps.forEach(step => {
+        if (step.descriptionValue === "") {
+          error = true;
+          console.error("description du step ", step, " vide");
+        }
 
-        // Here we set the created boolean value to true to display the success message
-        // but we set a 2 seconds timeout to set it back to false to the message is not displayed forever.
+      });
 
+      if (error) {
+        // errors, don't send datas.
+        // TODO: Display error message here
+        console.error("Some fields are empty");
+      } else {
+        // No errors, send datas
+        // TODO: create recipe model here
+        const result = API.instance.createRecipe(new Recipe(
+          this.title,
+          this.description,
+          this.numberPeople,
+          this.steps
+        ));
+
+        if (result) {
+          // TODO: Redirect to another page with success message here
+        } else {
+          // TODO: Display error message here
+        }
       }
+
     },
     addStep(): void {
-
+      this.stepCounter++;
+      this.steps.push({
+        stepId: this.stepCounter,
+        descriptionValue: "",
+        cooktimeValue: "",
+        preptimeValue: "",
+      });
+    },
+    deleteStep(stepObjectToDelete: Step): void {
+      console.error(this.steps);
+      this.steps = this.steps.filter(step => step.stepId !== stepObjectToDelete.stepId);
+      console.error(this.steps);
     }
   },
   created() {
     this.steps.push({
-      stepNumber: this.stepCounter,
-      descriptionValue: "test",
+      stepId: this.stepCounter,
+      descriptionValue: "",
       cooktimeValue: "",
-      preptimeValue: ""
+      preptimeValue: "",
     });
   }
 };
 
 </script>
 <template>
-  <div class="CreateRecipePage">
-
+  <main class="CreateRecipePage">
     <div class="contentConainer">
 
       <PageTitle text="Create a new recipe !" />
+
+      <PageSeparator title="🍔 Global informations about your recipe" />
 
       <div class="flexHorizontal">
         <InputField id="recipeTitle" labelText="Recipe Title:" placeholder="Please enter the recipe title..."
@@ -94,30 +128,55 @@ export default {
         placeholder="Tell us some global informations about your recipe..." v-model="description" :mandatory="true"
         inputType="textarea" initialHeight="100" maxLength="650" />
 
-      <!-- TODO: Make a separator here -->
+      <PageSeparator title="📜 Give us the steps to complete your recipe" />
 
-      <StepCreate v-for="step in steps" :key="step.stepNumber" v-model:descriptionModelValue="step.descriptionValue"
-        :stepObject="step" v-model:cooktimeModelValue="step.cooktimeValue" />
+      <transition-group name="list">
+        <StepCreate v-for="(step, index) in steps" :key="step.stepId" :stepObject="step" :stepIndex="index + 1"
+          :stepIndexLength="steps.length" v-model:descriptionModelValue="step.descriptionValue"
+          v-model:cooktimeModelValue="step.cooktimeValue" v-model:preptimeModelValue="step.preptimeValue"
+          @stepDeleted="deleteStep" />
+      </transition-group>
 
-      {{ steps[0].descriptionValue }}
-      {{ steps[0].cooktimeValue }}
-
-      <div class="alignLeft">
-        <CustomButton text="Add a new step" @clicked="addStep" />
+      <div class="containerAddStep">
+        <CustomButton text="Add a new step" type="success" effect="plain" icon="add" titleText="Click to add a new step"
+          @clicked="addStep" />
+        <hr>
       </div>
 
 
-      <CustomButton text="Create the recipe !" @clicked="createRecipe" />
+      <CustomButton text="🥧 Create the recipe !" titleText="Click to create the recipe" @clicked="createRecipe" />
 
-      <!-- This is the confirmation message, that we display only if the created variable is set to true ! -->
-      <!-- <p v-if="created">Recipe created !</p> -->
 
     </div>
 
-  </div>
+    <BackgroundIcons />
+
+  </main>
 </template>
 
 <style scoped>
+/* ----- transition for step list ------- */
+.list-move,
+/* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
+}
+
+/* ------- */
+
 .CreateRecipePage {
   display: flex;
   flex-direction: column;
@@ -149,5 +208,22 @@ form input {
 
 .flexHorizontal div:nth-child(2) {
   flex: 1;
+}
+
+.containerAddStep {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.containerAddStep hr {
+  border: 0;
+  height: 1px;
+  background-color: var(--color-background-light);
+  flex: 1;
+  margin-left: 20px;
 }
 </style>

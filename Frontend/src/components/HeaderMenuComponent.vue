@@ -19,6 +19,7 @@ export default {
     <nav>
       <RouterLink to="/" exact>Home</RouterLink>
       <RouterLink to="/createRecipe" exact>Create Recipe</RouterLink>
+      <RouterLink to="/pantry" exact>Pantry</RouterLink>
     </nav>
   </header>
 </template>

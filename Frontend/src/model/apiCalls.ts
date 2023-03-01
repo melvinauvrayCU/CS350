@@ -1,3 +1,4 @@
+import { IngredientCat, UntensilCat } from "./CatagoryModel";
 import { Recipe } from "./recipeModel";
 
 /**
@@ -37,6 +38,14 @@ export class API {
 		new Recipe("Americain burger", "True og burger"),
 		new Recipe("French burger", "Same burger, but better"),
 	];
+	ingredientCatList: IngredientCat[] = [
+		new IngredientCat("Protein"),
+		new IngredientCat("Dairy"),
+	];
+	untensilCatList: UntensilCat[] = [
+		new UntensilCat("Silverware"),
+		new UntensilCat("Electric Appliances"),
+	];
 
 	// * ------------------- Start of the API call methods ------------------------
 
@@ -65,4 +74,35 @@ export class API {
 	createRecipe(title: string, description: string): void {
 		this.recipeList.push(new Recipe(title, description));
 	}
+
+// ----IngredientCatagory Methods----
+
+getIngredientCats(): IngredientCat[] {
+	return this.ingredientCatList;
+}
+
+removeIngredientCat(id: number): IngredientCat[] {
+	this.ingredientCatList = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+	return this.ingredientCatList;
+}
+
+createIngredientCat(name: string): void {
+	this.ingredientCatList.push(new IngredientCat(name));
+}
+
+// ----UntensilCatagory Methods----
+
+getUntensilCats(): UntensilCat[] {
+	return this.untensilCatList;
+}
+
+removeUntensilCat(id: number): UntensilCat[] {
+	this.untensilCatList = this.untensilCatList.filter(untensilcat => untensilcat.id !== id);
+	return this.untensilCatList;
+}
+
+createUntensilCat(name: string): void {
+	this.untensilCatList.push(new UntensilCat(name));
+}
+
 }

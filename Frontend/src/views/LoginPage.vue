@@ -51,13 +51,6 @@ export default {
           this.messageType = "warning";
           this.messageText = "Username or Password incorrect";
         }
-
-
-
-
-
-
-
       }
     }
   },

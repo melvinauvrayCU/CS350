@@ -46,6 +46,7 @@ export class API {
 	userList: User[] = [
 		new User("Ava.Megyeri", "Password", "megyeram@clarkson.edu"),
 		new User("petesupreme", "password1", "dorovip@clarkson.edu"),
+		new User("a", "a", "a@clarkson.edu"),
 
 	];
 
@@ -98,8 +99,6 @@ export class API {
 			return false;
 		}
 
-
-
 	}
 
 
@@ -131,6 +130,11 @@ export class API {
 	 */
 	isLoggedIn(): boolean {
 		return this.loggedIn;
+	}
+
+	logout(): boolean {
+		this.loggedIn = false;
+		return true;
 	}
 
 }

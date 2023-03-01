@@ -1,3 +1,4 @@
+import { Category } from './categoryModel';
 import { Recipe } from "./recipeModel";
 
 /**
@@ -38,6 +39,16 @@ export class API {
 		new Recipe("French burger", "Same burger, but better"),
 	];
 
+	/**
+	 * List of all Categories, this is temporary because we don't have the backend setup yet.
+	 * Its type is an array of Recipe class, defined in another file.
+	 * Same as above with recipeList
+	 */
+	categoryList: Category[] = [
+		new Category("Recommneded"),
+		new Category("Highest Rated")
+	]
+
 	// * ------------------- Start of the API call methods ------------------------
 
 	/**
@@ -45,6 +56,13 @@ export class API {
 	 */
 	getRecipes(): Recipe[] {
 		return this.recipeList;
+	}
+
+	/**
+	 * Return the full list of categories
+	 */
+	getCategories(): Category[] {
+		return this.categoryList;
 	}
 
 	/**

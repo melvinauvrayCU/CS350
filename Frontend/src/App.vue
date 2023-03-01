@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import HeaderMenuComponent from "./components/HeaderMenuComponent.vue";
+import FooterComponent from "./components/FooterComponent.vue";
 </script>
 
 <template>
@@ -12,6 +13,9 @@ import HeaderMenuComponent from "./components/HeaderMenuComponent.vue";
 
     <!-- RouterView element, a native VueJs component which contains the content of each page -->
     <RouterView />
+
+    <!-- Footer of the application, present on all pages so we put it in this file -->
+    <FooterComponent />
 
   </div>
 </template>

@@ -4,9 +4,15 @@
 :root {
   --color-background: white;
   --color-text: #2f2e2e;
+  --color-text-light: #858585;
   --color-accent: yellow;
   --color-primary: green;
   --color-background-light: lightgray;
+  --color-black: black;
+  --color-danger: #ff3a3a;
+  --color-danger-light: #ffb8b8;
+  --color-success-light: #90ee90;
+  --color-success: #39c439;
   --color-salmon-test: salmon;
 }
 
@@ -17,15 +23,43 @@
   margin: 0;
   position: relative;
   font-weight: normal;
+  outline: 0;
 }
 
 body {
-  min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
+  font-family:Arial, Helvetica, sans-serif;
+
+}
+
+main {
+  width: 100%;
+  flex: 1;
 }
 
 /* Generic class used in a lot of components, used to fill some space with flexbox */
 .flexFill {
   flex: 1;
+}
+
+.flexHorizontal {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+
+.flexHorizontal div:nth-child(1) {
+  margin-right: 20px;
+}
+
+.flexHorizontal div:nth-child(2) {
+  margin-left: 20px;
+}
+
+.alignLeft {
+  display: flex;
+  width: 100%;
+  justify-content: start;
 }

@@ -35,8 +35,7 @@ export class API {
 	 * But obviously we will not have any persistency of our datas when reloading the website.
 	 */
 	recipeList: Recipe[] = [
-		new Recipe("Americain burger", "True og burger"),
-		new Recipe("French burger", "Same burger, but better"),
+		new Recipe("Americain burger", "True og burger", 2, []),
 	];
 
 	/*
@@ -79,8 +78,10 @@ export class API {
 	 * @param title Title of the recipe
 	 * @param description Description of the recipe.
 	 */
-	createRecipe(title: string, description: string): void {
-		this.recipeList.push(new Recipe(title, description));
+	createRecipe(recipeObject: Recipe): boolean {
+		this.recipeList.push(recipeObject);
+		console.log(this.recipeList);
+		return true;
 	}
 
 

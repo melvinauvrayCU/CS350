@@ -39,9 +39,12 @@ export default {
 .search-textbox {
     background-color: white;
     font-size: 20px;
+    border: 3px solid lightgrey ;
+    border-radius: 5px;
     display: flex;
     width: 100%;
-    margin: 15px;
+    margin: 10px ;
+    height: 40px;
 }
 
 .search-button__button {
@@ -52,6 +55,7 @@ export default {
     cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
+    height: 40px;
 }
 
 .search-button__button:hover {

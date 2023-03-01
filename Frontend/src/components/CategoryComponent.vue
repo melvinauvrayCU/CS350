@@ -24,7 +24,7 @@ export default {
 
 <style scoped>
 .CategoryComponent {
-    background-color: black;
+    background-color: grey;
     width: 200px;
     border-radius: 5px;
     padding: 5px;

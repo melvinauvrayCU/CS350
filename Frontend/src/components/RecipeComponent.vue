@@ -35,8 +35,9 @@ export default {
 <style scoped>
 .RecipeComponent {
     background-color: white;
-    border: 3px solid black;
-    border-color: black;
+    border: 3px solid lightgrey;
+    border-color: lightgrey;
+    border-radius: 5px;
     width: 500px;
     display: flex;
     padding: 30px;

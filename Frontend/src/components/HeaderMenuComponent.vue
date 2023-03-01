@@ -11,6 +11,7 @@ export default {
     clickLogout() {
       // We call the API to logout
       if (API.instance.logout()) {
+        this.$router.push("/");
         // We force the refresh of the menu component to it recall the checkIfLoggedIn method.
         this.$forceUpdate();
       }
@@ -31,7 +32,7 @@ export default {
 
     <nav v-if="!$route.meta.hideNavbar">
       <RouterLink to="/" exact>Home</RouterLink>
-      <RouterLink to="/createRecipe" exact>Create Recipe</RouterLink>
+      <RouterLink v-if="checkIfLoggedIn()" to="/createRecipe" exact>Create Recipe</RouterLink>
       <RouterLink v-if="!checkIfLoggedIn()" to="/login" exact>Login</RouterLink>
       <a v-if="checkIfLoggedIn()" @click="clickLogout">Logout</a>
       <RouterLink to="/signup" v-if="!checkIfLoggedIn()" exact>Signup</RouterLink>

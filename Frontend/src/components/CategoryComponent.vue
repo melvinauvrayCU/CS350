@@ -24,16 +24,20 @@ export default {
 
 <style scoped>
 .CategoryComponent {
-    background-color: var(--color-accent);
+    background-color: black;
     width: 200px;
-    display: block;
-    padding: 10px;
+    border-radius: 5px;
+    padding: 5px;
     margin: 20px;
     flex-direction: row;
 }
 
 .containerText {
+    background-color: white;
     display: flex;
-    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    font-display: center;
 }
 </style>

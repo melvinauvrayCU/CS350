@@ -16,30 +16,28 @@ export default {
 <template>
     <div class="RecipeComponent">
         <div class="containerText">
-            <h3>{{ recipe.title }}</h3>
-            <p>{{ recipe.description }}</p>
+            <h3 class="recipe-title">{{ recipe.title }}</h3>
+            <p class="recipe-descrip">{{ recipe.description }}</p>
         </div>
-        <div class="flexFill">
-        </div>
+        <div class="flexFill"> </div>
         <div class="delete-button">
             <!-- On clicking on the button, we want to delete the recipe,-->
             <!-- Since we are in the component file, we can't touch the API, we are allowed to do so only in Page files, -->
             <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
             <!-- and we don't forget to attach the id of the recipe we want to delete. -->
-            <button @click="$emit('delete-recipe', recipe.id)">
+            <button class="delete-button__button" @click="$emit('delete-recipe', recipe.id)">
             Delete Recipe
-        </button>
+            </button>
         </div>
-        
-        
-
     </div>
 </template>
 
 <style scoped>
 .RecipeComponent {
-    background-color: var(--color-accent);
-    width: 300px;
+    background-color: white;
+    border: 3px solid black;
+    border-color: black;
+    width: 500px;
     display: flex;
     padding: 30px;
     margin: 20px;
@@ -48,21 +46,36 @@ export default {
 
 .containerText {
     display: flex;
+    text-decoration-color: white;
     flex-direction: column;
 }
 
 .delete-button {
-    background-color: red;
-    border: none;
-    color: red;
-    padding: 15px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    display: flex;
     cursor: pointer;
-    border-radius: 5px;
+    font-size: 16px;
+}
 
+.delete-button__button {
+    background-color: red;
+    border: 1px solid red;
+    border-radius: 3px;
+    margin-left: auto;
+    margin-top: -10px;
+    font-size: 16px;
+    color: white;
+}
+
+.recipe-title {
+    font-size: 20px;
+
+    margin-right: auto;
+    margin-top: -10px;
+}
+
+.delete-button__button:hover {
+    background-color: darkred;
+    border: 1px solid darkred;
+    border-radius: 3px;
 }
 </style>

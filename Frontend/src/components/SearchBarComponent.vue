@@ -17,9 +17,9 @@ export default {
 
 <template>
     <div class="SearchBarComponent">
-        <input type="text" v-model="searchText" placeholder="Search...">
+        <input class="search-textbox" type="text" v-model="searchText" placeholder="Search...">
         <div class="search-button">
-            <button @click="search">Search</button>
+            <button class="search-button__button" @click="search">Search</button>
         </div>
     </div>
 </template>
@@ -28,14 +28,33 @@ export default {
 .SearchBarComponent {
     display: flex;
     flex-direction: row;
-    margin: 15px;
-    text-align-last: left;
-    background-color: white;
 }
 
 .search-button {
     display: flex;
     flex-direction: row;
+    margin: 10px 10px;
+}
+
+.search-textbox {
+    background-color: white;
+    font-size: 20px;
+    display: flex;
+    width: 100%;
+    margin: 15px;
+}
+
+.search-button__button {
     background-color: green;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.search-button__button:hover {
+    background-color: darkgreen;
 }
 </style>

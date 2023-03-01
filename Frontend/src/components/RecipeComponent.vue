@@ -1,5 +1,6 @@
 <script lang="ts">
 import { Recipe } from "@/model/recipeModel";
+import router from "@/router/index";
 
 export default {
     name: "RecipeComponent",
@@ -9,7 +10,13 @@ export default {
             type: Recipe,
             required: true
         },
-    }
+    },
+    methods: {
+        editRecipe(){
+            console.log("Pushing to edit page " + this.recipe.id);
+            router.push({name: "editRecipe", params: {id: this.recipe.id} });
+        }
+    },
 };
 </script>
 
@@ -28,6 +35,10 @@ export default {
         <!-- and we don't forget to attach the id of the recipe we want to delete. -->
         <button @click="$emit('delete-recipe', recipe.id)">
             Delete Recipe
+        </button>
+
+        <button @click="editRecipe()">
+            Edit recipe 
         </button>
 
     </div>

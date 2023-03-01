@@ -46,6 +46,15 @@ export class API {
 	getRecipes(): Recipe[] {
 		return this.recipeList;
 	}
+	getRecipe(id : number){
+		for(let i=0; i<this.recipeList.length; i++){
+			if (this.recipeList[i].id == id){
+				return this.recipeList[i];
+			}
+
+		}
+		return this.recipeList[0];
+	}
 
 	/**
 	 * Remove a recipe with the specified id in paramter and returns the new full list of recipes. 
@@ -64,5 +73,9 @@ export class API {
 	 */
 	createRecipe(title: string, description: string): void {
 		this.recipeList.push(new Recipe(title, description));
+	}
+	editRecipe( id: number, tit: string, des: string): void{
+		this.recipeList[id].title=tit;
+		this.recipeList[id].description=des;
 	}
 }

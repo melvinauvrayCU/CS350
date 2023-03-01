@@ -85,7 +85,8 @@ export class API {
 	login(username: string, password: string): boolean {
 		if (this.userList.find(user => user.username === username) || this.userList.find(user => user.email === username)) {
 			const personUser = username;
-			if (personUser == username && this.userList.find(pass => pass.password === password)) {
+			if (this.userList.find(pass => pass.password === password && pass.username === personUser)) {
+				console.warn(`${password}`);
 				console.warn(`Welcome back ${username}`);
 				return true;
 			} else {
@@ -110,14 +111,10 @@ export class API {
 	 * @param email email the user puts it
 	 */
 	signup(email: string, username: string, password: string): boolean {
-		if (this.userList.find(user => user.email === email)) {
-			console.log("email already in use, press login to login");
+		if (this.userList.find(user => user.email === email) || this.userList.find(user => user.username === username) ) {
+			console.log("Email or username already taken");
 			return false;
 		} else {
-			if (this.userList.find(user => user.username === username)) {
-				console.log("username already taken");
-				return false;
-			} else {
 
 				this.userList.push(new User(email, username, password));
 				console.log("User created!");
@@ -127,12 +124,5 @@ export class API {
 
 		}
 
-
-
-
-
 	}
-
-
-}
 

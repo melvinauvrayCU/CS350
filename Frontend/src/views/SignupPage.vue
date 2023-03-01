@@ -13,8 +13,7 @@ export default{
     email: string,
     username: string,
     password: string,
-    passerror: string,
-    signedup: boolean,
+    messageText: string,
     messageType: "success" | "warning",
 
    }{
@@ -24,8 +23,7 @@ export default{
       username: "",
       password: "",
       email: "",
-      passerror: "",
-      signedup: false,
+      messageText: "",
       messageType: "success",
     };
   },
@@ -44,12 +42,12 @@ export default{
 
         if(signedUp === false)
         {
-          this.signedup = false;
-          this.passerror = "Username or Email already in use";
+          
+          this.messageText = "Username or Email already in use";
           this.messageType = "warning";
         }else{
-          this.signedup = true;
-          this.passerror = "Welcome!";
+          
+          this.messageText = "Welcome!";
           this.messageType = "success";
         }
 
@@ -106,7 +104,7 @@ export default{
             </p>
           </div>
         
-          <MessageComponent v-if="passerror !== ''" :type="messageType" :message="passerror" />
+          <MessageComponent v-if="messageText !== ''" :type="messageType" :message="messageText" />
         </form>
       </div>
   </div>

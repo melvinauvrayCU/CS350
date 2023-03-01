@@ -13,8 +13,7 @@ export default {
   data(): {
     username: string,
     password: string,
-    loggedin: boolean,
-    passerror: string,
+    messageText: string,
     messageType: "success" | "warning",
   } {
     // We are setting the title and description datas that will be linked to the form.
@@ -22,8 +21,7 @@ export default {
     return {
       username: "",
       password: "",
-      loggedin: false,
-      passerror: "",
+      messageText: "",
       messageType: "success"
     };
   },
@@ -41,13 +39,13 @@ export default {
         this.password = "";
 
         if (ifLoggedin === true) {
-          this.loggedin = true;
+        
           this.messageType = "success";
-          this.passerror = "Welcome back!";
+          this.messageText = "Welcome back!";
         } else {
-          this.loggedin = false;
+  
           this.messageType = "warning";
-          this.passerror = "Username or Password incorrect";
+          this.messageText = "Username or Password incorrect";
         }
 
 
@@ -102,7 +100,7 @@ export default {
         </div>
 
 
-        <MessageComponent v-if="passerror !== ''" :type="messageType" :message="passerror" />
+        <MessageComponent v-if="messageText !== ''" :type="messageType" :message="messageText" />
       </form>
     </div>
   </div>

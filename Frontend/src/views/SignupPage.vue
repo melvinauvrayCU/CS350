@@ -3,120 +3,118 @@ import { API } from "@/model/apiCalls";
 import MessageComponent from "@/components/MessageComponent.vue";
 
 
+export default{
+    name: "CreateSignupPage",
+    components:{
+      MessageComponent
+    },
 
-export default {
-  name: "CreateLoginPage",
-  components: {
-    MessageComponent
-  },
-
-  data(): {
+   data(): {
+    email: string,
     username: string,
     password: string,
-    loggedin: boolean,
     passerror: string,
+    signedup: boolean,
     messageType: "success" | "warning",
-  } {
+
+   }{
     // We are setting the title and description datas that will be linked to the form.
     // And a boolean created variable, which will be true when a user has logged in
     return {
       username: "",
       password: "",
-      loggedin: false,
+      email: "",
       passerror: "",
-      messageType: "success"
+      signedup: false,
+      messageType: "success",
     };
   },
-
   methods: {
-    login() {
-      if (this.username !== "" && this.password !== "") {
+    //method to signup as a user
+    signup(){
+      if(this.username !== "" && this.password !== "" && this.email !== ""){
 
-        // We do the API call to login the user
-        var ifLoggedin = API.instance.login(this.username, this.password);
+        //API call to signup a user
+        var signedUp = API.instance.signup(this.email, this.username, this.password);
 
-
-        // reset forms
+        //reset forms
         this.username = "";
         this.password = "";
+        this.email = "";
 
-        if (ifLoggedin === true) {
-          this.loggedin = true;
-          this.messageType = "success";
-          this.passerror = "Welcome back!";
-        } else {
-          this.loggedin = false;
+        if(signedUp === false)
+        {
+          this.signedup = false;
+          this.passerror = "Username or Email already in use";
           this.messageType = "warning";
-          this.passerror = "Username or Password incorrect";
+        }else{
+          this.signedup = true;
+          this.passerror = "Welcome!";
+          this.messageType = "success";
         }
-
-
-        //     setTimeout(() => {
-        //     this.loggedin = false;
-        // }, 2000);
-
-
 
       }
     }
+
   },
 };
-
-
+    
+    
+    
+    
+    
 
 </script>
+
+
 
 <template>
   <div class="welcome">
     <h1>Welcome to Recipe Buddy</h1>
   </div>
 
-<section>
-  <div class ="border">
-    <div class="CreateLoginPage">
-
-      <form @submit.prevent>
-        <div class = "inputbox"> 
+  <section>
+    <div class = "border">
+      <div class="CreateSignupPage">
+  
+        <form @submit.prevent>
+          <div class = "inputbox">
+            <label for="email"></label>
           
-          <label for="username"></label>
-
-          <input type="text" id="username" placeholder="Username or Email" v-model="username" required>
-        </div>
-        <div class = "inputbox">
-        <label for="password"></label>
-
-        <input type="password" id="password" placeholder="Password" v-model="password" required>
-        </div>  
+            <input type="email" id="email" placeholder="Email*" v-model="email" required>
+          </div>
 
 
-        <button @click="login">Login</button>
+          <div  class = "inputbox">
+            <label for="username"></label>
+          
+            <input type="text" id="username" placeholder = "Username*" maxlength="15" v-model="username" required>
+          </div>
 
-        <div class = "forgot">
-        <p>
-          <router-link to="/">Forgot Password?</router-link>
-        </p>
-        </div>
+          <div class = "inputbox">
+            <label for="password"></label>
+          
+            <input type="password" id="password" placeholder = "Password*" v-model="password" required>
+          </div>
+          
+          <button @click="signup">Signup</button>
 
-        <div class = "create">
-        <p>
-          Don't have an account?
-          <router-link to="signup">Sign up</router-link>
-        </p>
-        </div>
-
-
-        <!-- <p v-if="loggedin">{{ passerror }}!</p> -->
-        <!-- <p v-if="!loggedin"> {{ passerror }}</p> -->
-        <MessageComponent v-if="passerror !== ''" :type="messageType" :message="passerror" />
-      </form>
-    </div>
+          <div class = "login">
+            <p> 
+              Already have an account?
+              <router-link to ="login">Login</router-link>
+            </p>
+          </div>
+        
+          <MessageComponent v-if="passerror !== ''" :type="messageType" :message="passerror" />
+        </form>
+      </div>
   </div>
-</section>
+  </section>
+  </template>
 
-</template>
 
 <style scoped>
-
 .welcome {
   display: flex;
   justify-content: center;
@@ -125,6 +123,7 @@ export default {
   margin: 10px auto;
   flex-wrap: nowrap;
 }
+
 .welcome h1{
   color: var(--color-text);
   font-weight: 600;
@@ -132,6 +131,7 @@ export default {
   font-family: Helvetica;
 
 }
+
 section{
   display: flex;
   justify-content: center;
@@ -139,8 +139,7 @@ section{
   min-height: 100px;
   width: 100%;
 }
-
-.CreateLoginPage {
+  .CreateSignupPage  {
   display: flex;
   justify-content: center;
   height: 500px;
@@ -186,18 +185,14 @@ section{
   padding:0 35px 0 5px;
   color: black;
 }
-.forgot{
-  margin: 20px;
+
+.login{
+  margin-top: 15px;
   color: var(--color-text);
   display: flex;
   justify-content: space-between; 
 }
-.create{
-  margin: 20px;
-  color: var(--color-text);
-  display: flex;
-  justify-content: space-between; 
-}
+
 
 
 button {
@@ -216,7 +211,6 @@ button {
 button:hover{
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
+    </style>
+    
 
-
-
-</style>

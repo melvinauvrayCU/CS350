@@ -84,7 +84,8 @@ export class API {
 	 */
 	login(username: string, password: string): boolean {
 		if (this.userList.find(user => user.username === username) || this.userList.find(user => user.email === username)) {
-			if (this.userList.find(pass => pass.password === password)) {
+			const personUser = username;
+			if (personUser == username && this.userList.find(pass => pass.password === password)) {
 				console.warn(`Welcome back ${username}`);
 				return true;
 			} else {

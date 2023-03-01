@@ -21,7 +21,7 @@ const router = createRouter({
       path: "/login",
       name: "Login",
     
-      component: () => import("../views/CreateLoginPage.vue"),
+      component: () => import("../views/LoginPage.vue"),
       meta: {
         hideNavbar: true,
       }
@@ -30,7 +30,7 @@ const router = createRouter({
       path: "/signup",
       name: "Signup",
     
-      component: () => import("../views/CreateSignupPage.vue"),
+      component: () => import("../views/SignupPage.vue"),
       meta: {
         hideNavbar: true,
       }

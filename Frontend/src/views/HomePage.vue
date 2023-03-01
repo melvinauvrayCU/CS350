@@ -4,6 +4,7 @@ import type { Category } from "@/model/categoryModel";
 import { API } from "../model/apiCalls";
 import RecipeListComponent from "../components/RecipeListComponent.vue";
 import CategoryListComponent from "@/components/CategoryListComponent.vue";
+import SearchBarComponent from "@/components/SearchBarComponent.vue";
 
 export default {
   name: "HomePage",
@@ -45,12 +46,16 @@ export default {
     this.recipes = API.instance.getRecipes();
   }
 };
-
 </script>
 
 <template>
   <main>
-    <div ></div>
+    <div >
+      <form action="https://www.example.com/search">
+          <input type="text" name="q" />
+          <input type="submit" value="Search"/>
+      </form>
+    </div>
     <CategoryListComponent type="text" v-bind:categories="categories" />
     <!-- We call the recipe list component. -->
     <!-- We make sure to listen to the delete-recipe signal. We call the deleteRecipe method when we receive it. -->

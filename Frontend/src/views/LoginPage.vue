@@ -1,13 +1,14 @@
 <script lang="ts">
 import { API } from "@/model/apiCalls";
 import MessageComponent from "@/components/MessageComponent.vue";
-
+import PageTitle from "@/components/PageTitleComponent.vue";
 
 
 export default {
   name: "CreateLoginPage",
   components: {
-    MessageComponent
+    MessageComponent,
+    PageTitle
   },
 
   data(): {
@@ -61,11 +62,11 @@ export default {
 </script>
 
 <template>
-  <div class="welcome">
-    <h1>Welcome to Recipe Buddy</h1>
-  </div>
-
   <section>
+
+    <PageTitle text="Welcome to RecipeBuddy !" />
+
+
     <div class="border">
       <div class="CreateLoginPage">
 
@@ -107,29 +108,13 @@ export default {
 </template>
 
 <style scoped>
-.welcome {
-  display: flex;
-  justify-content: center;
-  padding: 30px;
-  width: 60%;
-  margin: 10px auto;
-  flex-wrap: nowrap;
-}
-
-.welcome h1 {
-  color: var(--color-text);
-  font-weight: 600;
-  font-size: 32px;
-  font-family: Helvetica;
-
-}
-
 section {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100px;
   width: 100%;
+  flex-direction: column;
 }
 
 .CreateLoginPage {

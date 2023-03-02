@@ -23,11 +23,11 @@ div {
 }
 
 h3 {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "OpenSans";
     color: var(--color-text);
     font-size: 1.3em;
     margin-bottom: 5px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 hr {

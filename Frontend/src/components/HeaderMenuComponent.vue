@@ -84,4 +84,8 @@ nav .router-link-active {
   box-shadow: inset 200px 0 0 0 var(--color-text);
   color: #fff;
 }
+
+h1 {
+  font-family: "FilsonSoft";
+}
 </style>

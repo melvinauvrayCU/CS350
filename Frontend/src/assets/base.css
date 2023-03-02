@@ -1,5 +1,21 @@
 /* base.css file contains all the most basic css rules used everywhere in the app */
 
+/* Fonts */
+@font-face {
+  font-family: "OpenSans";
+  src: url("fonts/OpenSans.ttf") format("truetype-variations");
+}
+
+@font-face {
+  font-family: "OpenSansItalic";
+  src: url("fonts/OpenSans_Italic.ttf") format("truetype-variations");
+}
+
+@font-face {
+  font-family: "FilsonSoft";
+  src: url("fonts/FilsonSoft.ttf") format("truetype-variations");
+}
+
 /* Colors */
 :root {
   --color-background: white;
@@ -29,8 +45,7 @@
 body {
   color: var(--color-text);
   background: var(--color-background);
-  font-family:Arial, Helvetica, sans-serif;
-
+  font-family: "OpenSans";
 }
 
 main {

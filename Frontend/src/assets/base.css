@@ -2,34 +2,40 @@
 
 /* Fonts */
 @font-face {
-  font-family: "OpenSans";
+  font-family: "common";
   src: url("fonts/OpenSans.ttf") format("truetype-variations");
 }
 
 @font-face {
-  font-family: "OpenSansItalic";
+  font-family: "commonItalic";
   src: url("fonts/OpenSans_Italic.ttf") format("truetype-variations");
 }
 
 @font-face {
-  font-family: "FilsonSoft";
+  font-family: "title";
   src: url("fonts/FilsonSoft.ttf") format("truetype-variations");
 }
 
 /* Colors */
 :root {
   --color-background: white;
+  --color-background-light: rgb(210, 210, 210);
+  --color-background-extra-light: rgb(245, 245, 245);
+
   --color-text: #2f2e2e;
   --color-text-light: #858585;
-  --color-accent: yellow;
-  --color-primary: green;
-  --color-background-light: lightgray;
-  --color-black: black;
+
+  --color-accent: #fa8072;
+  --color-accent-light: #faaca3;
+  
+  /* --color-primary: green; */
+  /* --color-black: black; */
   --color-danger: #ff3a3a;
-  --color-danger-light: #ffb8b8;
+  --color-danger-light: #fa8888;
+  
   --color-success-light: #90ee90;
   --color-success: #39c439;
-  --color-salmon-test: salmon;
+  /* --color-salmon-test: #fa8072; */
 }
 
 *,
@@ -45,7 +51,7 @@
 body {
   color: var(--color-text);
   background: var(--color-background);
-  font-family: "OpenSans";
+  font-family: "common";
 }
 
 main {

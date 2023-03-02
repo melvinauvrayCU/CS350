@@ -16,10 +16,10 @@ export default {
 
 <style scoped>
 h1 {
-    margin: 20px 0;
+    margin: 20px 0 50px 0;
     color: var(--color-text);
     font-weight: bold;
-    font-family: "FilsonSoft";
+    font-family: "title";
     font-size: 2em;
 }
 </style>

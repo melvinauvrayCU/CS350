@@ -12,7 +12,7 @@ export default {
             required: true
         },
         inputType: {
-            type: String as () => "text" | "number" | "textarea" | "time",
+            type: String as () => "text" | "number" | "textarea" | "time" | "password" | "email",
             default: "text"
         },
         modelValue: {
@@ -115,7 +115,6 @@ export default {
 
         <div>
             <Transition>
-
                 <label :class="'counterLabel ' + labelCounterError" v-show="maxLength !== '' && lengthCounter > 0">{{
                     lengthCounter +
                     " / " + maxLength
@@ -172,10 +171,10 @@ textarea {
     padding: 10px 20px;
     font-size: 1.2em;
     border-radius: 5px;
-    font-family: "OpenSans";
+    font-family: "common";
     color: var(--color-text);
 
-    box-shadow: inset 0 0 0 0px var(--color-black);
+    box-shadow: inset 0 0 0 0px var(--color-accent);
     overflow: hidden;
 }
 
@@ -216,15 +215,15 @@ textarea.errorBorder:focus {
 
 @keyframes shadowOnFocusBlack {
     0% {
-        box-shadow: inset 0 0 0 0px var(--color-black);
+        box-shadow: inset 0 0 0 0px var(--color-text);
     }
 
     50% {
-        box-shadow: inset 0 0 0 .2px var(--color-black);
+        box-shadow: inset 0 0 0 .2px var(--color-text);
     }
 
     100% {
-        box-shadow: inset 0 0 0 .4px var(--color-black);
+        box-shadow: inset 0 0 0 .4px var(--color-text);
     }
 }
 

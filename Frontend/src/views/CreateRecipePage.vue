@@ -144,7 +144,8 @@ export default {
       </div>
 
 
-      <CustomButton text="🥧 Create the recipe !" titleText="Click to create the recipe" @clicked="createRecipe" />
+      <CustomButton type="neutral" effect="plain" text="Create the recipe !" titleText="Click to create the recipe"
+        @clicked="createRecipe" />
 
 
     </div>

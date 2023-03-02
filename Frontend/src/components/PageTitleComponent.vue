@@ -19,5 +19,7 @@ h1 {
     margin: 20px 0;
     color: var(--color-text);
     font-weight: bold;
+    font-family: "FilsonSoft";
+    font-size: 2em;
 }
 </style>

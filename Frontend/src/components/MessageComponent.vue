@@ -27,7 +27,6 @@ div {
     bottom: 15px;
     font-size: 1.4em;
     padding: 15px;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 .success {
@@ -36,6 +35,6 @@ div {
 
 .warning {
     color: red;
-    
+
 }
 </style>

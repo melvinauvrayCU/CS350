@@ -172,7 +172,7 @@ textarea {
     padding: 10px 20px;
     font-size: 1.2em;
     border-radius: 5px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "OpenSans";
     color: var(--color-text);
 
     box-shadow: inset 0 0 0 0px var(--color-black);

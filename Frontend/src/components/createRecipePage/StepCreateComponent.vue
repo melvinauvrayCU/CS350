@@ -97,9 +97,9 @@ export default {
 
 .containerTitle h4 {
     font-size: 1.4em;
-    font-weight: bold;
+    font-weight: 600;
     color: var(--color-text);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "OpenSans";
 }
 
 .containerTitle hr {

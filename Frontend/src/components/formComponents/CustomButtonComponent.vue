@@ -36,7 +36,7 @@ export default {
 <style scoped>
 .empty {
     font-size: 1.2em;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "OpenSans";
     display: inline-block;
     text-align: center;
     padding: 10px 30px;

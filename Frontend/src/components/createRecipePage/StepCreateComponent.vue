@@ -99,7 +99,7 @@ export default {
     font-size: 1.4em;
     font-weight: 600;
     color: var(--color-text);
-    font-family: "OpenSans";
+    font-family: "common";
 }
 
 .containerTitle hr {

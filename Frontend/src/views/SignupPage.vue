@@ -1,12 +1,19 @@
 <script lang="ts">
 import { API } from "@/model/apiCalls";
 import MessageComponent from "@/components/MessageComponent.vue";
-
+import PageTitle from "@/components/PageTitleComponent.vue";
+import InputField from "@/components/formComponents/InputFieldComponent.vue";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
+import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
 
 export default {
   name: "CreateSignupPage",
   components: {
-    MessageComponent
+    MessageComponent,
+    PageTitle,
+    InputField,
+    CustomButton,
+    BackgroundIcons
   },
 
   data(): {
@@ -53,6 +60,9 @@ export default {
           }, 1000);
         }
 
+      } else {
+        this.messageType = "warning";
+        this.messageText = "Please fill all the form";
       }
     }
 
@@ -75,39 +85,31 @@ export default {
     <div class="border">
       <div class="CreateSignupPage">
 
-        <form @submit.prevent>
-          <div class="inputbox">
-            <label for="email"></label>
+        <InputField id="email" inputType="email" labelText="Email:" max-length="200" placeholder="Email" v-model="email"
+          :mandatory="true" />
 
-            <input type="email" id="email" placeholder="Email*" v-model="email" required>
-          </div>
+        <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="username"
+          v-model="username" :mandatory="true" />
+
+        <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"
+          v-model="password" :mandatory="true" />
+
+        <CustomButton titleText="Click to signup" text="Signup" effect="plain" @click="signup" />
 
 
-          <div class="inputbox">
-            <label for="username"></label>
+        <div class="login">
+          <p>
+            Already have an account?
+            <router-link to="login">Login</router-link>
+          </p>
+        </div>
 
-            <input type="text" id="username" placeholder="Username*" maxlength="15" v-model="username" required>
-          </div>
-
-          <div class="inputbox">
-            <label for="password"></label>
-
-            <input type="password" id="password" placeholder="Password*" v-model="password" required>
-          </div>
-
-          <button @click="signup">Signup</button>
-
-          <div class="login">
-            <p>
-              Already have an account?
-              <router-link to="login">Login</router-link>
-            </p>
-          </div>
-
-          <MessageComponent v-if="messageText !== ''" :type="messageType" :message="messageText" />
-        </form>
       </div>
     </div>
+
+    <MessageComponent :type="messageType" v-model="messageText" />
+    <BackgroundIcons />
+
   </section>
 </template>
 
@@ -119,22 +121,23 @@ section {
   align-items: center;
   min-height: 100px;
   width: 100%;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .CreateSignupPage {
   display: flex;
   justify-content: center;
-  height: 500px;
-
+  align-items: center;
+  flex-direction: column;
+  padding: 30px 60px;
+  width: 100%;
 }
 
 .border {
   position: relative;
-  width: 400px;
-  height: 475px;
+  width: 40%;
   background: transparent;
-  border: 2px solid black;
+  border: 2px solid var(--color-accent);
   border-radius: 20px;
   backdrop-filter: blur(15px);
   display: flex;

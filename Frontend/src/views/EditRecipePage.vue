@@ -5,7 +5,7 @@ import router from "@/router";
 
 export default {
   props:{
-    id: {type:Number, required: true},
+    id: {type: Number, required: true},
   },
   name: "EditRecipePage",
   // In the first bracket, we define the types of the variables we will use,

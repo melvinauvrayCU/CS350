@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { IngredientCat } from "@/model/CatagoryModel";
+import type { IngredientCat } from "@/model/PantryModels";
 import IngredientCatComponent from "@/components/pantry/ingredient/IngredientCatComponent.vue";
 export default {
     name: "IngredientCatListComponent",
@@ -12,6 +12,8 @@ export default {
 };
 </script>
 <template>
-        <IngredientCatComponent @delete-ingredientcat="(id) => $emit('delete-ingredientcat', id)" v-for="ingredientcat in ingredientcats" :key="ingredientcat.id"
+        <IngredientCatComponent @delete-ingredientcat="(id) => $emit('delete-ingredientcat', id)"
+            @open-ingredientmodal="(id) => $emit('open-ingredientmodal', id)" 
+            v-for="ingredientcat in ingredientcats" :key="ingredientcat.id"
             :ingredientcat="ingredientcat" />
 </template>

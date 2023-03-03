@@ -1,33 +1,35 @@
 <script lang="ts">
-import { UntensilCat } from "@/model/CatagoryModel";
-
 export default {
-    name: "UntensilCatComponent",
+    name: "IngredientComponent",
     props: {
-        untensilcat: {
-            type: UntensilCat,
+        ingredient: {
+            type: String,
             required: true
         },
-    }
+    },
 };
+
+
+
 </script>
 
 <template>
-    <div class="UntensilCatComponent">
+    <div class="IngredientCatComponent">
         <div class="containerText">
-            <h5>{{ untensilcat.name }}</h5>
+            <h5>{{ ingredient }}</h5>
         </div>
 
         <div class="flexFill"></div>
-        <button @click="$emit('delete-untensilcat', untensilcat.id)">
+
+        <button @click="$emit('delete-ingredient', ingredient)">
             X
         </button>
 
-    </div>
+</div>
 </template>
 
 <style scoped>
-.UntensilCatComponent {
+.IngredientCatComponent {
     background-color: white;
     width: 100px;
     display: flex;
@@ -40,4 +42,5 @@ export default {
     display: flex;
     flex-direction: row;
 }
+
 </style>

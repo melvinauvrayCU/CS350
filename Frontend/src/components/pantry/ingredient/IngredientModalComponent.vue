@@ -1,59 +1,56 @@
 <script lang="ts">
-import { IngredientCat } from "@/model/CatagoryModel";
+import { IngredientCat } from "@/model/PantryModels";
+import IngredientListComponent from "@/components/pantry/ingredient/IngredientListComponent.vue";
  export default {
     name: "IngredientModalComponent",
+
     props: {
         ingredientcat: {
             type: IngredientCat,
             required: true
         },
+
     },
+
     methods: {
       close() {
         this.$emit("close");
       },
     },
+    components: {
+        IngredientListComponent,
+    }
   };
 </script>
 
 <template>
-    <div class="modal-backdrop">
-      <div class="modal">
-        <header class="modal-header">
-            <h5>{{ ingredientcat.name }}</h5>
-          <button
-            type="button"
-            class="btn-close"
-            @click="close"
-          >
-            x
-          </button>
-        </header>
-  
-        <section class="modal-body">
-          <slot name="body">
-            This is the default body!
-          </slot>
-         </section>
-  
-        <footer class="modal-footer">
-          <slot name="footer">
-            This is the default footer!
-          </slot>
-          <button
-            type="button"
-            class="btn-green"
-            @click="close"
-          >
-            Close Modal
-          </button>
-        </footer>
+    <div class="modal-overlay">
+      <div class="modal" role="dialog">
+        <div class="containerText">
+          <div class="header">
+            <h3>{{ ingredientcat.name }}</h3>
+            <button
+              type="button"
+              class="btn-close"
+              @click="close"
+            >
+              x
+            </button>
+          </div>
+        </div>
+
+        <IngredientListComponent
+        @delete-ingredient="(ingredient) => $emit('delete-ingredient', ingredient)"
+        @add-ingredient="(nameAdd) => $emit('add-ingredient', nameAdd)"
+        :ingredients="ingredientcat.ingredients" />    
+
+        
       </div>
     </div>
   </template>
 
-<style>
-  .modal-backdrop {
+<style scoped>
+  .modal-overlay {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -71,6 +68,19 @@ import { IngredientCat } from "@/model/CatagoryModel";
     overflow-x: auto;
     display: flex;
     flex-direction: column;
+    padding: 10px;
+  }
+
+.header {
+
+  justify-content: space-between;
+  position: relative;
+}
+
+  h3 {
+    text-align: center;
+    display: flex;
+
   }
 
   .modal-header,
@@ -83,7 +93,7 @@ import { IngredientCat } from "@/model/CatagoryModel";
     position: relative;
     border-bottom: 1px solid #eeeeee;
     color: #4AAE9B;
-    justify-content: space-between;
+    
   }
 
   .modal-footer {
@@ -99,21 +109,20 @@ import { IngredientCat } from "@/model/CatagoryModel";
 
   .btn-close {
     position: absolute;
-    top: 0;
+    top: 0px;
     right: 0;
     border: none;
-    font-size: 20px;
-    padding: 10px;
+    font-size: 15px;
+    padding: 5px;
     cursor: pointer;
     font-weight: bold;
-    color: #4AAE9B;
+    color: #ff0000;
     background: transparent;
   }
-
-  .btn-green {
-    color: white;
-    background: #4AAE9B;
-    border: 1px solid #4AAE9B;
-    border-radius: 2px;
-  }
+  .containerText {
+  background-color: lightgray;
+  padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
 </style>

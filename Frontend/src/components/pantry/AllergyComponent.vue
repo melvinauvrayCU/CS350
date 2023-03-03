@@ -1,10 +1,9 @@
 <script lang="ts">
-import { IngredientCat } from "@/model/PantryModels";
 export default {
-    name: "IngredientCatComponent",
+    name: "AllergyComponent",
     props: {
-        ingredientcat: {
-            type: IngredientCat,
+        allergy: {
+            type: String,
             required: true
         },
     },
@@ -17,16 +16,12 @@ export default {
 <template>
     <div class="IngredientCatComponent">
         <div class="containerText">
-            <h5>{{ ingredientcat.name }}</h5>
+            <h5>{{ allergy }}</h5>
         </div>
 
         <div class="flexFill"></div>
 
-        <button @click="$emit('open-ingredientmodal', ingredientcat.id)">
-            -
-        </button>
-
-        <button @click="$emit('delete-ingredientcat', ingredientcat.id)">
+        <button @click="$emit('delete-allergy', allergy)">
             X
         </button>
 

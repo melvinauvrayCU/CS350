@@ -1,4 +1,4 @@
-import { IngredientCat, UntensilCat } from "./CatagoryModel";
+import { IngredientCat, Conversion } from "./PantryModels";
 import { Recipe } from "./recipeModel";
 
 /**
@@ -39,13 +39,23 @@ export class API {
 		new Recipe("French burger", "Same burger, but better"),
 	];
 	ingredientCatList: IngredientCat[] = [
-		new IngredientCat("Protein"),
-		new IngredientCat("Dairy"),
+		new IngredientCat("I", "Protein", ["Beef", "Chicken"]),
+		new IngredientCat("I", "Dairy", ["Milk", "Cheese"]),
+		new IngredientCat("U", "Silverware", ["Spoon", "Knife"]),
+		new IngredientCat("U", "Electric Appliances", ["Blender", "Food Proccessor"]),
 	];
-	untensilCatList: UntensilCat[] = [
-		new UntensilCat("Silverware"),
-		new UntensilCat("Electric Appliances"),
+	utensilCatList: IngredientCat[] = [
+
 	];
+	alergies: string[] = [
+		"Milk",
+		"Clarkson"
+	];
+	unitOptions: string[] = [
+		"Cups",
+		"Gallons",
+	];
+	conversion: Conversion = new Conversion(1,"");
 
 	// * ------------------- Start of the API call methods ------------------------
 
@@ -86,23 +96,67 @@ removeIngredientCat(id: number): IngredientCat[] {
 	return this.ingredientCatList;
 }
 
-createIngredientCat(name: string): void {
-	this.ingredientCatList.push(new IngredientCat(name));
+createIngredientCat(name: string, ingredients: Array<string>): IngredientCat[] {
+	this.ingredientCatList.push(new IngredientCat("I", name, ingredients));
+	return this.ingredientCatList;
 }
 
-// ----UntensilCatagory Methods----
-
-getUntensilCats(): UntensilCat[] {
-	return this.untensilCatList;
+getIngredientCat(id: number): IngredientCat {
+	return this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
 }
 
-removeUntensilCat(id: number): UntensilCat[] {
-	this.untensilCatList = this.untensilCatList.filter(untensilcat => untensilcat.id !== id);
-	return this.untensilCatList;
+removeIngredient(id: number, name: string): IngredientCat[] {
+	const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+	const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+	temp.ingredients = temp.ingredients.filter(ingredient => ingredient !== name);
+	templist.push(temp);
+	this.ingredientCatList = templist;
+	return this.ingredientCatList;
 }
 
-createUntensilCat(name: string): void {
-	this.untensilCatList.push(new UntensilCat(name));
+createIngredient(id: number, name: string): IngredientCat[] {
+	const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+	const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+	temp.ingredients.push(name);
+	templist.push(temp);
+	this.ingredientCatList = templist;
+	return this.ingredientCatList;
+}
+
+// ----UtensilCatagory Methods----
+
+createUtensilCat(name: string, utensils: Array<string>): IngredientCat[] {
+	this.ingredientCatList.push(new IngredientCat("U", name, utensils));
+	return this.ingredientCatList;
+}
+
+//----Allergy Methods----
+
+getAllergies(): string[] {
+	return this.alergies;
+}
+
+removeAllergy(name: string) : string[] {
+this.alergies = this.alergies.filter(allergy => allergy !== name);
+	return this.alergies;
+}
+
+createAllergy(name: string) : void {
+	this.alergies.push(name);
+}
+
+//----Conversion Methods----
+
+getUnitOptions() : string[] {
+	return this.unitOptions;
+}
+
+changePeopleEating(people: number) : void {
+	this.conversion.people = people;
+}
+
+changeUnitConversion(unit: string) : void {
+	this.conversion.unit = unit;
 }
 
 }

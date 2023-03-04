@@ -27,7 +27,8 @@ export default {
 </script>
 <template>
     <div>
-        <button @click="$emit('clicked')" :class="effect + ' ' + type + ' ' + icon" :title="titleText">
+        <button @click="$emit('clicked')" :class="effect + ' ' + type + ((icon !== '') ? ' icon ' + icon : '')"
+            :title="titleText">
             {{ text }}
         </button>
     </div>
@@ -36,15 +37,18 @@ export default {
 <style scoped>
 .empty {
     font-size: 1.2em;
-    font-family: "OpenSans";
+    font-family: "common";
     display: inline-block;
     text-align: center;
-    padding: 10px 30px;
-    border-radius: 5px;
+    padding: 10px 45px;
     position: relative;
     background-color: transparent;
     cursor: pointer;
     z-index: 1;
+    text-decoration: none;
+    -webkit-transition: 0.3s all ease;
+    transition: 0.3s ease all;
+    border-radius: 40px;
 }
 
 .empty:before {
@@ -58,6 +62,7 @@ export default {
     opacity: 0;
     content: "";
     z-index: -1;
+    border-radius: 40px;
 }
 
 .empty:hover:before {
@@ -69,21 +74,15 @@ export default {
 }
 
 
-.empty {
-    text-decoration: none;
-    -webkit-transition: 0.3s all ease;
-    transition: 0.3s ease all;
-}
-
 /** Color buttons for empty style */
 /** Neutral */
 .empty.neutral {
-    color: var(--color-text);
-    border: 2px solid var(--color-text);
+    color: var(--color-accent);
+    border: 2px solid var(--color-accent);
 }
 
 .empty.neutral::before {
-    background-color: var(--color-text);
+    background-color: var(--color-accent-light);
 }
 
 .empty.neutral:hover {
@@ -105,7 +104,7 @@ export default {
 }
 
 .empty.success:hover {
-    color: var(--color-text);
+    color: var(--color-background);
 }
 
 /** danger */
@@ -115,11 +114,11 @@ export default {
 }
 
 .empty.danger::before {
-    background-color: var(--color-danger-light);
+    background-color: var(--color-danger);
 }
 
 .empty.danger:hover {
-    color: var(--color-danger);
+    color: var(--color-background);
 }
 
 /** ----------------- plain style -------------- */
@@ -130,15 +129,14 @@ export default {
     text-decoration: none;
     font-size: 1.2em;
     padding: 10px 45px;
-    border-radius: 5px;
+    border-radius: 40px;
     overflow: hidden;
     cursor: pointer;
     outline: none;
-}
-
-.plain {
     transition: all 0.2s linear 0s;
 }
+
+
 
 /** For all icons */
 .plain.trash:before,
@@ -185,9 +183,6 @@ export default {
 }
 
 /** Danger colors */
-.plain.danger:active {
-    border-color: var(--color-danger-light)
-}
 
 .plain.danger:before {
     background-color: var(--color-danger-light);
@@ -200,10 +195,11 @@ export default {
     color: #fff;
 }
 
-/** Success colors */
-.plain.success:active {
-    border-color: var(--color-success-light)
+.plain.danger:not(.icon):hover {
+    background-color: var(--color-danger-light)
 }
+
+/** Success colors */
 
 .plain.success:before {
     background-color: var(--color-success-light);
@@ -214,5 +210,31 @@ export default {
     border: 2px solid var(--color-success);
     background-color: var(--color-success);
     color: #fff;
+}
+
+.plain.success:not(.icon):hover {
+    background-color: var(--color-success-light)
+}
+
+/** Neutral colors */
+
+.plain.neutral:before {
+    background-color: var(--color-accent-light);
+    border: 2px solid var(--color-accent-light);
+}
+
+.plain.neutral {
+    border: 2px solid var(--color-accent);
+    background-color: var(--color-accent);
+    color: #fff;
+}
+
+.plain.neutral:not(.icon):hover {
+    background-color: var(--color-accent-light)
+}
+
+/** Commons */
+button:active {
+    border-color: var(--color-background) !important;
 }
 </style>

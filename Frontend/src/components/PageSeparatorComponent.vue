@@ -23,7 +23,7 @@ div {
 }
 
 h3 {
-    font-family: "OpenSans";
+    font-family: "common";
     color: var(--color-text);
     font-size: 1.3em;
     margin-bottom: 5px;

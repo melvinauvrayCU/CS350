@@ -48,6 +48,7 @@ export class API {
 		new User("a", "a", "a@clarkson.edu"),
 
 	];
+	currentUser: User = new User("", "", "");
 
 	/** 
 	 * variable to check if a user is logged in or not 
@@ -93,6 +94,8 @@ export class API {
 	login(username: string, password: string): boolean {
 		if (this.userList.find(user => user.password === password && (user.username === username || user.email === username))) {
 			console.warn(`Welcome back ${username}`);
+			const temp = this.userList.find(user => user.username === username || user.email === username);
+			if (temp !== undefined) this.currentUser = temp;
 			this.loggedIn = true;
 			return true;
 		} else {
@@ -136,6 +139,17 @@ export class API {
 	logout(): boolean {
 		this.loggedIn = false;
 		return true;
+	}
+
+
+
+	/**
+	 * get username
+	 * 
+	 */
+	getUsername(): string {
+		return this.currentUser.username;
+
 	}
 
 }

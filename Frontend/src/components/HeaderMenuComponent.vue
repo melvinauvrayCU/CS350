@@ -36,6 +36,7 @@ export default {
       <RouterLink v-if="!checkIfLoggedIn()" to="/login" exact>Login</RouterLink>
       <a v-if="checkIfLoggedIn()" @click="clickLogout">Logout</a>
       <RouterLink to="/signup" v-if="!checkIfLoggedIn()" exact>Signup</RouterLink>
+      <RouterLink v-if="checkIfLoggedIn()" to="/profile" exact>Profile</RouterLink>
 
     </nav>
   </header>

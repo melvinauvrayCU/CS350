@@ -31,12 +31,24 @@ const router = createRouter({
         hideNavbar: true,
       }
     },
+    {
+      path: "/profile",
+      name: "profilepage",
+      component: () => import("../views/ProfilePage.vue"),
+
+    }
   ],
 });
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = API.instance.isLoggedIn();
   if (to.name === "createRecipe" && !isAuthenticated) next({ name: "Login" });
+  else next();
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = API.instance.isLoggedIn();
+  if (to.name === "profilepage" && !isAuthenticated) next({ name: "Login" });
   else next();
 });
 

@@ -38,8 +38,10 @@ export default {
     methods: {
 
         getUsername() {
-            const username = API.instance.getUsername();
-            return username;
+            this.username = API.instance.getUsername();
+            console.log(this.password);
+            return this.username;
+
 
 
         }
@@ -55,12 +57,39 @@ export default {
 
 <template>
     <section>
-        <h1>{{ getUsername() }} </h1>
+        <div id="test">
+            <PageTitle :text=getUsername() />
+        </div>
+        <h1>asdf</h1>
+
+        <div class="picture">
 
 
+        </div>
 
 
 
 
     </section>
 </template>
+
+<style scoped>
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+    width: 100%;
+    flex-direction: column;
+
+
+}
+
+h1 {
+    text-align: center;
+}
+
+#test {
+    text-align: center;
+}
+</style>

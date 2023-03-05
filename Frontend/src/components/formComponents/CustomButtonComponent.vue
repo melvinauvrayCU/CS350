@@ -11,7 +11,7 @@ export default {
             default: ""
         },
         effect: {
-            type: String as () => "empty" | "plain",
+            type: String as () => "empty" | "plain" | "inline",
             default: "empty"
         },
         type: {
@@ -29,7 +29,7 @@ export default {
     <div>
         <button @click="$emit('clicked')" :class="effect + ' ' + type + ((icon !== '') ? ' icon ' + icon : '')"
             :title="titleText">
-            {{ text }}
+           <h3 v-if="effect !== 'inline'">{{ text }}</h3>
         </button>
     </div>
 </template>
@@ -237,4 +237,98 @@ export default {
 button:active {
     border-color: var(--color-background) !important;
 }
+
+/*---- inline style----*/
+
+.inline {
+    width: 30px;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    font-size: 0em;
+    padding: 10px 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s linear 0s;
+}
+
+
+
+/** For all icons */
+.inline.trash:before,
+.inline.add:before {
+    font-family: FontAwesome;
+    font-weight: 100;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.2s linear 0s;
+    text-align: center;
+    right: 7px;
+    text-indent: 0px;
+}
+
+/** For all icons */
+
+.inline:hover {
+    border-radius: 50px;
+}
+
+/** Specific to props */
+/** Trash icon */
+.inline.trash::before {
+    content: "\f1f8";
+}
+
+/** Add icon */
+.inline.add::before {
+    content: "\2b";
+}
+
+/** Danger colors */
+
+.inline.danger:hover {
+    background-color: var(--color-danger-light);
+    border: 2px solid var(--color-danger);
+}
+
+.inline.danger {
+    border: 2px solid var(--color-danger);
+    background-color: var(--color-danger);
+    color: #fff;
+}
+
+/** Success colors */
+
+.inline.success:hover {
+    background-color: var(--color-success-light);
+    border: 2px solid var(--color-success);
+}
+
+.inline.success {
+    border: 2px solid var(--color-success);
+    background-color: var(--color-success);
+    color: #fff;
+}
+
+/** Neutral colors */
+
+.inline.neutral:hover {
+    background-color: var(--color-accent-light);
+    border: 2px solid var(--color-accent);
+}
+
+.inline.neutral {
+    border: 2px solid var(--color-accent);
+    background-color: var(--color-accent);
+    color: #fff;
+}
+
 </style>

@@ -12,7 +12,7 @@ export default {
             required: true
         },
         inputType: {
-            type: String as () => "text" | "number" | "textarea" | "time" | "password" | "email",
+            type: String as () => "text" | "number" | "textarea" | "time" | "password" | "email" | "select",
             default: "text"
         },
         modelValue: {
@@ -46,6 +46,10 @@ export default {
         maxLength: {
             type: String,
             default: ""
+        },
+        options: {
+            type: Array<string>,
+            default: []
         }
     },
     data(): {
@@ -105,8 +109,16 @@ export default {
             </Transition>
         </label>
 
-        <input v-if="inputType !== 'textarea'" :type="inputType" :value="modelValue" @input="onInput"
+        <select v-if="inputType == 'select'" :id="id" @input="onInput" :value="modelValue" :class="classList + classError"
+        :placeholder="placeholder">
+            <option v-for="option in options" :key="option">
+            {{ option }}
+          </option>
+        </select>
+
+        <input v-else-if="inputType !== 'textarea'" :type="inputType" :value="modelValue" @input="onInput"
             :placeholder="placeholder" :class="classList + classError" :min="min" :max="max" :id="id" />
+
 
         <textarea v-else :id="id" :value="modelValue" @input="onInput" :class="classList + classError"
             :placeholder="placeholder" :style="{
@@ -162,6 +174,7 @@ label.counterLabel {
     position: absolute;
 }
 
+select,
 input,
 textarea {
     display: block;
@@ -187,6 +200,8 @@ textarea.errorBorder {
     border-color: var(--color-danger-light);
 }
 
+select.errorBorder:focus,
+select.errorBorder:hover,
 input.errorBorder:hover,
 input.errorBorder:focus,
 textarea.errorBorder:hover,
@@ -194,6 +209,8 @@ textarea.errorBorder:focus {
     border-color: var(--color-danger);
 }
 
+select:hover,
+select:focus,
 input:hover,
 input:focus,
 textarea:hover,
@@ -202,11 +219,13 @@ textarea:focus {
     outline: 0;
 }
 
+select:focus,
 input:focus,
 textarea:focus {
     animation: shadowOnFocusBlack 0.2s ease forwards;
 }
 
+select.errorBorder:focus,
 input.errorBorder:focus,
 textarea.errorBorder:focus {
     animation: shadowOnFocusRed 0.2s ease forwards;

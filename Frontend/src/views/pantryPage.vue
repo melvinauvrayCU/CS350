@@ -4,6 +4,9 @@ import { IngredientCat } from "@/model/PantryModels";
 import IngredientCatListComponent from "@/components/pantry/ingredient/IngredientCatListComponent.vue";
 import IngredientModalComponent from "@/components/pantry/ingredient/IngredientModalComponent.vue";
 import AllergyListComponent from "@/components/pantry/AllergyListComponent.vue";
+import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
+import InputField from "@/components/formComponents/InputFieldComponent.vue";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import ConversionComponent from "@/components/pantry/ConversionComponent.vue";
 
 export default {
@@ -13,7 +16,10 @@ export default {
     IngredientCatListComponent,
     IngredientModalComponent,
     AllergyListComponent,
-    ConversionComponent
+    ConversionComponent,
+    BackgroundIcons,
+    InputField,
+    CustomButton
 },
 
 data(): {
@@ -129,15 +135,29 @@ created() {
 </script>
 
 <template>
-  <body>
+
+  <section>
+
+    <BackgroundIcons />
+
     <div class="grid">
       <div class="ingredients">
-        <div class="containerText">
-          <h3>Ingredient Catagories</h3>
 
-          <input type="text" v-model="newIngredientCat" placeholder="Add Category.."/>
-          <button @click="addIngredientCat">+</button>
+        <div class="text">
 
+          <h2>Ingredient Catagories</h2>
+
+          <div class="pair">
+            <div class="flexHorizontal">
+
+              <InputField id="newIngredientCat" inputType="text" labelText="" max-length="200" placeholder="New Ingredient Category Name.." v-model="newIngredientCat"
+              :mandatory="false" />
+
+              <CustomButton type="neutral" effect="plain" text="Add Category" titleText="Click to add the category" icon="add"
+              @clicked="addIngredientCat" />
+
+          </div>
+        </div>
         <IngredientCatListComponent 
         @delete-ingredientcat="deleteIngredientCat"
         @open-ingredientmodal="getIngredientCat"
@@ -145,21 +165,30 @@ created() {
         </div>
       </div>
       <div class="utensils">
-        <div class="containerText">
-          <h3>Untensil Catagories</h3>
+        <div class="text">
+          <h2>Untensil Catagories</h2>
 
-          <input type="text" v-model="newUtensilCat" placeholder="Add Category.."/>
-          <button @click="addUtensilCat">+</button>
+          <div class="pair">
+            <div class="flexHorizontal">
 
+              <InputField id="newUtensilCat" inputType="text" labelText="" max-length="200" placeholder="New Utensil Category Name.." v-model="newUtensilCat"
+              :mandatory="false" />
+
+              <CustomButton type="neutral" effect="plain" text="Add Category" titleText="Click to add the category" icon="add"
+              @clicked="addUtensilCat" />
+
+          </div>
+        </div>
           <IngredientCatListComponent 
         @delete-ingredientcat="deleteIngredientCat"
         @open-ingredientmodal="getIngredientCat"
         :ingredientcats="filterIngredientCats('U')" />
         </div>
       </div>
-      <div class="conversion">
-        <div class="containerText">
-          <h3>Conversions</h3>
+      <div class="conversions">
+        <div class="text">
+          <h2>Conversions</h2>
+
           <ConversionComponent
           @change-people="changePeople"
           @change-unit="changeUnit"
@@ -169,8 +198,8 @@ created() {
         </div>
       </div>
       <div class="alergies">
-        <div class="containerText">
-          <h3>Allergies</h3>
+        <div class="text">
+          <h2>Allergies</h2>
 
           <AllergyListComponent
           @delete-allergy="deleteAllergy"
@@ -180,14 +209,19 @@ created() {
         </div>
       </div>
     </div>
-  </body>
-  <IngredientModalComponent 
-  @add-ingredient="addIngredient"
-  @delete-ingredient="deleteIngredient"
-  @close="closeModal" 
-  v-show="isModalVisible" 
-  :ingredientcat="ingredientcat"/>
+  </section>
+
+  
+<IngredientModalComponent 
+@add-ingredient="addIngredient"
+@delete-ingredient="deleteIngredient"
+@close="closeModal" 
+v-show="isModalVisible" 
+:ingredientcat="ingredientcat"/>
+
 </template>
+
+
 
 <style scoped>
 
@@ -201,41 +235,71 @@ created() {
 
 .ingredients {
   grid-area: 1 / 1 / 2 / 2;
+  border-radius: 25px;
   border-style: solid;
-  border-width: 0;
+  border-color: var(--color-accent);
+  background-color: transparent;
+  border-width: 1;
+  padding: 10px;
   margin: 10px;
 }
 .utensils {
   grid-area: 1 / 2 / 2 / 3;
+  border-radius: 25px;
   border-style: solid;
-  border-width: 0;
+  border-color: var(--color-accent);
+  background-color: transparent;
+  padding: 10px;
+  border-width: 1;
   margin: 10px;
 }
 
 .conversions {
   grid-area: 2 / 1 / 3 / 2;
+  border-radius: 25px;
   border-style: solid;
-  border-width: 0;
+  border-color: var(--color-accent);
+  background-color: transparent;
+  padding: 10px;
+  border-width: 1;
   margin: 10px;
 }
 
 .alergies {
   grid-area: 2 / 2 / 3 / 3;
+  border-radius: 25px;
   border-style: solid;
-  border-width: 0;
+  border-color: var(--color-accent);
+  background-color: transparent;
+  padding: 10px;
+  border-width: 1;
   margin: 10px;
 }
 
-.containerText {
-  background-color: lightgray;
+.text {
+  background-color: transparent;
     display: flex;
     flex-direction: column;
 }
 
-.h3 {
-  background-color: white;
-  color: black;
-  text-align: center;
+.pair {
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: baseline;
 }
+
+.flexHorizontal div:nth-child(1) {
+  flex: 1.5;
+  width: 60%;
+}
+
+.flexHorizontal div:nth-child(2) {
+  padding: 25px;
+  flex: 1;
+
+}
+
+
 
 </style>

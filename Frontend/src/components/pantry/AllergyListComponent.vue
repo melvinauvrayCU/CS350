@@ -1,5 +1,8 @@
 <script lang="ts">
 import AllergyComponent from "@/components/pantry/AllergyComponent.vue";
+import InputField from "@/components/formComponents/InputFieldComponent.vue";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
+
 export default {
     name: "AllergyListComponent",
     props: {
@@ -10,6 +13,8 @@ export default {
     },
     components: {
         AllergyComponent,
+        InputField,
+        CustomButton
     },
     data(): {
       search: string,
@@ -38,20 +43,60 @@ addAllergy() {
 </script>
 
 <template>
-    
-<input type="text" v-model="nameAdd" placeholder="Add Allergy.."/>
+<div class="transparent">
+<div class="pair">
+            <div class="flexHorizontal">
 
-<button @click="addAllergy">+</button>
+              <InputField id="nameAdd" inputType="text" labelText="" max-length="200" placeholder="New Allergen.." v-model="nameAdd"
+              :mandatory="false" />
 
-<input type="text" v-model="search" placeholder="Search Allergy.."/>
+              <CustomButton type="neutral" effect="plain" text="Add Allergen" titleText="Click to add the allergen" icon="add"
+              @clicked="addAllergy" />
 
+          </div>
+        </div>
+
+<InputField id="search" inputType="text" labelText="" max-length="200" placeholder="Search Allergen.." v-model="search"
+:mandatory="false" />
+
+<div class="list">
 <AllergyComponent 
 @delete-allergy="(allergy) => $emit('delete-allergy', allergy)"
 v-for="allergy in filteredList()" :key="allergy"
 :allergy="allergy" />
+</div>
 
+</div>
 </template>
 
 <style scoped>
+
+.background {
+  background-color: transparent;
+}
+
+.pair {
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: baseline;
+
+}
+
+.flexHorizontal div:nth-child(1) {
+  flex: 1.5;
+  width: 60%;
+}
+
+.flexHorizontal div:nth-child(2) {
+  padding: 25px;
+  flex: 1;
+}
+
+.list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 
 </style>

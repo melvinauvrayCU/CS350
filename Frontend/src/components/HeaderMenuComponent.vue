@@ -43,6 +43,10 @@ export default {
         <CustomButton type="neutral" :effect="$route.name === 'createRecipe' ? 'plain' : 'empty'" text="Create Recipe"
           titleText="Create Recipe" />
       </RouterLink>
+      <RouterLink v-if="checkIfLoggedIn()" to="/pantry">
+        <CustomButton type="neutral" :effect="$route.name === 'pantry' ? 'plain' : 'empty'" text="Pantry"
+          titleText="Pantry" />
+      </RouterLink>
       <RouterLink v-if="!checkIfLoggedIn()" to="/login">
         <CustomButton type="neutral" :effect="$route.name === 'Login' ? 'plain' : 'empty'" text="Login"
           titleText="Login" />

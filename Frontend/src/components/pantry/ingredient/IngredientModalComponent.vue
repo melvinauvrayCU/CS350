@@ -1,6 +1,7 @@
 <script lang="ts">
 import { IngredientCat } from "@/model/PantryModels";
 import IngredientListComponent from "@/components/pantry/ingredient/IngredientListComponent.vue";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
  export default {
     name: "IngredientModalComponent",
 
@@ -19,35 +20,28 @@ import IngredientListComponent from "@/components/pantry/ingredient/IngredientLi
     },
     components: {
         IngredientListComponent,
+        CustomButton
     }
   };
 </script>
 
 <template>
-    <div class="modal-overlay">
-      <div class="modal" role="dialog">
-        <div class="containerText">
-          <div class="header">
-            <h3>{{ ingredientcat.name }}</h3>
-            <button
-              type="button"
-              class="btn-close"
-              @click="close"
-            >
-              x
-            </button>
-          </div>
+  <div class="modal-overlay">
+    <div class="modal" role="dialog">
+        <div class="header">
+          <h2>{{ ingredientcat.name }}</h2>
+          <div class="btn-close">
+            <CustomButton type="danger" effect="inline" text="" titleText="Close ingredient"
+            @clicked="close" />
         </div>
-
-        <IngredientListComponent
+      </div>
+      <IngredientListComponent
         @delete-ingredient="(ingredient) => $emit('delete-ingredient', ingredient)"
         @add-ingredient="(nameAdd) => $emit('add-ingredient', nameAdd)"
-        :ingredients="ingredientcat.ingredients" />    
-
-        
+        :ingredients="ingredientcat.ingredients" />          
       </div>
-    </div>
-  </template>
+  </div>
+</template>
 
 <style scoped>
   .modal-overlay {
@@ -60,69 +54,36 @@ import IngredientListComponent from "@/components/pantry/ingredient/IngredientLi
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 2;
   }
 
   .modal {
-    background: #FFFFFF;
+    width: 40%;
+    border-radius: 25px;
+    background: var(--color-background);
     box-shadow: 2px 2px 20px 1px;
     overflow-x: auto;
     display: flex;
     flex-direction: column;
     padding: 10px;
+    position: relative;
+    z-index: 3;
   }
 
 .header {
-
+  flex-direction: row;
   justify-content: space-between;
   position: relative;
+  background-color: transparent;
+  align-items: baseline;
+  padding: 5px;
 }
-
-  h3 {
-    text-align: center;
-    display: flex;
-
-  }
-
-  .modal-header,
-  .modal-footer {
-    padding: 15px;
-    display: flex;
-  }
-
-  .modal-header {
-    position: relative;
-    border-bottom: 1px solid #eeeeee;
-    color: #4AAE9B;
-    
-  }
-
-  .modal-footer {
-    border-top: 1px solid #eeeeee;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-
-  .modal-body {
-    position: relative;
-    padding: 20px 10px;
-  }
 
   .btn-close {
     position: absolute;
-    top: 0px;
+    top: 1px;
     right: 0;
-    border: none;
-    font-size: 15px;
-    padding: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #ff0000;
-    background: transparent;
+    padding-top: 5px;
+    padding-right: 10px;
   }
-  .containerText {
-  background-color: lightgray;
-  padding: 5px;
-    display: flex;
-    flex-direction: column;
-}
 </style>

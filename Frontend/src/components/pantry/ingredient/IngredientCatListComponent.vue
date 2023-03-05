@@ -12,8 +12,20 @@ export default {
 };
 </script>
 <template>
+    <div class="list">
         <IngredientCatComponent @delete-ingredientcat="(id) => $emit('delete-ingredientcat', id)"
             @open-ingredientmodal="(id) => $emit('open-ingredientmodal', id)" 
             v-for="ingredientcat in ingredientcats" :key="ingredientcat.id"
             :ingredientcat="ingredientcat" />
+    </div>
 </template>
+
+<style scoped>
+
+.list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+</style>

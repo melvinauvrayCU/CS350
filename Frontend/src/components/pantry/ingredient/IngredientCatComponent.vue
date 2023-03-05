@@ -1,5 +1,6 @@
 <script lang="ts">
 import { IngredientCat } from "@/model/PantryModels";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 export default {
     name: "IngredientCatComponent",
     props: {
@@ -8,6 +9,9 @@ export default {
             required: true
         },
     },
+    components: {
+        CustomButton
+    }
 };
 
 
@@ -15,37 +19,42 @@ export default {
 </script>
 
 <template>
-    <div class="IngredientCatComponent">
+    <div class="listItem">
         <div class="containerText">
-            <h5>{{ ingredientcat.name }}</h5>
+            <h4 class="text">{{ ingredientcat.name }}</h4>
         </div>
 
-        <div class="flexFill"></div>
+        <CustomButton class="button" type="success" effect="inline" text="" titleText="Open ingredient category" 
+        icon="add" @clicked="$emit('open-ingredientmodal', ingredientcat.id)" />
 
-        <button @click="$emit('open-ingredientmodal', ingredientcat.id)">
-            -
-        </button>
-
-        <button @click="$emit('delete-ingredientcat', ingredientcat.id)">
-            X
-        </button>
+        <CustomButton class="button" type="danger" effect="inline" text="" titleText="Delete ingredient category" 
+        icon="trash" @clicked="$emit('delete-ingredientcat', ingredientcat.id)" />
 
 </div>
 </template>
 
 <style scoped>
-.IngredientCatComponent {
-    background-color: white;
-    width: 100px;
+.listItem {
     display: flex;
-    padding: 5px;
-    margin: 10px;
+    flex-direction: row;
+    border-radius: 25px;
+    border-width: 1;
+    border-style: solid;
+    border-color: var(--color-background-light);
+    background-color: var(--color-background-extra-light);
+    padding: 10px;
+    margin: 5px;
+}
+
+.text {
+    padding-top: 5px;
+    display: flex;
     flex-direction: row;
 }
 
-.containerText {
-    display: flex;
-    flex-direction: row;
+.button {
+    padding-left: 10px;
+    padding-bottom: 5px;
 }
 
 </style>

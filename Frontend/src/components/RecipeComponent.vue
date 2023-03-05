@@ -1,22 +1,30 @@
 <script lang="ts">
 import { Recipe } from "@/model/recipeModel";
+import RatingComponent from "./RatingComponent.vue";
+
 //import { RatingComponent } from "@/components/RatingComponent.vue"
 
 export default {
     name: "RecipeComponent",
+    components: {
+        RatingComponent,
+    },
     props: {
         // This component will have a props named recipe, which will be of type a single Recipe, and is mandatory.
         recipe: {
             type: Recipe,
             required: true
         },
-        
+
 
     }
 };
 </script>
 
 <template>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
     <div class="RecipeComponent">
         <div class="containerText">
             <h3 class="recipe-title">{{ recipe.title }}</h3>
@@ -31,6 +39,7 @@ export default {
             <button class="delete-button__button" @click="$emit('delete-recipe', recipe.id)">
             Delete Recipe
             </button>
+            <RatingComponent class="star" :rating="recipe.rating" />
         </div>
     </div>
 </template>
@@ -85,4 +94,12 @@ export default {
     border: 1px solid darkred;
     border-radius: 3px;
 }
+
+.star {
+    background-color: lightgray;
+    display: flex;
+    margin-left: -80px;
+    margin-top: 70px;
+}
 </style>
+

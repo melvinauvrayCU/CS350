@@ -3,34 +3,41 @@ export default {
     name: "RatingComponent",
     data() {
         return {
-            currentRating: 0,
-            maxRating: 5,
-            stars: [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+            rating: 0,
         };
     },
     methods: {
-        setRating(rating: number) {
-            this.currentRating = rating;
-            this.$emit('rating-selected',rating)
+        setRating(value: number) {
+            this.rating = value
         }
     }
 }
 </script>
 
 <template>
-    <div>
+    <div >
         <span
-            v-for="(star,index) in stars"
-            :key="index"
-            @click="setRating(index)"
-            :class="{ 'star-filled': index === currentRating }">
-        ★
+            v-for="i in 5"
+            :key="i"
+            @click="setRating(i)"
+            :class="{ 'text-yellow-400': rating >= i }">
+        <i class="fa fa-star"></i>
         </span>
     </div>
 </template>
 
 <style scoped>
-.star-filled {
-    color: yellow
+.fa-star {
+    font-size: 15px;
+    color: lightgrey;
+    opacity: 50%;
+    margin-right: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.text-yellow-400 .fa-star {
+    color: gold;
+    opacity: 100%;
 }
 </style>

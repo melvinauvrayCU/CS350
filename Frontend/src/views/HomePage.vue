@@ -68,21 +68,5 @@ export default {
 </template>
 
 <style scoped>
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  grid-template-rows: repeat(2,1fr);
-  grid-column-gap: 10px;
-}
 
-.grid-category {
-  grid-area: 1/1/2/2;
-  background-color: #ccc;
-  padding: 10px;
-}
-
-.grid-recipe {
-  grid-area: 1/1/2/2
-
-}
 </style>

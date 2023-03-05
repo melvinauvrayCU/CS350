@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { Recipe } from "@/model/recipeModel";
 import RecipeComponent from "@/components/RecipeComponent.vue";
+
 export default {
     name: "RecipeListComponent",
     // This component will require an array of Recipe, since we want to display a full recipe list.

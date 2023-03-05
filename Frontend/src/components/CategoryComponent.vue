@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Category } from '@/model/categoryModel';
+import { Category } from "@/model/categoryModel";
 
 export default {
     name: "CategoryComponent",
@@ -11,7 +11,7 @@ export default {
             required: true,
         }
     }
-}
+};
 </script>
 
 <template>

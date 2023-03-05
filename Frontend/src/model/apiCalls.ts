@@ -1,5 +1,6 @@
-import { Category } from './categoryModel';
+import { Category } from "./categoryModel";
 import { Recipe } from "./recipeModel";
+import { User } from "./userModel";
 
 /**
  * API Class, it will contain all the methods that will interact with the Backend / Datas.
@@ -35,9 +36,24 @@ export class API {
 	 * But obviously we will not have any persistency of our datas when reloading the website.
 	 */
 	recipeList: Recipe[] = [
-		new Recipe("Americain burger", "True og burger", 3),
-		new Recipe("French burger", "Same burger, but better", 4),
+		new Recipe("Americain burger", "True og burger", 2, [], 3),
 	];
+
+	/*
+	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
+	and if a user is not defined then we need tell the user they need to sign up
+	*/
+	userList: User[] = [
+		new User("Ava.Megyeri", "Password", "megyeram@clarkson.edu"),
+		new User("petesupreme", "password1", "dorovip@clarkson.edu"),
+		new User("a", "a", "a@clarkson.edu"),
+
+	];
+
+	/** 
+	 * variable to check if a user is logged in or not 
+	 */
+	loggedIn: boolean = false;
 
 	/**
 	 * List of all Categories, this is temporary because we don't have the backend setup yet.
@@ -50,7 +66,7 @@ export class API {
 		new Category("Breakfast"),
 		new Category("Lunch"),
 		new Category("Dinner"),
-	]
+	];
 
 	// * ------------------- Start of the API call methods ------------------------
 
@@ -85,7 +101,65 @@ export class API {
 	 * @param title Title of the recipe
 	 * @param description Description of the recipe.
 	 */
-	createRecipe(title: string, description: string, rating: number): void {
-		this.recipeList.push(new Recipe(title, description, rating));
+	createRecipe(recipeObject: Recipe): boolean {
+		this.recipeList.push(recipeObject);
+		console.log(this.recipeList);
+		return true;
 	}
+
+
+	/**
+	 * Login a user: The user needs to enter their username and password. If username matches the password they are logged in
+	 * @param username username 
+	 * @param password password 
+	 */
+	login(username: string, password: string): boolean {
+		if (this.userList.find(user => user.password === password && (user.username === username || user.email === username))) {
+			console.warn(`Welcome back ${username}`);
+			this.loggedIn = true;
+			return true;
+		} else {
+			console.warn("Error!");
+			return false;
+		}
+
+	}
+
+
+	/**
+	 * Signup a user: User needs to enter the username, password, and email. If the username is already taken then
+	 * they need a new username. Password must be longer than 6 characters long
+	 * @param username username user creates
+	 * @param password password the user creates
+	 * @param email email the user puts it
+	 */
+	signup(email: string, username: string, password: string): boolean {
+		if (this.userList.find(user => user.email === email) || this.userList.find(user => user.username === username)) {
+			console.log("Email or username already taken");
+			return false;
+		} else {
+
+			this.userList.push(new User(email, username, password));
+			console.log("User created!");
+			this.loggedIn = true;
+			return true;
+		}
+
+
+	}
+
+	/**
+	 * checks if the user is logged in or not
+	 * 
+	 */
+	isLoggedIn(): boolean {
+		return this.loggedIn;
+	}
+
+	logout(): boolean {
+		this.loggedIn = false;
+		return true;
+	}
+
 }
+

@@ -15,9 +15,11 @@ export class Recipe {
 	id: number;
 	title: string;
 	description: string;
+	numberPeople: number;
+	steps: Step[];
 	rating: number;
 
-	constructor(title: string, description: string, rating: number) {
+	constructor(title: string, description: string, numberPeople: number, steps: Step[], rating: number) {
 		// We set the id automatically with the static field, so it is auto incrementing.
 		this.id = Recipe.idCounter;
 		Recipe.idCounter++;
@@ -25,6 +27,15 @@ export class Recipe {
 		// We create the recipe from the properties passed in parameters.
 		this.title = title;
 		this.description = description;
+		this.numberPeople = numberPeople;
+		this.steps = steps;
 		this.rating = rating;
 	}
+}
+
+export type Step = {
+	stepId: number,
+	descriptionValue: string,
+	cooktimeValue: string,
+	preptimeValue: string,
 }

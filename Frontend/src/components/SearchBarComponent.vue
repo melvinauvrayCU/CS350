@@ -1,15 +1,15 @@
 <script lang="ts">
 
 export default {
-    name: 'SearchBarComponent',
+    name: "SearchBarComponent",
     data() {
         return {
-            searchText: '',
+            searchText: "",
         };
     },
     methods: {
         search(){
-            this.$emit('search', this.searchText);
+            this.$emit("search", this.searchText);
         },
     },
 };

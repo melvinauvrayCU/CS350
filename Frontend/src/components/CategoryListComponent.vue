@@ -1,6 +1,6 @@
 <script lang="ts">
-import type { Category } from '@/model/categoryModel';
-import CategoryComponent from './CategoryComponent.vue';
+import type { Category } from "@/model/categoryModel";
+import CategoryComponent from "./CategoryComponent.vue";
 export default {
     name: "CategoryListComponent",
     // This component will include an array of Category since we want to display the full list of categories available
@@ -10,7 +10,7 @@ export default {
     components: {
         CategoryComponent,
     }
-}
+};
 </script>
 
 <template>

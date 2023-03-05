@@ -38,7 +38,7 @@ export default {
       this.recipes = API.instance.removeRecipe(id);
     },
     handleSearch(searchText: string) {
-      console.log('Performing search for:', searchText);
+      console.log("Performing search for:", searchText);
     }
   },
   /**

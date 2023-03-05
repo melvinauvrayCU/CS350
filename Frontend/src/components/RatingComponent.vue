@@ -1,5 +1,5 @@
 <script lang="ts">
-import { API } from '@/model/apiCalls';
+import { API } from "@/model/apiCalls";
 
 
 export default {
@@ -24,7 +24,7 @@ export default {
             this.currentrating = value;
         },
     }
-}
+};
 </script>
 
 <template>

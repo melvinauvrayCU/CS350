@@ -1,5 +1,5 @@
 <script lang="ts">
-import { API } from '@/model/apiCalls';
+import { API } from "@/model/apiCalls";
 import { Recipe } from "@/model/recipeModel";
 import RatingComponent from "./RatingComponent.vue";
 

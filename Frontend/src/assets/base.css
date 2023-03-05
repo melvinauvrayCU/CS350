@@ -1,12 +1,41 @@
 /* base.css file contains all the most basic css rules used everywhere in the app */
 
+/* Fonts */
+@font-face {
+  font-family: "common";
+  src: url("fonts/OpenSans.ttf") format("truetype-variations");
+}
+
+@font-face {
+  font-family: "commonItalic";
+  src: url("fonts/OpenSans_Italic.ttf") format("truetype-variations");
+}
+
+@font-face {
+  font-family: "title";
+  src: url("fonts/FilsonSoft.ttf") format("truetype-variations");
+}
+
 /* Colors */
 :root {
   --color-background: white;
+  --color-background-light: rgb(210, 210, 210);
+  --color-background-extra-light: rgb(245, 245, 245);
+
   --color-text: #2f2e2e;
-  --color-accent: yellow;
-  --color-primary: green;
-  --color-background-light: lightgray;
+  --color-text-light: #858585;
+
+  --color-accent: #fa8072;
+  --color-accent-light: #faaca3;
+  
+  /* --color-primary: green; */
+  /* --color-black: black; */
+  --color-danger: #ff3a3a;
+  --color-danger-light: #fa8888;
+  
+  --color-success-light: #90ee90;
+  --color-success: #39c439;
+  /* --color-salmon-test: #fa8072; */
 }
 
 *,
@@ -16,15 +45,42 @@
   margin: 0;
   position: relative;
   font-weight: normal;
+  outline: 0;
 }
 
 body {
-  min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
+  font-family: "common";
+}
+
+main {
+  width: 100%;
+  flex: 1;
 }
 
 /* Generic class used in a lot of components, used to fill some space with flexbox */
 .flexFill {
   flex: 1;
+}
+
+.flexHorizontal {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+
+.flexHorizontal div:nth-child(1) {
+  margin-right: 20px;
+}
+
+.flexHorizontal div:nth-child(2) {
+  margin-left: 20px;
+}
+
+.alignLeft {
+  display: flex;
+  width: 100%;
+  justify-content: start;
 }

@@ -85,16 +85,17 @@ export default {
         </div>
 
         <div class="gets">
-            <div>
+            <div class="gets">
                 <PageTitle :text=getname() />
             </div>
 
-            <div id="username">
+            <div class="gets">
                 <h3>@{{ getUsername() }}</h3>
             </div>
 
-            <div>
-                <h3> Email: {{ getEmail() }}</h3>
+            <div id="email">
+                <h3 id="emailname"> Email: </h3>
+                <h3>{{ getEmail() }}</h3>
             </div>
 
         </div>
@@ -132,13 +133,8 @@ section {
 
 }
 
-h4 {
-    padding-bottom: 20px
-}
-
-#username {
+.gets {
     text-align: center;
-
 }
 
 
@@ -147,7 +143,14 @@ h4 {
 
 }
 
+#email {
+    margin-top: 10px;
+}
 
+#emailname {
+    font-weight: bold;
+    padding-top: 5%;
+}
 
 
 .image img {
@@ -164,7 +167,12 @@ h4 {
     text-align: left;
 }
 
-p {
+.bio p {
     font-size: 150%;
+}
+
+
+h1[data-v-5e02ae5f] {
+    margin: 10px 0 0 0;
 }
 </style>

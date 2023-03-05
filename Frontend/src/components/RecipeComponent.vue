@@ -1,4 +1,5 @@
 <script lang="ts">
+import { API } from '@/model/apiCalls';
 import { Recipe } from "@/model/recipeModel";
 import RatingComponent from "./RatingComponent.vue";
 
@@ -15,9 +16,7 @@ export default {
             type: Recipe,
             required: true
         },
-
-
-    }
+    },
 };
 </script>
 
@@ -31,16 +30,18 @@ export default {
             <p class="recipe-descrip">{{ recipe.description }}</p>
         </div>
         <div class="flexFill"> </div>
-        <div class="delete-button">
+        <div class="delete-button"> 
             <!-- On clicking on the button, we want to delete the recipe,-->
             <!-- Since we are in the component file, we can't touch the API, we are allowed to do so only in Page files, -->
             <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
             <!-- and we don't forget to attach the id of the recipe we want to delete. -->
-            <button class="delete-button__button" @click="$emit('delete-recipe', recipe.id)">
-            Delete Recipe
-            </button>
-            <RatingComponent class="star" :rating="recipe.rating" />
+            <button class="delete-button__button" @click="$emit('delete-recipe', recipe.id)"> Delete </button> 
         </div>
+
+        <div class="stars">
+            <RatingComponent class="stars__star" :rating="recipe.rating" :recipeId="recipe.id"/>
+        </div>
+        
     </div>
 </template>
 
@@ -50,25 +51,30 @@ export default {
     border: 3px solid lightgrey;
     border-color: lightgrey;
     border-radius: 5px;
+    border-style: double;
     width: 300px;
+    height: 125px;
     display: flex;
-    padding: 40px;
-    margin: 20px;
-    flex-direction: row;
+    padding: 20px 20px;
+    margin-left: 20px;
 }
 
 .containerText {
-    text-decoration-color: white;
-    flex-direction: column;
+    flex-direction: row;
     margin-left: -30px;
 }
 
 .recipe-title {
-    margin-top: -30px;
+    width: auto;
+    flex-direction: row;
+    margin-left: 20px;
+    margin-top: -10px;
 }
-
 .recipe-descrip {
+    width: 200px;
+    margin-left: 30px;
     margin-top: 10px;
+
 }
 
 .delete-button {
@@ -76,15 +82,14 @@ export default {
     cursor: pointer;
     width: 40px;
     height: 30px;
-    margin-right: -20px;
-    margin-top: -30px;
+    margin-left: 20px;
+    margin-top: -10px;
 }
 
 .delete-button__button {
     background-color: red;
     border: 1px solid red;
     border-radius: 3px;
-
     font-size: 10px;
     color: white;
 }
@@ -95,11 +100,15 @@ export default {
     border-radius: 3px;
 }
 
-.star {
-    background-color: lightgray;
+.stars {
     display: flex;
-    margin-left: -80px;
-    margin-top: 70px;
+    flex-direction: row;
+    margin-top: 75px;
+    margin-left: -110px;
+}
+
+.stars__star {
+    width: 200px;
 }
 </style>
 

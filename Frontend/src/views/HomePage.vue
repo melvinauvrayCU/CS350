@@ -58,15 +58,20 @@ export default {
       <SearchBarComponent @search="handleSearch"/>
     </div>
     <div class="grid">
-      <CategoryListComponent class="grid-category" type="text" v-bind:categories="categories" />
+      <CategoryListComponent class="categories" type="text" v-bind:categories="categories" />
       <!-- We call the recipe list component. -->
       <!-- We make sure to listen to the delete-recipe signal. We call the deleteRecipe method when we receive it. -->
       <!-- We pass the recipe list as a property -->
-      <RecipeListComponent class="grid-recipe" @delete-recipe="deleteRecipe" :recipes="recipes" />
+      <RecipeListComponent class="recipes" @delete-recipe="deleteRecipe" :recipes="recipes" />
     </div>
   </main>
 </template>
 
 <style scoped>
+
+.recipes {
+  display: flex;
+  flex-direction: row;
+}
 
 </style>

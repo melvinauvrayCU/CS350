@@ -1,15 +1,28 @@
 <script lang="ts">
+import { API } from '@/model/apiCalls';
+
+
 export default {
     name: "RatingComponent",
+    props: {
+        rating: {
+            type: Number,
+            required: true,
+        },
+        recipeId: {
+            type: Number,
+            required: true,
+        }
+    },
     data() {
         return {
-            rating: 0,
+            currentrating: this.rating,
         };
     },
     methods: {
         setRating(value: number) {
-            this.rating = value
-        }
+            this.currentrating = value;
+        },
     }
 }
 </script>
@@ -28,12 +41,11 @@ export default {
 
 <style scoped>
 .fa-star {
-    font-size: 15px;
+    font-size: 20px;
     color: lightgrey;
     opacity: 50%;
     margin-right: 5px;
     cursor: pointer;
-    display: inline-block;
 }
 
 .text-yellow-400 .fa-star {

@@ -68,6 +68,7 @@ export class API {
 		return this.categoryList;
 	}
 
+
 	/**
 	 * Remove a recipe with the specified id in paramter and returns the new full list of recipes. 
 	 * @param id The id of the recipe you want to delete
@@ -76,6 +77,7 @@ export class API {
 		this.recipeList = this.recipeList.filter(recipe => recipe.id !== id);
 		return this.recipeList;
 	}
+
 
 	/**
 	 * Create a new recipe with the datas you're giving in parameter. 

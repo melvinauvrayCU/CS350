@@ -30,11 +30,13 @@ export default {
     recipes: Array<Recipe>,
     messageText: string,
     messageType: "success" | "warning",
+    isAuthenticated: boolean,
   } {
     return {
       recipes: [],
       messageText: "",
-      messageType: "success"
+      messageType: "success",
+      isAuthenticated: false,
     };
   },
   methods: {
@@ -53,7 +55,7 @@ export default {
    */
   created() {
     this.recipes = API.instance.getRecipes();
-
+    this.isAuthenticated = API.instance.isLoggedIn();
   },
   /**
    * We use mounted because we want to init these two variables after the page being created
@@ -71,7 +73,7 @@ export default {
     <!-- We call the recipe list component. -->
     <!-- We make sure to listen to the delete-recipe signal. We call the deleteRecipe method when we receive it. -->
     <!-- We pass the recipe list as a property -->
-    <RecipeListComponent @delete-recipe="deleteRecipe" :recipes="recipes" />
+    <RecipeListComponent @delete-recipe="deleteRecipe" :recipes="recipes" :isUserAuthenticated="isAuthenticated" />
 
     <MessageComponent :type="messageType" v-model="messageText" />
   </main>

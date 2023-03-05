@@ -6,6 +6,7 @@ export default {
     // This component will require an array of Recipe, since we want to display a full recipe list.
     props: {
         recipes: Array<Recipe>,
+        isUserAuthenticated: Boolean,
     },
     // We will use smaller components in this list, such as the RecipeComponent.
     components: {
@@ -31,6 +32,6 @@ export default {
         <!-- Lastly, we have the ":recipe" field, which is the props we will pass to the child. -->
         <!-- Each RecipeComponent requires a recipe props (see the component's file), so we are giving it through this property. -->
         <RecipeComponent @delete-recipe="(id) => $emit('delete-recipe', id)" v-for="recipe in recipes" :key="recipe.id"
-            :recipe="recipe" />
+            :recipe="recipe" :isUserAuthenticated="isUserAuthenticated" />
     </div>
 </template>

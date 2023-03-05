@@ -14,10 +14,13 @@ export default {
             type: Recipe,
             required: true
         },
+        isUserAuthenticated: {
+            type: Boolean,
+            required: true
+        },
     },
     methods: {
         editRecipe() {
-            console.log("Pushing to edit page " + this.recipe.id);
             router.push({ name: "createRecipe", params: { id: this.recipe.id } });
         }
     },
@@ -41,13 +44,8 @@ export default {
             Delete Recipe
         </button>
 
-        <CustomButton text="Edit" type="neutral" effect="empty" icon="add" titleText="Click to edit the recipe"
-            @clicked="editRecipe" />
-
-        <!-- <button @click="editRecipe()"> -->
-        <!-- Edit recipe -->
-        <!-- </button> -->
-
+        <CustomButton v-if="isUserAuthenticated" text="Edit" type="neutral" effect="empty" icon="add"
+            titleText="Click to edit the recipe" @clicked="editRecipe" />
     </div>
 </template>
 

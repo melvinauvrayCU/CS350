@@ -104,7 +104,6 @@ export default {
       this.recipeTempObject.steps.forEach(step => {
         if (step.descriptionValue === "") {
           noErrors = false;
-          console.error("description du step ", step, " vide");
         }
 
       });

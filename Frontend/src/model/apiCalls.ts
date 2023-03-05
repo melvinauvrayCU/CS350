@@ -152,5 +152,71 @@ export class API {
 
 	}
 
+	/**
+	 * get email
+	 */
+
+	getEmail(): string {
+		return this.currentUser.email;
+	}
+
+	/**
+	 * sets a users first and last name based on their username
+	 */
+
+	setname(): string[] {
+		const length = (Math.random() * this.currentUser.username.length) + 1;
+		this.currentUser.fname = this.currentUser.username.substring(0, length / 2);
+		this.currentUser.lname = this.currentUser.username.substring(length / 2, length);
+
+		// if (this.userList.find(user => user.username === this.currentUser.username) !== undefined) {
+		// 	this.userList.find(user => user.username === this.currentUser.username).fname = this.currentUser.fname;
+		// }
+
+		return [this.currentUser.fname, this.currentUser.lname];
+	}
+
+	/**
+	 * change the users username
+	 */
+	done(fname: string, lname: string, username: string, bio: string): boolean {
+		if (this.userList.find(user => user.username === username)) {
+			if (this.currentUser.username === username) {
+				this.currentUser.fname = fname;
+				this.currentUser.lname = lname;
+				this.currentUser.username = username;
+				this.currentUser.bio = bio;
+				return true;
+
+			}
+
+			console.log("username already taken");
+			return false;
+		}
+
+		this.currentUser.fname = fname;
+		this.currentUser.lname = lname;
+		this.currentUser.username = username;
+		this.currentUser.bio = bio;
+
+
+		return true;
+
+	}
+
+	/**
+	 * if you update the users profile page you will update the page
+	 */
+	getname(): string[] {
+		return [this.currentUser.fname, this.currentUser.lname];
+
+	}
+
+	getbio(): string {
+		return this.currentUser.bio;
+	}
+
+
+
 }
 

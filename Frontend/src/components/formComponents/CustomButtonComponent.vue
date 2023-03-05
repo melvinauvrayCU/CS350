@@ -125,6 +125,7 @@ export default {
     position: relative;
     text-decoration: none;
     font-size: 1.2em;
+    font-family: "common";
     padding: 10px 45px;
     border-radius: 40px;
     overflow: hidden;

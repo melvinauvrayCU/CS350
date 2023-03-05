@@ -35,7 +35,18 @@ export class API {
 	 * But obviously we will not have any persistency of our datas when reloading the website.
 	 */
 	recipeList: Recipe[] = [
-		new Recipe("Americain burger", "True og burger", 2, []),
+		new Recipe("Americain burger", "True og burger", 2, [{
+			stepId: 0,
+			descriptionValue: "First description of first step",
+			cooktimeValue: "12:00",
+			preptimeValue: "02:00",
+		},
+		{
+			stepId: 1,
+			descriptionValue: "First description of second step",
+			cooktimeValue: "16:00",
+			preptimeValue: "02:00",
+		}]),
 	];
 
 	/*
@@ -62,14 +73,11 @@ export class API {
 	getRecipes(): Recipe[] {
 		return this.recipeList;
 	}
-	getRecipe(id: number) {
-		for (let i = 0; i < this.recipeList.length; i++) {
-			if (this.recipeList[i].id == id) {
-				return this.recipeList[i];
-			}
-
-		}
-		return this.recipeList[0];
+	getRecipe(id: number): Recipe | undefined {
+		const recipeObj = this.recipeList.find((recipe) => recipe.id === id);
+		if (recipeObj === undefined)
+			return undefined;
+		return JSON.parse(JSON.stringify(recipeObj));
 	}
 
 	/**
@@ -90,6 +98,23 @@ export class API {
 	createRecipe(recipeObject: Recipe): boolean {
 		this.recipeList.push(recipeObject);
 		console.log(this.recipeList);
+		return true;
+	}
+
+	/**
+	 * Edit a recipe
+	 * @param recipeId Id of the recipe to be edited
+	 * @param recipeObj New recipe object to replace the old one
+	 */
+	editRecipe(recipeId: number, recipeObj: Recipe): boolean {
+		this.recipeList = this.recipeList.map(recipe => {
+			// We go through all recipes, if the id is the one we're looking for then we return the new obj, else the old obj
+			if (recipe.id === recipeId) {
+				return recipeObj;
+			} else {
+				return recipe;
+			}
+		});
 		return true;
 	}
 
@@ -147,9 +172,5 @@ export class API {
 		return true;
 	}
 
-	editRecipe(id: number, tit: string, des: string): void {
-		this.recipeList[id].title = tit;
-		this.recipeList[id].description = des;
-	}
 }
 

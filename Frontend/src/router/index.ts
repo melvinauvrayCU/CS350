@@ -1,4 +1,3 @@
-import { API } from "@/model/apiCalls";
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 
@@ -6,12 +5,14 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
+      path: "/:messageTextParam?/:messageTypeParam?",
       name: "home",
       component: HomePage,
+      props: route => ({ messageTextParam: route.params.messageTextParam, messageTypeParam: route.params.messageTypeParam })
     },
     {
-      path: "/createRecipe",
+      path: "/createRecipe/:id?",
+      props: true,
       name: "createRecipe",
       component: () => import("../views/CreateRecipePage.vue"),
     },
@@ -19,8 +20,6 @@ const router = createRouter({
       path: "/editRecipe/:id",
       name: "editRecipe",
       component: () => import("../views/EditRecipePage.vue"),
-
-
     }, {
       path: "/login",
       name: "Login",
@@ -40,10 +39,10 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  const isAuthenticated = API.instance.isLoggedIn();
-  if (to.name === "createRecipe" && !isAuthenticated) next({ name: "Login" });
-  else next();
-});
+// router.beforeEach((to, from, next) => {
+//   const isAuthenticated = API.instance.isLoggedIn();
+//   if (to.name === "createRecipe" && !isAuthenticated) next({ name: "Login" });
+//   else next();
+// });
 
 export default router;

@@ -7,6 +7,8 @@ import StepCreate from "@/components/createRecipePage/StepCreateComponent.vue";
 import PageSeparator from "@/components/PageSeparatorComponent.vue";
 import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
 import { Recipe, type Step } from "@/model/recipeModel";
+import MessageComponent from "@/components/MessageComponent.vue";
+import router from "@/router/index";
 
 export default {
   name: "CreateRecipePage",
@@ -17,24 +19,34 @@ export default {
     StepCreate,
     PageSeparator,
     BackgroundIcons,
+    MessageComponent
+  },
+  props: {
+    /** Id is the props we retrieve from URL parameter when we want to edit a recipe */
+    id: { type: String, default: "" },
   },
   // In the first bracket, we define the types of the variables we will use,
   // And in the second bracket we define the initiale values.
   data(): {
-    title: string,
-    description: string,
-    numberPeople: number,
-    steps: Step[],
+    recipeTempObject: Recipe,
     stepCounter: number,
+    mode: "create" | "edit",
+    messageText: string,
+    messageType: "success" | "warning",
   } {
     // We are setting the title and description datas that will be linked to the form.
     // And a boolean created variable, which will be true when a recipe has been created to display a success message.
     return {
-      title: "",
-      description: "",
-      numberPeople: 1,
-      steps: [],
       stepCounter: 1,
+      recipeTempObject: new Recipe("", "", 1, [{
+        stepId: 1,
+        descriptionValue: "",
+        cooktimeValue: "",
+        preptimeValue: "",
+      }]),
+      mode: "create",
+      messageText: "",
+      messageType: "success"
     };
   },
   methods: {
@@ -43,67 +55,86 @@ export default {
      */
     createRecipe(): void {
 
-      /** 
-       * Data validation 
-       */
-      let error: boolean = false;
-      if (this.title === ""
-        || this.description === "" || this.description.length > 650
-        || this.numberPeople < 1)
-        error = true;
+      if (this.verifyInputs()) {
+        // No errors, send datas
+        const result = API.instance.createRecipe(this.recipeTempObject);
 
-      this.steps.forEach(step => {
+        if (result) {
+          // We redirect to home page with a success message
+          router.push({ name: "home", params: { messageTextParam: "Recipe created !", messageTypeParam: "success" } });
+        } else {
+          this.messageType = "warning";
+          this.messageText = "An error has occured";
+        }
+      } else {
+        // errors, don't send datas.
+        this.messageType = "warning";
+        this.messageText = "Some mandatory fields are empty";
+      }
+
+    },
+    editRecipe(): void {
+      if (this.verifyInputs()) {
+        // No errors, send datas
+        const result = API.instance.editRecipe(parseInt(this.id), this.recipeTempObject);
+
+        if (result) {
+          // We redirect to home page with a success message
+          router.push({ name: "home", params: { messageTextParam: "Recipe edited !", messageTypeParam: "success" } });
+        } else {
+          this.messageType = "warning";
+          this.messageText = "An error has occured";
+        }
+      } else {
+        // errors, don't send datas.
+        this.messageType = "warning";
+        this.messageText = "Some mandatory fields are empty";
+      }
+    },
+    /**
+     * This check if the inputs are correct, return true if there is no error, false otherwise (eg: title empty)
+     */
+    verifyInputs(): boolean {
+      let noErrors: boolean = true;
+      if (this.recipeTempObject.title === ""
+        || this.recipeTempObject.description === "" || this.recipeTempObject.description.length > 650
+        || this.recipeTempObject.numberPeople < 1)
+        noErrors = false;
+
+      this.recipeTempObject.steps.forEach(step => {
         if (step.descriptionValue === "") {
-          error = true;
+          noErrors = false;
           console.error("description du step ", step, " vide");
         }
 
       });
-
-      if (error) {
-        // errors, don't send datas.
-        // TODO: Display error message here
-        console.error("Some fields are empty");
-      } else {
-        // No errors, send datas
-        // TODO: create recipe model here
-        const result = API.instance.createRecipe(new Recipe(
-          this.title,
-          this.description,
-          this.numberPeople,
-          this.steps
-        ));
-
-        if (result) {
-          // TODO: Redirect to another page with success message here
-        } else {
-          // TODO: Display error message here
-        }
-      }
-
-    },
+      return noErrors;
+    }
+    ,
     addStep(): void {
       this.stepCounter++;
-      this.steps.push({
+      this.recipeTempObject.steps.push({
         stepId: this.stepCounter,
         descriptionValue: "",
         cooktimeValue: "",
         preptimeValue: "",
       });
     },
+
     deleteStep(stepObjectToDelete: Step): void {
-      console.error(this.steps);
-      this.steps = this.steps.filter(step => step.stepId !== stepObjectToDelete.stepId);
-      console.error(this.steps);
+      this.recipeTempObject.steps = this.recipeTempObject.steps.filter(step => step.stepId !== stepObjectToDelete.stepId);
     }
+
   },
   created() {
-    this.steps.push({
-      stepId: this.stepCounter,
-      descriptionValue: "",
-      cooktimeValue: "",
-      preptimeValue: "",
-    });
+    // If the id parameter is not empty, then it means we will edit a recipe, so we get the current recipe from an API call and change the mode
+    if (this.id !== "") {
+      const recipeObject = API.instance.getRecipe(parseInt(this.id));
+      if (recipeObject !== undefined) {
+        this.recipeTempObject = recipeObject;
+        this.mode = "edit";
+      }
+    }
   }
 };
 
@@ -112,29 +143,29 @@ export default {
   <main class="CreateRecipePage">
     <div class="contentConainer">
 
-      <PageTitle text="Create a new recipe !" />
+      <PageTitle :text="mode === 'create' ? 'Create a new recipe !' : 'Edit the recipe : ' + recipeTempObject.title" />
 
       <PageSeparator title="🍔 Global informations about your recipe" />
 
       <div class="flexHorizontal">
         <InputField id="recipeTitle" labelText="Recipe Title:" max-length="200"
-          placeholder="Please enter the recipe title..." v-model="title" :mandatory="true" />
+          placeholder="Please enter the recipe title..." v-model="recipeTempObject.title" :mandatory="true" />
         <InputField id="numberPeople" labelText="Number of people:"
-          placeholder="Please enter the number of people this recipe is for..." v-model="numberPeople" inputType="number"
-          min="1" max="50" :mandatory="true" />
+          placeholder="Please enter the number of people this recipe is for..." v-model="recipeTempObject.numberPeople"
+          inputType="number" min="1" max="50" :mandatory="true" />
       </div>
 
       <InputField id="recipeDescription" labelText="Recipe description:"
-        placeholder="Tell us some global informations about your recipe..." v-model="description" :mandatory="true"
-        inputType="textarea" initialHeight="100" maxLength="650" />
+        placeholder="Tell us some global informations about your recipe..." v-model="recipeTempObject.description"
+        :mandatory="true" inputType="textarea" initialHeight="100" maxLength="650" />
 
       <PageSeparator title="📜 Give us the steps to complete your recipe" />
 
       <transition-group name="list">
-        <StepCreate v-for="(step, index) in steps" :key="step.stepId" :stepObject="step" :stepIndex="index + 1"
-          :stepIndexLength="steps.length" v-model:descriptionModelValue="step.descriptionValue"
-          v-model:cooktimeModelValue="step.cooktimeValue" v-model:preptimeModelValue="step.preptimeValue"
-          @stepDeleted="deleteStep" />
+        <StepCreate v-for="(step, index) in recipeTempObject.steps" :key="step.stepId" :stepObject="step"
+          :stepIndex="index + 1" :stepIndexLength="recipeTempObject.steps.length"
+          v-model:descriptionModelValue="step.descriptionValue" v-model:cooktimeModelValue="step.cooktimeValue"
+          v-model:preptimeModelValue="step.preptimeValue" @stepDeleted="deleteStep" />
       </transition-group>
 
       <div class="containerAddStep">
@@ -144,13 +175,16 @@ export default {
       </div>
 
 
-      <CustomButton type="neutral" effect="plain" text="Create the recipe !" titleText="Click to create the recipe"
-        @clicked="createRecipe" />
+      <CustomButton v-if="mode === 'create'" type="neutral" effect="plain" text="Create the recipe !"
+        titleText="Click to create the recipe" @clicked="createRecipe" />
+      <CustomButton v-else type="neutral" effect="plain" text="Edit your recipe !" titleText="Click to edit this recipe"
+        @clicked="editRecipe" />
 
 
     </div>
 
     <BackgroundIcons />
+    <MessageComponent :type="messageType" v-model="messageText" />
 
   </main>
 </template>

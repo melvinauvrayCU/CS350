@@ -1,9 +1,13 @@
 <script lang="ts">
 import { Recipe } from "@/model/recipeModel";
 import router from "@/router/index";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 
 export default {
     name: "RecipeComponent",
+    components: {
+        CustomButton,
+    },
     props: {
         // This component will have a props named recipe, which will be of type a single Recipe, and is mandatory.
         recipe: {
@@ -12,9 +16,9 @@ export default {
         },
     },
     methods: {
-        editRecipe(){
+        editRecipe() {
             console.log("Pushing to edit page " + this.recipe.id);
-            router.push({name: "editRecipe", params: {id: this.recipe.id} });
+            router.push({ name: "createRecipe", params: { id: this.recipe.id } });
         }
     },
 };
@@ -37,9 +41,12 @@ export default {
             Delete Recipe
         </button>
 
-        <button @click="editRecipe()">
-            Edit recipe 
-        </button>
+        <CustomButton text="Edit" type="neutral" effect="empty" icon="add" titleText="Click to edit the recipe"
+            @clicked="editRecipe" />
+
+        <!-- <button @click="editRecipe()"> -->
+        <!-- Edit recipe -->
+        <!-- </button> -->
 
     </div>
 </template>

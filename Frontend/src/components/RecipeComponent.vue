@@ -1,9 +1,11 @@
 <script lang="ts">
 import { Recipe } from "@/model/recipeModel";
-import router from "@/router";
+
 
 export default {
     name: "RecipeComponent",
+    emits: 
+        ["delete-recipe"],
     props: {
         // This component will have a props named recipe, which will be of type a single Recipe, and is mandatory.
         recipe: {
@@ -11,17 +13,6 @@ export default {
             required: true
         },
     },
-    methods: {
-        /**Method called when a recipe is clicked on to view the recipe
-     * it pushes the user to the view recipe page with the matching id number
-     * @param id 
-     */
-        viewRecipe(id: number){
-            console.log("Trying to push");
-            router.push({name: "viewRecipe", params: {id} });
-        },
-    }
-
 };
 </script>
 
@@ -29,19 +20,22 @@ export default {
         <div class="RecipeComponent">
         <!--On clicking this button we will want to view the recipe so we will
         emit a signal to the parnet funtion on the homepage that we want to view the recipe so we are taken to the view recipe page-->
-            <button @click="viewRecipe(recipe.id)">
-                <div class="containerText">
-                    <h3>{{ recipe.title }}</h3>
-                    <p>{{ recipe.description }}</p>
-                </div>
+            <router-link :to='{name: "ViewRecipePage", params: {id: recipe.id}}'>
+                View Recipe
+            </router-link>
 
-                <div class="flexFill"></div>
+            <div class="containerText">
+                <h3>{{ recipe.title }}</h3>
+                <p>{{ recipe.description }}</p>
+            </div>
+            
+                
                 <!-- On clicking on the button, we want to delete the recipe,-->
                 <!-- Since we are in the component file, we can't touch the API, we are allowed to do so only in Page files, -->
                 <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
                 <!-- and we don't forget to attach the id of the recipe we want to delete. -->
-            </button>
 
+            <div class="flexFill"></div>
             <button @click="$emit('delete-recipe', recipe.id)">
                 Delete Recipe
                 </button>

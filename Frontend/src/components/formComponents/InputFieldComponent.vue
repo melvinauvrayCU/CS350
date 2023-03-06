@@ -46,6 +46,14 @@ export default {
         maxLength: {
             type: String,
             default: ""
+        },
+        icon: {
+            type: String as () => "add" | "",
+            default: ""
+        },
+        inline: {
+            type: Boolean,
+            default: false
         }
     },
     data(): {
@@ -90,6 +98,7 @@ export default {
         }
     },
     created() {
+        console.error(this.inline);
         this.lengthCounter = 0;
         if (typeof this.modelValue === "string") {
             this.lengthCounter = this.modelValue.length;
@@ -99,14 +108,16 @@ export default {
 </script>
 <template>
     <div class="InputFieldComponent">
-        <label :for="id">{{ labelText }}<span v-if="mandatory" style="color: red;"> *</span>
+        <label :for="id">{{ labelText }}<span v-if="mandatory && !inline" style="color: red;"> *</span>
             <Transition>
-                <span style="color: red;" v-if="classError !== ''"> - This field is mandatory</span>
+                <span style="color: red;" v-if="classError !== '' && !inline"> - This field is mandatory</span>
             </Transition>
         </label>
 
         <input v-if="inputType !== 'textarea'" :type="inputType" :value="modelValue" @input="onInput"
-            :placeholder="placeholder" :class="classList + classError" :min="min" :max="max" :id="id" />
+            :placeholder="placeholder"
+            :class="classList + (icon !== '' ? ' ' + icon : '') + (classError ? ' ' + classError : '')" :min="min"
+            :max="max" :id="id" />
 
         <textarea v-else :id="id" :value="modelValue" @input="onInput" :class="classList + classError"
             :placeholder="placeholder" :style="{
@@ -126,6 +137,12 @@ export default {
 </template>
 
 <style scoped>
+.add {
+    padding-right: 45px;
+    background: url("@/assets/plus.png") no-repeat right 20px center;
+    background-size: 20px;
+}
+
 .v-enter-active,
 .v-leave-active {
     transition: opacity 0.5s ease;
@@ -167,7 +184,7 @@ textarea {
     display: block;
     margin-top: 5px;
     border: 1px solid var(--color-background-light);
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease, background .4s ease;
     padding: 10px 20px;
     font-size: 1.2em;
     border-radius: 5px;

@@ -3,6 +3,7 @@ import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
 import type { Step } from "@/model/recipeModel";
 import type { PropType } from "vue";
+import CustomSelectField from "@/components/formComponents/CustomSelectFieldComponent.vue";
 
 export default {
     name: "StepCreate",
@@ -34,6 +35,7 @@ export default {
     components: {
         CustomButton,
         InputField,
+        CustomSelectField
     },
     methods: {
         updateDescription() {
@@ -67,6 +69,8 @@ export default {
                 placeholder="Tell us some detailed informations about this step..." :mandatory="true" inputType="textarea"
                 initialHeight="100" maxLength="650" v-model="descriptionPrivateValue"
                 @update:modelValue="updateDescription" />
+
+            <CustomSelectField labelText="Ingredients:" />
 
             <div class="flexHorizontal">
                 <InputField :id="'cooktime' + stepObject.stepId" labelText="Cook time:" inputType="time"

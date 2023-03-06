@@ -53,6 +53,10 @@ export default {
         <CustomButton type="neutral" :effect="$route.name === 'Signup' ? 'plain' : 'empty'" text="Signup"
           titleText="Signup" />
       </RouterLink>
+      <RouterLink v-if="checkIfLoggedIn()" to="/profile">
+        <CustomButton type="neutral" :effect="$route.name === 'profilepage' ? 'plain' : 'empty'" text="Profile"
+          titleText="Profile" />
+      </RouterLink>
 
     </nav>
   </header>

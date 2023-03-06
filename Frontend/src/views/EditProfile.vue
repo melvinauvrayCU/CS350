@@ -42,9 +42,9 @@ export default {
     },
 
     methods: {
-        done() {
+        updateProfile() {
             if (this.fname !== "" && this.lname !== "" && this.username !== "") {
-                const temp = API.instance.done(this.fname, this.lname, this.username, this.bio);
+                const temp = API.instance.updateProfile(this.fname, this.lname, this.username, this.bio);
 
                 if (temp === true) {
                     this.messageType = "success";
@@ -69,10 +69,14 @@ export default {
         },
 
         getinput() {
-            this.fname = API.instance.getname()[0];
-            this.lname = API.instance.getname()[1];
-            this.username = API.instance.getUsername();
-            this.bio = API.instance.getbio();
+            var user = API.instance.getUser();
+
+            this.username = user.username;
+            this.fname = user.fname;
+            this.lname = user.lname;
+            this.bio = user.bio;
+
+
         }
 
     },
@@ -120,7 +124,7 @@ export default {
 
         </div>
 
-        <CustomButton titleText="Done" text="Done" effect="plain" @click="done" />
+        <CustomButton titleText="Done" text="Done" effect="plain" @click="updateProfile" />
 
 
 
@@ -153,7 +157,7 @@ h4 {
     width: 50%;
 }
 
-#change{
+#change {
     text-align: center;
     padding-top: 15px;
 }

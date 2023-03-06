@@ -34,35 +34,14 @@ export default {
 
     methods: {
 
-        getUsername() {
-            this.username = API.instance.getUsername();
-            return this.username;
+        getUser() {
+            var user = API.instance.getUser();
 
-
-
-        },
-        getEmail() {
-            this.email = API.instance.getEmail();
-            return this.email;
-
-        },
-
-        editProfile() {
-
-
-
-        },
-
-        getname() {
-            const names: string[] = API.instance.getname();
-            this.fname = names[0];
-            this.lname = names[1];
-            return this.fname + " " + this.lname;
-
-        },
-        getbio() {
-            this.bio = API.instance.getbio();
-            return this.bio;
+            this.username = user.username;
+            this.fname = user.fname;
+            this.lname = user.lname;
+            this.bio = user.bio;
+            this.email = user.email;
         }
 
     },
@@ -76,6 +55,7 @@ export default {
 
 <template>
     <section>
+        {{ getUser() }}
 
 
         <div class="image">
@@ -84,26 +64,29 @@ export default {
 
         </div>
 
+
         <div class="gets">
             <div class="gets">
-                <PageTitle :text=getname() />
+                
+                <PageTitle :text=fname />
+                <PageTitle :text=lname />
             </div>
 
             <div class="gets">
-                <h3>@{{ getUsername() }}</h3>
+                
+                <h3>@{{ username }}</h3>
             </div>
 
             <div id="email">
                 <h3 id="emailname"> Email: </h3>
-                <h3>{{ getEmail() }}</h3>
+                <h3>{{ email }}</h3>
             </div>
 
         </div>
 
         <div id="button">
             <RouterLink to="/editprofile">
-                <CustomButton type="neutral" effect='plain' text="Edit Profile" titleText="Edit Profile"
-                    @click="editProfile" />
+                <CustomButton type="neutral" effect='plain' text="Edit Profile" titleText="Edit Profile" />
             </RouterLink>
         </div>
 
@@ -111,7 +94,7 @@ export default {
 
         <div class="bio">
             <PageTitle text="Bio:" />
-            <p> {{ getbio() }}</p>
+            <p> {{ bio }}</p>
         </div>
 
 
@@ -171,8 +154,10 @@ section {
     font-size: 150%;
 }
 
+.gets h1 {
+    text-align: center;
+    margin: 10px 5px 0 5px;
+    display: inline-block;
 
-h1[data-v-5e02ae5f] {
-    margin: 10px 0 0 0;
 }
 </style>

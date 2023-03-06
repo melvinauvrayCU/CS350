@@ -33,6 +33,12 @@ const router = createRouter({
         hideNavbar: true,
       }
     },
+    {
+      path:"/viewRecipe/:id",
+      name:"viewRecipe",
+      props: true,
+      component: () => import("../views/ViewRecipePage.vue"),
+    },
   ],
 });
 

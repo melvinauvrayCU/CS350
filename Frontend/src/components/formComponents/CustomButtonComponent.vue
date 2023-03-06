@@ -19,7 +19,7 @@ export default {
             default: "neutral"
         },
         icon: {
-            type: String as () => "" | "trash" | "add",
+            type: String as () => "" | "trash" | "add" | "x",
             default: "",
         }
     }
@@ -247,7 +247,7 @@ button:active {
     position: relative;
     text-decoration: none;
     font-size: 0em;
-    padding: 10px 10px;
+    padding: 10px 15px;
     border-radius: 10px;
     overflow: hidden;
     cursor: pointer;
@@ -258,11 +258,12 @@ button:active {
 
 
 /** For all icons */
+.inline.x:before,
 .inline.trash:before,
 .inline.add:before {
     font-family: FontAwesome;
     font-weight: 100;
-    font-size: 15px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -271,7 +272,6 @@ button:active {
     height: 100%;
     transition: all 0.2s linear 0s;
     text-align: center;
-    right: 7px;
     text-indent: 0px;
 }
 
@@ -285,11 +285,18 @@ button:active {
 /** Trash icon */
 .inline.trash::before {
     content: "\f1f8";
+    right: 10px;
 }
 
 /** Add icon */
 .inline.add::before {
     content: "\2b";
+    right: 9.5px;
+}
+
+.inline.x::before{
+    content: "\f00d";
+    right: 11px;
 }
 
 /** Danger colors */

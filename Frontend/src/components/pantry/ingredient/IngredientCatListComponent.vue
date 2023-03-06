@@ -3,6 +3,7 @@ import type { IngredientCat } from "@/model/PantryModels";
 import IngredientCatComponent from "@/components/pantry/ingredient/IngredientCatComponent.vue";
 export default {
     name: "IngredientCatListComponent",
+    emits: ["open-ingredientmodal","delete-ingredientcat"],
     props: {
         ingredientcats: Array<IngredientCat>,
     },

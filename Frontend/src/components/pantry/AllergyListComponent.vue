@@ -5,6 +5,7 @@ import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
 
 export default {
     name: "AllergyListComponent",
+    emits: ["add-allergy","delete-allergy"],
     props: {
         allergies: {
             type: Array<string>,
@@ -84,7 +85,7 @@ align-items: baseline;
 }
 
 .flexHorizontal div:nth-child(1) {
-  flex: 1.5;
+  flex: 2.25;
   width: 60%;
 }
 

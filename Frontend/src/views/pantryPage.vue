@@ -4,10 +4,10 @@ import { IngredientCat } from "@/model/PantryModels";
 import IngredientCatListComponent from "@/components/pantry/ingredient/IngredientCatListComponent.vue";
 import IngredientModalComponent from "@/components/pantry/ingredient/IngredientModalComponent.vue";
 import AllergyListComponent from "@/components/pantry/AllergyListComponent.vue";
-import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import ConversionComponent from "@/components/pantry/ConversionComponent.vue";
+import MessageComponent from "@/components/MessageComponent.vue";
 
 export default {
   name: "PantryPage",
@@ -17,9 +17,9 @@ export default {
     IngredientModalComponent,
     AllergyListComponent,
     ConversionComponent,
-    BackgroundIcons,
     InputField,
-    CustomButton
+    CustomButton,
+    MessageComponent
 },
 
 data(): {
@@ -31,6 +31,7 @@ data(): {
   isModalVisible: boolean,
   newIngredientCat: string,
   newUtensilCat: string,
+  messageText: string
 } {
   return {
     ingredientcats: [],
@@ -41,6 +42,7 @@ data(): {
     isModalVisible: false,
     newIngredientCat: "",
     newUtensilCat: "",
+    messageText: "",
   };
 },
 
@@ -112,12 +114,14 @@ addAllergy(name: string) {
 
 changePeople(people: number) {
   console.log("Change People Eating to " + people);
+  this.messageText = "Saved Number of People Eating as " + people;
   API.instance.changePeopleEating(people);
 },
 
 changeUnit(unit: string) {
   console.log("Change Unit Conversion to " + unit);
-API.instance.changeUnitConversion(unit);
+  this.messageText = "Saved Unit Conversion as " + unit;
+  API.instance.changeUnitConversion(unit);
 }
 
 },
@@ -135,13 +139,12 @@ created() {
 </script>
 
 <template>
-
-  <section>
-
-    <BackgroundIcons />
+  <main>
 
     <div class="grid">
       <div class="ingredients">
+
+        <img draggable="false" src="@/assets/foodIcons/meat.png">
 
         <div class="text">
 
@@ -165,7 +168,12 @@ created() {
         </div>
       </div>
       <div class="utensils">
+
+        <img draggable="false" src="@/assets/foodIcons/pepper.png">
+        <img draggable="false" src="@/assets/foodIcons/cheese.png">
+
         <div class="text">
+
           <h2>Untensil Catagories</h2>
 
           <div class="pair">
@@ -186,7 +194,12 @@ created() {
         </div>
       </div>
       <div class="conversions">
+
+        <img draggable="false" src="">
+        <img draggable="false" src="@/assets/foodIcons/banana.png">
+
         <div class="text">
+
           <h2>Conversions</h2>
 
           <ConversionComponent
@@ -198,7 +211,11 @@ created() {
         </div>
       </div>
       <div class="alergies">
+
+        <img draggable="false" src="@/assets/foodIcons/lemon.png">
+
         <div class="text">
+
           <h2>Allergies</h2>
 
           <AllergyListComponent
@@ -209,22 +226,26 @@ created() {
         </div>
       </div>
     </div>
-  </section>
 
-  
-<IngredientModalComponent 
-@add-ingredient="addIngredient"
-@delete-ingredient="deleteIngredient"
-@close="closeModal" 
-v-show="isModalVisible" 
-:ingredientcat="ingredientcat"/>
+    <IngredientModalComponent 
+    @add-ingredient="addIngredient"
+    @delete-ingredient="deleteIngredient"
+    @close="closeModal" 
+    v-show="isModalVisible" 
+    :ingredientcat="ingredientcat"/>
 
+    <MessageComponent :type="'success'" v-model="messageText" />
+
+  </main>
 </template>
 
 
 
 <style scoped>
-
+h2 {
+  font-weight: bold;
+  padding: 5px 15px;
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -238,7 +259,7 @@ v-show="isModalVisible"
   border-radius: 25px;
   border-style: solid;
   border-color: var(--color-accent);
-  background-color: transparent;
+  background-color: var(--color-background);
   border-width: 1;
   padding: 10px;
   margin: 10px;
@@ -248,7 +269,7 @@ v-show="isModalVisible"
   border-radius: 25px;
   border-style: solid;
   border-color: var(--color-accent);
-  background-color: transparent;
+  background-color: var(--color-background);
   padding: 10px;
   border-width: 1;
   margin: 10px;
@@ -259,7 +280,7 @@ v-show="isModalVisible"
   border-radius: 25px;
   border-style: solid;
   border-color: var(--color-accent);
-  background-color: transparent;
+  background-color: var(--color-background);
   padding: 10px;
   border-width: 1;
   margin: 10px;
@@ -270,7 +291,7 @@ v-show="isModalVisible"
   border-radius: 25px;
   border-style: solid;
   border-color: var(--color-accent);
-  background-color: transparent;
+  background-color: var(--color-background);
   padding: 10px;
   border-width: 1;
   margin: 10px;
@@ -278,8 +299,9 @@ v-show="isModalVisible"
 
 .text {
   background-color: transparent;
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 10px;
 }
 
 .pair {
@@ -290,7 +312,7 @@ align-items: baseline;
 }
 
 .flexHorizontal div:nth-child(1) {
-  flex: 1.5;
+  flex: 2.25;
   width: 60%;
 }
 
@@ -300,6 +322,25 @@ align-items: baseline;
 
 }
 
+img {
+    width: 40px;
+    position: absolute;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
 
+img:nth-child(1) {
+  top: 75%;
+  right: 8%;
+}
+
+img:nth-child(2) {
+  top: 85%;
+  right: 85%;
+  transform: rotate(45deg);
+}
 
 </style>

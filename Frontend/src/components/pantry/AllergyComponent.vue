@@ -4,6 +4,7 @@ import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
 
 export default {
     name: "AllergyComponent",
+    emits: ["delete-allergy"],
     props: {
         allergy: {
             type: String,
@@ -44,6 +45,7 @@ export default {
 }
 
 .text {
+    padding-left: 7px;
     padding-top: 5px;
     display: flex;
     flex-direction: row;

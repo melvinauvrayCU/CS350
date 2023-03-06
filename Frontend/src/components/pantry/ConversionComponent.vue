@@ -6,6 +6,7 @@ import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
 
 export default {
     name: "ConversionComponent",
+    emits: ["change-people","change-unit"],
 props: {
     options: {
         type: Array<string>,

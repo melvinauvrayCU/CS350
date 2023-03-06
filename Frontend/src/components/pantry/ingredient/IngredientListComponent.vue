@@ -4,6 +4,7 @@ import InputField from "@/components/formComponents/InputFieldComponent.vue";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 export default {
     name: "IngredientListComponent",
+    emits: ["add-ingredient", "delete-ingredient"],
     props: {
         ingredients: {
             type: Array<string>,

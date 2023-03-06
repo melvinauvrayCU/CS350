@@ -2,6 +2,7 @@
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 export default {
     name: "IngredientComponent",
+    emits: ["delete-ingredient"],
     components: {
         CustomButton
     },
@@ -46,6 +47,7 @@ export default {
 }
 
 .text {
+    padding-left: 10px;
     padding-top: 5px;
     display: flex;
     flex-direction: row;

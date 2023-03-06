@@ -3,6 +3,7 @@ import { IngredientCat } from "@/model/PantryModels";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 export default {
     name: "IngredientCatComponent",
+    emits: ["open-ingredientmodal","delete-ingredientcat"],
     props: {
         ingredientcat: {
             type: IngredientCat,
@@ -47,6 +48,7 @@ export default {
 }
 
 .text {
+    padding-left: 7px;
     padding-top: 5px;
     display: flex;
     flex-direction: row;

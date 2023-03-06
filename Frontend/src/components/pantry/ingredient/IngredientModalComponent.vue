@@ -4,7 +4,7 @@ import IngredientListComponent from "@/components/pantry/ingredient/IngredientLi
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
  export default {
     name: "IngredientModalComponent",
-
+    emits: ["close", "delete-ingredient", "add-ingredient"],
     props: {
         ingredientcat: {
             type: IngredientCat,
@@ -26,21 +26,23 @@ import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
 </script>
 
 <template>
-  <div class="modal-overlay">
-    <div class="modal" role="dialog">
-        <div class="header">
-          <h2>{{ ingredientcat.name }}</h2>
-          <div class="btn-close">
-            <CustomButton type="danger" effect="inline" text="" titleText="Close ingredient"
-            @clicked="close" />
+  <transition name="modal-fade">
+    <div class="modal-overlay">
+      <div class="modal" role="dialog">
+          <div class="header">
+            <h2>{{ ingredientcat.name }}</h2>
+            <div class="btn-close">
+              <CustomButton type="danger" effect="inline" text="" titleText="Close category" icon="x"
+              @clicked="close" />
+          </div>
         </div>
-      </div>
-      <IngredientListComponent
-        @delete-ingredient="(ingredient) => $emit('delete-ingredient', ingredient)"
-        @add-ingredient="(nameAdd) => $emit('add-ingredient', nameAdd)"
-        :ingredients="ingredientcat.ingredients" />          
-      </div>
-  </div>
+        <IngredientListComponent
+          @delete-ingredient="(ingredient) => $emit('delete-ingredient', ingredient)"
+          @add-ingredient="(nameAdd) => $emit('add-ingredient', nameAdd)"
+          :ingredients="ingredientcat.ingredients" />          
+        </div>
+    </div>
+  </transition>
 </template>
 
 <style scoped>
@@ -86,4 +88,15 @@ import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
     padding-top: 5px;
     padding-right: 10px;
   }
+
+  .modal-fade-enter-active,
+.modal-fade-leave-active {
+    transition: all 0.5s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+    opacity: 0;
+}
+
 </style>

@@ -22,7 +22,7 @@ export default {
     methods: {
         setRating(value: number) {
             this.currentrating = value;
-            this.$emit('input',value);
+            this.$emit("input",value);
         },
     }
 };

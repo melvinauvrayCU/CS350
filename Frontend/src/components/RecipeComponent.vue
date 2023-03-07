@@ -1,14 +1,35 @@
 <script lang="ts">
 import { Recipe } from "@/model/recipeModel";
+import PopupModal from "@/components/PopupModalComponent.vue";
 
 export default {
     name: "RecipeComponent",
+    components: {
+        PopupModal
+    },
     props: {
         // This component will have a props named recipe, which will be of type a single Recipe, and is mandatory.
         recipe: {
             type: Recipe,
             required: true
         },
+    },
+    data(): {
+        isModalVisible: boolean,
+    }{
+        return {
+            isModalVisible: false
+        };
+    },
+
+    methods : {
+        showModal(){
+    this.isModalVisible = true;
+  },
+  closeModal(){
+    this.isModalVisible = false;
+  }
+
     }
 };
 </script>
@@ -26,9 +47,14 @@ export default {
         <!-- Since we are in the component file, we can't touch the API, we are allowed to do so only in Page files, -->
         <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
         <!-- and we don't forget to attach the id of the recipe we want to delete. -->
-        <button @click="$emit('delete-recipe', recipe.id)">
+        <!-- <button @click="$emit('delete-recipe', recipe.id)">
+            Delete Recipe
+        </button> -->
+        <button @click="$emit('open-popupModal', recipe.id)">
             Delete Recipe
         </button>
+
+        <!-- <PopupModal :recipeTest = "recipe" @close ="closeModal" @/> -->
 
     </div>
 </template>

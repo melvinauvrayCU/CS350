@@ -22,13 +22,11 @@ export default {
   data(): {
     recipes: Array<Recipe>,
     categories: Array<Category>,
-    showMessage: boolean,
     message: string,
   } {
     return {
       recipes: [],
       categories: [],
-      showMessage: false,
       message: "",
     };
   },
@@ -40,14 +38,8 @@ export default {
      */
     deleteRecipe(id: number) {
       // Show a success message when the recipe is deleted
-      this.showMessage = true;
       this.message = "Recipe deleted sucessfully"
       this.recipes = API.instance.removeRecipe(id);
-
-      // Set showMessage to false after 3 seconds
-      setTimeout(() => {
-        this.showMessage = false;
-      }, 5500);
     },
     handleSearch(searchText: string) {
       console.log("Performing search for:", searchText);
@@ -72,6 +64,6 @@ export default {
     <div>
       <CategoryListComponent :categories="categories" :recipes="recipes" @delete-recipe="deleteRecipe" />
     </div>
-    <message-component v-if="showMessage" type="success" :modelValue="message" :show="showMessage" :message="message" />
+    <message-component type="success" v-model="message" />
   </main>
 </template>

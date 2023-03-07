@@ -22,6 +22,17 @@ export default {
 
 <style scoped>
 .category {
-    margin-left: 10px;
+    margin-left: 20px;
+    font-family: common;
+    margin-top: 5px;
+}
+
+h2 {
+    font-family: common;
+    color: var(--color-text);
+    font-size: 1.8em;
+    margin-bottom: 5px;
+    font-weight: 500;
+    text-shadow: 2px solid black;
 }
 </style>

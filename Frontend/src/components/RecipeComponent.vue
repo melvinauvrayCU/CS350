@@ -2,13 +2,13 @@
 import { API } from "@/model/apiCalls";
 import { Recipe } from "@/model/recipeModel";
 import RatingComponent from "./RatingComponent.vue";
-
-//import { RatingComponent } from "@/components/RatingComponent.vue"
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 
 export default {
     name: "RecipeComponent",
     components: {
         RatingComponent,
+        CustomButton,
     },
     props: {
         // This component will have a props named recipe, which will be of type a single Recipe, and is mandatory.
@@ -29,19 +29,24 @@ export default {
             <h3 class="recipe-title">{{ recipe.title }}</h3>
             <p class="recipe-descrip">{{ recipe.description }}</p>
         </div>
-        <div class="flexFill"> </div>
+        <div class="flexFill"></div>
+
         <div class="delete-button"> 
             <!-- On clicking on the button, we want to delete the recipe,-->
             <!-- Since we are in the component file, we can't touch the API, we are allowed to do so only in Page files, -->
             <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
             <!-- and we don't forget to attach the id of the recipe we want to delete. -->
-            <button class="delete-button__button" @click="$emit('delete-recipe', recipe.id)"> Delete </button> 
-        </div>
+            <CustomButton titleText="Click to delete" text="Delete" effect="empty" @click="$emit('delete-recipe',recipe.id)"/>
+            <!--
+                Here is the code for the other button I had working, trying to fix layout of new custom button
+                but old code is here just in case
 
+                <button class="delete-button__button" @click="$emit('delete-recipe', recipe.id)"> Delete </button> 
+            -->
+        </div>
         <div class="stars">
             <RatingComponent class="stars__star" :rating="recipe.rating" :recipeId="recipe.id"/>
-        </div>
-        
+        </div>     
     </div>
 </template>
 
@@ -49,11 +54,10 @@ export default {
 .RecipeComponent {
     background-color: white;
     border: 3px solid lightgrey;
-    border-color: lightgrey;
+    border-color: var(--color-accent);
     border-radius: 5px;
-    border-style: double;
-    width: 300px;
-    height: 125px;
+    width: 450px;
+    height: 175px;
     display: flex;
     padding: 20px 20px;
     margin-left: 20px;
@@ -61,31 +65,33 @@ export default {
 
 .containerText {
     flex-direction: row;
-    margin-left: -30px;
 }
 
 .recipe-title {
-    width: auto;
+    font-family: "common";
+    font-weight: 400;
     flex-direction: row;
-    margin-left: 20px;
     margin-top: -10px;
+    margin-left: -10px;
+    font-size: 1.3em;
 }
-.recipe-descrip {
-    width: 200px;
-    margin-left: 30px;
-    margin-top: 10px;
 
+.recipe-descrip {
+    font-family: "common";
+    width: 200px;
+    font-family: "common";
+    font-weight: 300;
+    font-size: 1.0em;
 }
 
 .delete-button {
     display: flex;
     cursor: pointer;
-    width: 40px;
-    height: 30px;
-    margin-left: 20px;
     margin-top: -10px;
+    margin-left: 60px;
 }
 
+/**
 .delete-button__button {
     background-color: red;
     border: 1px solid red;
@@ -99,16 +105,27 @@ export default {
     border: 1px solid darkred;
     border-radius: 3px;
 }
+*/
+
 
 .stars {
     display: flex;
     flex-direction: row;
-    margin-top: 75px;
-    margin-left: -110px;
+    margin-top: 120px;
+    margin-left: -120px;
 }
 
 .stars__star {
     width: 200px;
 }
+
+h3 {
+    font-family: "common";
+    color: var(--color-text);
+    font-size: 1.3em;
+    margin-bottom: 5px;
+    font-weight: 350;
+}
+
 </style>
 

@@ -2,6 +2,9 @@
 import type { Recipe } from "@/model/recipeModel";
 import type { Category } from "@/model/categoryModel";
 import { API } from "../model/apiCalls";
+import PageTitle from "@/components/PageTitleComponent.vue";
+import InputField from "@/components/formComponents/InputFieldComponent.vue";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
 import CategoryListComponent from "@/components/CategoryListComponent.vue";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
 

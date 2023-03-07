@@ -1,7 +1,13 @@
 <script lang="ts">
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
+import InputField from "@/components/formComponents/InputFieldComponent.vue";
 
 export default {
     name: "SearchBarComponent",
+    components: {
+        CustomButton,
+        InputField,
+    },
     data() {
         return {
             searchText: "",
@@ -17,9 +23,16 @@ export default {
 
 <template>
     <div class="SearchBarComponent">
-        <input class="search-textbox" type="text" v-model="searchText" placeholder="Search...">
+        <div class="search-bar">
+            <InputField id="searchName" labelText="" max-length="100"
+          placeholder="Search for...." v-model="searchText" :mandatory="false" />
+            <!--
+            Old Search Bar 
+            <input class="search-textbox" type="text" v-model="searchText" placeholder="Search...">
+            -->
+        </div>
         <div class="search-button">
-            <button class="search-button__button" @click="search">Search</button>
+            <CustomButton titleText="Click to search" text="Search" effect="plain" @click="search"/>
         </div>
     </div>
 </template>
@@ -28,13 +41,21 @@ export default {
 .SearchBarComponent {
     display: flex;
     flex-direction: row;
+    margin-left: 20px;
 }
 
 .search-button {
     display: flex;
     flex-direction: row;
-    margin: 10px 10px;
+    margin: 12px;
 }
+
+.search-bar {
+    width: 100%;
+    margin-top: -10px;
+}
+/**
+Previous Search Bar
 
 .search-textbox {
     background-color: white;
@@ -61,4 +82,7 @@ export default {
 .search-button__button:hover {
     background-color: darkgreen;
 }
+
+*/
+
 </style>

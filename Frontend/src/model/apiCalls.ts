@@ -62,7 +62,7 @@ export class API {
 	 * Will have a title and an array of recipes associated with category
 	 */
 	categoryList: Category[] = [
-		new Category("Recommneded", this.recipeList),
+		new Category("Recommended", this.recipeList),
 		new Category("Highest Rated", this.recipeList),
 		new Category("Recent", this.recipeList),
 		new Category("Frequently Cooked", this.recipeList),
@@ -83,8 +83,6 @@ export class API {
 	getCategories(): Category[] {
 		return this.categoryList;
 	}
-
-
 
 
 	/**

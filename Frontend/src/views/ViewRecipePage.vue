@@ -21,6 +21,7 @@ import router from "@/router";
     },
     methods: {
         recipeDone(){
+            this.recipe.createdCounter++;
             router.push({name: "home"});
         }
 

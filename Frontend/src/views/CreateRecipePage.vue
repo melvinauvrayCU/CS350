@@ -71,7 +71,8 @@ export default {
           this.title,
           this.description,
           this.numberPeople,
-          this.steps
+          this.steps,
+          1
         ));
 
         if (result) {

@@ -1,4 +1,5 @@
 import { IngredientCat, Conversion } from "./PantryModels";
+import { Category } from "./categoryModel";
 import { Recipe } from "./recipeModel";
 import { User } from "./userModel";
 
@@ -36,7 +37,10 @@ export class API {
 	 * But obviously we will not have any persistency of our datas when reloading the website.
 	 */
 	recipeList: Recipe[] = [
-		new Recipe("Americain burger", "True og burger", 2, []),
+		new Recipe("Americain burger", "True og burger", 2, [], 3, ["Recommended","Recent"]),
+		new Recipe("French Burger","A burger, but french", 1,[],4, ["Highest Rated","Frequently Cooked"]),
+		new Recipe("Blueberry Pancakes","Pancakes with blueberries", 3,[],5, ["Recommended","Highest Rated","Recent","Frequently Cooked"]),
+		new Recipe("Pancakes","Pancakes but plain", 3,[],4, ["Highest Rated","Recent"]),
 	];
 	ingredientCatList: IngredientCat[] = [
 		new IngredientCat("I", "Protein", ["Beef", "Chicken"]),
@@ -74,6 +78,18 @@ export class API {
 	 */
 	loggedIn: boolean = false;
 
+	/**
+	 * List of all Categories, this is temporary because we don't have the backend setup yet.
+	 * Its type is an array of Category class, defined in another file.
+	 * Will have a title and an array of recipes associated with category
+	 */
+	categoryList: Category[] = [
+		new Category("Recommended", "Recommended", this.recipeList),
+		new Category("Highest Rated", "Highest Rated", this.recipeList),
+		new Category("Recent", "Recent", this.recipeList),
+		new Category("Frequently Cooked", "Frequently Cooked", this.recipeList,),
+	];
+	
 	// * ------------------- Start of the API call methods ------------------------
 
 	/**
@@ -84,6 +100,14 @@ export class API {
 	}
 
 	/**
+	 * Return the full list of categories
+	 */
+	getCategories(): Category[] {
+		return this.categoryList;
+	}
+
+
+	/**
 	 * Remove a recipe with the specified id in paramter and returns the new full list of recipes. 
 	 * @param id The id of the recipe you want to delete
 	 */
@@ -91,6 +115,7 @@ export class API {
 		this.recipeList = this.recipeList.filter(recipe => recipe.id !== id);
 		return this.recipeList;
 	}
+
 
 	/**
 	 * Create a new recipe with the datas you're giving in parameter. 
@@ -100,6 +125,15 @@ export class API {
 	 */
 	createRecipe(recipeObject: Recipe): boolean {
 		this.recipeList.push(recipeObject);
+		recipeObject.tags.forEach((tag) => {
+			const categoryIndex = this.categoryList.findIndex((category) => category.categoryTag === tag);
+			if (categoryIndex > -1) {
+				this.categoryList[categoryIndex].linkedRecipeList.push(recipeObject);
+			} else {
+				const newCategory = new Category(tag, tag, [recipeObject]);
+				this.categoryList.push(newCategory);
+			}
+		});
 		console.log(this.recipeList);
 		return true;
 	}

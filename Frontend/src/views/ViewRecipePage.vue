@@ -3,6 +3,8 @@ import StepView from "@/components/StepViewComponent.vue";
 import { API } from "@/model/apiCalls";
 import type { Recipe } from "@/model/recipeModel";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
+import PageSeparator from "@/components/PageSeparatorComponent.vue";
+import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
 import router from "@/router";
 
  export default{
@@ -18,31 +20,40 @@ import router from "@/router";
         };
     },
     methods: {
-        backHome(){
+        recipeDone(){
             router.push({name: "home"});
         }
 
     },
     components: { 
         StepView,
-        CustomButton },
+        CustomButton,
+        PageSeparator,
+        BackgroundIcons, },
 };
 
 </script>
 <template>
   <main class="ViewRecipePage">
     <h1 class="title">{{ recipe.title }}</h1>
+
+    <PageSeparator title="Description"></PageSeparator>
     <h2 class="subtitle">{{ recipe.description }}</h2>
     <p>Cooks for {{ recipe.numberPeople }} people</p>
+
+    <PageSeparator title="Recipe Steps"></PageSeparator>
     <transition-group name="list">
         <StepView v-for="(step, index) in recipe.steps" :key="step.stepId" :stepObject="step"
           :stepIndex="index + 1" :stepIndexLength="recipe.steps.length"
           v-model:descriptionModelValue="step.descriptionValue" v-model:cooktimeModelValue="step.cooktimeValue"
           v-model:preptimeModelValue="step.preptimeValue"  />
       </transition-group>
-    <CustomButton text="Recipe Completed!" type="neutral" effect="empty" icon="add"
-        titleText="Click to complete the recipe and return home" @clicked="backHome" />  
 
+      <PageSeparator title="Rate your Recipe"></PageSeparator>
+
+    <CustomButton text="Recipe Completed!" type="neutral" effect="empty" icon="add"
+        titleText="Click to complete the recipe and return home" @clicked="recipeDone" />  
+    <BackgroundIcons></BackgroundIcons>
   </main>
 </template>
 
@@ -76,10 +87,11 @@ import router from "@/router";
 }
 
 .title {
-    font-size:xx-large;
+    font: bolder;
+    font-size:1000;
 }
 .subtitle{
-    font-size:x-large;
+    font-size:600;
 }
 
 

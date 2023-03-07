@@ -17,11 +17,16 @@ export class Recipe {
 	description: string;
 	numberPeople: number;
 	steps: Step[];
+	createdCounter: number;
+	rating: number;
 
-	constructor(title: string, description: string, numberPeople: number, steps: Step[]) {
+	constructor(title: string, description: string, numberPeople: number, steps: Step[],rating: number) {
 		// We set the id automatically with the static field, so it is auto incrementing.
 		this.id = Recipe.idCounter;
 		Recipe.idCounter++;
+
+		this.createdCounter=0;
+		this.rating=rating;
 
 		// We create the recipe from the properties passed in parameters.
 		this.title = title;

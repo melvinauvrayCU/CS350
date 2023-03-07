@@ -1,6 +1,4 @@
 <script lang="ts">
-import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
-import InputField from "@/components/formComponents/InputFieldComponent.vue";
 import type { Step } from "@/model/recipeModel";
 import type { PropType } from "vue";
 

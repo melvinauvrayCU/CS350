@@ -46,7 +46,7 @@ export class API {
 			descriptionValue: "First description of second step",
 			cooktimeValue: "16:00",
 			preptimeValue: "02:00",
-		}]),
+		}],5),
 		new Recipe("French burger", "Ask Melvin", 2, [{
 			stepId: 0,
 			descriptionValue: "First description of first step",
@@ -58,7 +58,7 @@ export class API {
 			descriptionValue: "First description of second step",
 			cooktimeValue: "16:00",
 			preptimeValue: "02:00",
-		}])
+		}],7)
 		
 	];
 

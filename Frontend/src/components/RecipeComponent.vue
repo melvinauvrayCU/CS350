@@ -36,6 +36,7 @@ export default {
             <div class="containerText">
                 <h3>{{ recipe.title }}</h3>
                 <p>{{ recipe.description }}</p>
+                <p>{{ recipe.rating }}/10</p>
             </div>
         
         

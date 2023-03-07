@@ -1,6 +1,4 @@
 <script lang = "ts">
-import { Recipe } from "@/model/recipeModel";
-//import RecipeComponent from "@/components/RecipeComponent.vue"
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 
 
@@ -9,23 +7,6 @@ export default {
     components : {
         CustomButton
     },
-    props: {
-        recipeTest : {
-            type: Recipe,
-            required: true
-        },
-    },
-    methods: {
-        close() {
-            this.$emit("close");
-        },
-        // confirm() {
-        //     this.$emit("confirm");
-        // },
-        // deleteRecipe() {
-        //     this.$emit("deleteRecipe");
-        // }
-    }
 };
 
 </script>
@@ -35,19 +16,19 @@ export default {
     <div class = "modal-overlay">
         <div class = "modal">
             <div class = "header">
-                <h2> Test</h2>
+                
                 <p> Are you sure you want to delete </p>
                 <div class = "btn-close">
-                    <CustomButton type="danger" effect="empty" text="" titleText="Close" @clicked ="close"/>
+                    <CustomButton type="danger" effect="empty" text="x" titleText="Close" @click="$emit('close-modal')"/>
                 </div>
-                <!-- <div class = "btn-confirm">
-                    <CustomButton type="success" effect="empty" text="" titleText="confirm" @clicked ="confirm"/>
+                <div class = "btn-confirm">
+                    <CustomButton type="success" effect="empty" text="confirm" titleText="confirm" @clicked ="$emit('confirm-modal')"/>
 
                 </div>
-                <div class = "btn-delete">
-                    <CustomButton type="success" effect="empty" text="" titleText="delete" @clicked ="deleteRecipe"/>
+                <div class = "btn-cancel">
+                    <CustomButton type="neutral" effect="empty" text="cancel" titleText="cancel" @clicked ="$emit('cancel-modal')"/>
 
-                </div> -->
+                </div>
 
             </div>
 

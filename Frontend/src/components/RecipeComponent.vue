@@ -1,11 +1,13 @@
 <script lang="ts">
 import { Recipe } from "@/model/recipeModel";
 import PopupModal from "@/components/PopupModalComponent.vue";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 
 export default {
     name: "RecipeComponent",
     components: {
-        PopupModal
+        PopupModal,
+        CustomButton
     },
     props: {
         // This component will have a props named recipe, which will be of type a single Recipe, and is mandatory.
@@ -47,14 +49,25 @@ export default {
         <!-- Since we are in the component file, we can't touch the API, we are allowed to do so only in Page files, -->
         <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
         <!-- and we don't forget to attach the id of the recipe we want to delete. -->
+       
         <!-- <button @click="$emit('delete-recipe', recipe.id)">
             Delete Recipe
         </button> -->
-        <button @click="$emit('open-popupModal', recipe.id)">
+        <!-- <button @click="isModalVisible = true">
             Delete Recipe
-        </button>
+        </button> -->
+        
+        
 
-        <!-- <PopupModal :recipeTest = "recipe" @close ="closeModal" @/> -->
+        <CustomButton titleText="Click to delete" text="Delete" effect="plain" @click="showModal"/>
+        
+
+        <!-- <div class="save-btn">
+      <button @click="isModalVisible = true">Delete</button> -->
+      <!-- <CustomButton text = "Delete Recipe" icon = "trash" @click = "isModalVisible = true" />
+        </div> -->
+
+        <PopupModal @close-modal = "closeModal" @confirm-modal = "$emit('delete-recipe', recipe.id)"  @cancel-modal = "closeModal" v-show = "isModalVisible"  />
 
     </div>
 </template>

@@ -21,7 +21,7 @@ export default {
 </template>
 
 <style scoped>
-.category{
+.category {
     margin-left: 10px;
 }
 </style>

@@ -2,6 +2,9 @@
 import StepView from "@/components/StepViewComponent.vue";
 import { API } from "@/model/apiCalls";
 import type { Recipe } from "@/model/recipeModel";
+import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
+import router from "@/router";
+
  export default{
     name: "ViewRecipePage",
     props: {
@@ -14,15 +17,22 @@ import type { Recipe } from "@/model/recipeModel";
             recipe: API.instance.getRecipe(parseInt(this.id)),
         };
     },
+    methods: {
+        backHome(){
+            router.push({name: "home"});
+        }
+
+    },
     components: { 
-        StepView },
+        StepView,
+        CustomButton },
 };
 
 </script>
 <template>
   <main class="ViewRecipePage">
-    <h1>{{ recipe.title }}</h1>
-    <h2>{{ recipe.description }}</h2>
+    <h1 class="title">{{ recipe.title }}</h1>
+    <h2 class="subtitle">{{ recipe.description }}</h2>
     <p>Cooks for {{ recipe.numberPeople }} people</p>
     <transition-group name="list">
         <StepView v-for="(step, index) in recipe.steps" :key="step.stepId" :stepObject="step"
@@ -30,6 +40,8 @@ import type { Recipe } from "@/model/recipeModel";
           v-model:descriptionModelValue="step.descriptionValue" v-model:cooktimeModelValue="step.cooktimeValue"
           v-model:preptimeModelValue="step.preptimeValue"  />
       </transition-group>
+    <CustomButton text="Recipe Completed!" type="neutral" effect="empty" icon="add"
+        titleText="Click to complete the recipe and return home" @clicked="backHome" />  
 
   </main>
 </template>
@@ -62,6 +74,14 @@ import type { Recipe } from "@/model/recipeModel";
   flex-direction: column;
   align-items: center;
 }
+
+.title {
+    font-size:xx-large;
+}
+.subtitle{
+    font-size:x-large;
+}
+
 
 .contentConainer {
   display: flex;

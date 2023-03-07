@@ -72,6 +72,7 @@ export class API {
 		new User("a", "a", "a@clarkson.edu"),
 
 	];
+	currentUser: User = new User("", "", "");
 
 	/** 
 	 * variable to check if a user is logged in or not 
@@ -140,6 +141,8 @@ export class API {
 	login(username: string, password: string): boolean {
 		if (this.userList.find(user => user.password === password && (user.username === username || user.email === username))) {
 			console.warn(`Welcome back ${username}`);
+			const temp = this.userList.find(user => user.username === username || user.email === username);
+			if (temp !== undefined) this.currentUser = temp;
 			this.loggedIn = true;
 			return true;
 		} else {
@@ -184,6 +187,48 @@ export class API {
 		this.loggedIn = false;
 		return true;
 	}
+
+
+
+
+	/**
+	 * Goes through the users attributes and updates the first name, last name, username, and bio
+	 */
+	updateProfile(fname: string, lname: string, username: string, bio: string): boolean {
+		if (this.userList.find(user => user.username === username)) {
+			if (this.currentUser.username === username) {
+				this.currentUser.fname = fname;
+				this.currentUser.lname = lname;
+				this.currentUser.username = username;
+				this.currentUser.bio = bio;
+				return true;
+
+			}
+
+			console.log("username already taken");
+			return false;
+		}
+
+		this.currentUser.fname = fname;
+		this.currentUser.lname = lname;
+		this.currentUser.username = username;
+		this.currentUser.bio = bio;
+
+
+		return true;
+
+	}
+
+	/**
+	 * Returns the current user to easily get their attributes
+	 */
+	
+	getUser(): User {
+		return this.currentUser;
+
+	}
+
+
 
 }
 

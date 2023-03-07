@@ -34,8 +34,20 @@ const router = createRouter({
       }
     },
     {
-      path:"/viewRecipe/:id",
-      name:"viewRecipe",
+      path: "/profile",
+      name: "profilepage",
+      component: () => import("../views/ProfilePage.vue"),
+
+    },
+    {
+      path: "/editprofile",
+      name: "editprofile",
+      component: () => import("../views/EditProfile.vue"),
+
+    },
+    {
+      path: "/viewRecipe/:id",
+      name: "viewRecipe",
       props: true,
       component: () => import("../views/ViewRecipePage.vue"),
     },
@@ -45,7 +57,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isAuthenticated = API.instance.isLoggedIn();
   if (to.name === "createRecipe" && !isAuthenticated) next({ name: "Login" });
+  if (to.name === "profilepage" && !isAuthenticated) next({ name: "Login" });
   else next();
 });
+
+
 
 export default router;

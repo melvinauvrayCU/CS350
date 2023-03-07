@@ -2,11 +2,9 @@
 import type { Recipe } from "@/model/recipeModel";
 import type { Category } from "@/model/categoryModel";
 import { API } from "../model/apiCalls";
-import PageTitle from "@/components/PageTitleComponent.vue";
-import InputField from "@/components/formComponents/InputFieldComponent.vue";
-import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
 import CategoryListComponent from "@/components/CategoryListComponent.vue";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
+import MessageComponent from "@/components/MessageComponent.vue";
 
 export default {
   name: "HomePage",
@@ -14,6 +12,7 @@ export default {
   components: {
     CategoryListComponent,
     SearchBarComponent,
+    MessageComponent,
   },
   // For the data we will use the list of recipe.
   // This may have a strange look at first:
@@ -23,10 +22,14 @@ export default {
   data(): {
     recipes: Array<Recipe>,
     categories: Array<Category>,
+    showMessage: boolean,
+    message: string,
   } {
     return {
       recipes: [],
       categories: [],
+      showMessage: false,
+      message: "",
     };
   },
   methods: {
@@ -36,7 +39,15 @@ export default {
      * @param id id of the recipe you want to delete
      */
     deleteRecipe(id: number) {
+      // Show a success message when the recipe is deleted
+      this.showMessage = true;
+      this.message = "Recipe deleted sucessfully"
       this.recipes = API.instance.removeRecipe(id);
+
+      // Set showMessage to false after 3 seconds
+      setTimeout(() => {
+        this.showMessage = false;
+      }, 5500);
     },
     handleSearch(searchText: string) {
       console.log("Performing search for:", searchText);
@@ -58,8 +69,9 @@ export default {
     <div>
       <SearchBarComponent @search="handleSearch"/>
     </div>
-    <div class="categories">
+    <div>
       <CategoryListComponent :categories="categories" :recipes="recipes" @delete-recipe="deleteRecipe" />
     </div>
+    <message-component v-if="showMessage" type="success" :modelValue="message" :show="showMessage" :message="message" />
   </main>
 </template>

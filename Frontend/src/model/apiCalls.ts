@@ -36,8 +36,10 @@ export class API {
 	 * But obviously we will not have any persistency of our datas when reloading the website.
 	 */
 	recipeList: Recipe[] = [
-		new Recipe("Americain burger", "True og burger", 2, [], 3),
-		new Recipe("French Burger","A burger, but french", 1,[],4),
+		new Recipe("Americain burger", "True og burger", 2, [], 3, ["Recommended","Recent"]),
+		new Recipe("French Burger","A burger, but french", 1,[],4, ["Highest Rated","Frequently Cooked"]),
+		new Recipe("Blueberry Pancakes","Pancakes with blueberries", 3,[],5, ["Recommended","Highest Rated","Recent","Frequently Cooked"]),
+		new Recipe("Pancakes","Pancakes but plain", 3,[],4, ["Highest Rated","Recent"]),
 	];
 
 	/*
@@ -62,10 +64,10 @@ export class API {
 	 * Will have a title and an array of recipes associated with category
 	 */
 	categoryList: Category[] = [
-		new Category("Recommended", this.recipeList),
-		new Category("Highest Rated", this.recipeList),
-		new Category("Recent", this.recipeList),
-		new Category("Frequently Cooked", this.recipeList),
+		new Category("Recommended", "Recommended", this.recipeList),
+		new Category("Highest Rated", "Highest Rated", this.recipeList),
+		new Category("Recent", "Recent", this.recipeList),
+		new Category("Frequently Cooked", "Frequently Cooked", this.recipeList,),
 	];
 	
 	// * ------------------- Start of the API call methods ------------------------
@@ -103,8 +105,30 @@ export class API {
 	 */
 	createRecipe(recipeObject: Recipe): boolean {
 		this.recipeList.push(recipeObject);
-		console.log(this.recipeList);
-		return true;
+
+		// Will update the category list that a newly created recipe belongs in
+		let categoryFound = false;
+		recipeObject.tags.some(tag => {
+
+			const categoryIndex = this.categoryList.findIndex(category =>
+				category.categoryTag === tag
+				);
+				if (categoryIndex > -1) {
+					this.categoryList[categoryIndex].linkedRecipeList.push(recipeObject);
+					categoryFound = true;
+					return true; // exit the loop early
+				}
+				return false;
+			});
+			if (!categoryFound) {
+				const newCategory = new Category(recipeObject.tags[0], recipeObject.tags[0], [
+					recipeObject,
+
+				]);
+				this.categoryList.push(newCategory);
+			}
+			console.log(this.recipeList);
+			return true;
 	}
 
 

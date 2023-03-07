@@ -16,6 +16,11 @@ const router = createRouter({
       component: () => import("../views/CreateRecipePage.vue"),
     },
     {
+      path: "/pantry",
+      name: "pantry",
+      component: () => import("../views/pantryPage.vue"),
+    },
+    {
       path: "/login",
       name: "Login",
       component: () => import("../views/LoginPage.vue"),
@@ -31,13 +36,28 @@ const router = createRouter({
         hideNavbar: true,
       }
     },
+    {
+      path: "/profile",
+      name: "profilepage",
+      component: () => import("../views/ProfilePage.vue"),
+
+    },
+    {
+      path: "/editprofile",
+      name: "editprofile",
+      component: () => import("../views/EditProfile.vue"),
+
+    }
   ],
 });
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = API.instance.isLoggedIn();
   if (to.name === "createRecipe" && !isAuthenticated) next({ name: "Login" });
+  if (to.name === "profilepage" && !isAuthenticated) next({ name: "Login" });
   else next();
 });
+
+
 
 export default router;

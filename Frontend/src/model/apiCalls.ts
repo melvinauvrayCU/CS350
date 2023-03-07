@@ -1,3 +1,4 @@
+import { IngredientCat, Conversion } from "./PantryModels";
 import { Category } from "./categoryModel";
 import { Recipe } from "./recipeModel";
 import { User } from "./userModel";
@@ -41,6 +42,24 @@ export class API {
 		new Recipe("Blueberry Pancakes","Pancakes with blueberries", 3,[],5, ["Recommended","Highest Rated","Recent","Frequently Cooked"]),
 		new Recipe("Pancakes","Pancakes but plain", 3,[],4, ["Highest Rated","Recent"]),
 	];
+	ingredientCatList: IngredientCat[] = [
+		new IngredientCat("I", "Protein", ["Beef", "Chicken"]),
+		new IngredientCat("I", "Dairy", ["Milk", "Cheese"]),
+		new IngredientCat("U", "Silverware", ["Spoon", "Knife"]),
+		new IngredientCat("U", "Electric Appliances", ["Blender", "Food Proccessor"]),
+	];
+	utensilCatList: IngredientCat[] = [
+
+	];
+	alergies: string[] = [
+		"Milk",
+		"Clarkson"
+	];
+	unitOptions: string[] = [
+		"Cups",
+		"Gallons",
+	];
+	conversion: Conversion = new Conversion(1,"");
 
 	/*
 	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
@@ -52,6 +71,7 @@ export class API {
 		new User("a", "a", "a@clarkson.edu"),
 
 	];
+	currentUser: User = new User("", "", "");
 
 	/** 
 	 * variable to check if a user is logged in or not 
@@ -117,7 +137,80 @@ export class API {
 		console.log(this.recipeList);
 		return true;
 	}
-	
+
+// ----IngredientCatagory Methods----
+
+getIngredientCats(): IngredientCat[] {
+	return this.ingredientCatList;
+}
+
+removeIngredientCat(id: number): IngredientCat[] {
+	this.ingredientCatList = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+	return this.ingredientCatList;
+}
+
+createIngredientCat(name: string, ingredients: Array<string>): IngredientCat[] {
+	this.ingredientCatList.push(new IngredientCat("I", name, ingredients));
+	return this.ingredientCatList;
+}
+
+getIngredientCat(id: number): IngredientCat {
+	return this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+}
+
+removeIngredient(id: number, name: string): IngredientCat[] {
+	const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+	const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+	temp.ingredients = temp.ingredients.filter(ingredient => ingredient !== name);
+	templist.push(temp);
+	this.ingredientCatList = templist;
+	return this.ingredientCatList;
+}
+
+createIngredient(id: number, name: string): IngredientCat[] {
+	const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+	const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+	temp.ingredients.push(name);
+	templist.push(temp);
+	this.ingredientCatList = templist;
+	return this.ingredientCatList;
+}
+
+// ----UtensilCatagory Methods----
+
+createUtensilCat(name: string, utensils: Array<string>): IngredientCat[] {
+	this.ingredientCatList.push(new IngredientCat("U", name, utensils));
+	return this.ingredientCatList;
+}
+
+//----Allergy Methods----
+
+getAllergies(): string[] {
+	return this.alergies;
+}
+
+removeAllergy(name: string) : string[] {
+this.alergies = this.alergies.filter(allergy => allergy !== name);
+	return this.alergies;
+}
+
+createAllergy(name: string) : void {
+	this.alergies.push(name);
+}
+
+//----Conversion Methods----
+
+getUnitOptions() : string[] {
+	return this.unitOptions;
+}
+
+changePeopleEating(people: number) : void {
+	this.conversion.people = people;
+}
+
+changeUnitConversion(unit: string) : void {
+	this.conversion.unit = unit;
+}
 
 	/**
 	 * Login a user: The user needs to enter their username and password. If username matches the password they are logged in
@@ -127,6 +220,8 @@ export class API {
 	login(username: string, password: string): boolean {
 		if (this.userList.find(user => user.password === password && (user.username === username || user.email === username))) {
 			console.warn(`Welcome back ${username}`);
+			const temp = this.userList.find(user => user.username === username || user.email === username);
+			if (temp !== undefined) this.currentUser = temp;
 			this.loggedIn = true;
 			return true;
 		} else {
@@ -171,6 +266,48 @@ export class API {
 		this.loggedIn = false;
 		return true;
 	}
+
+
+
+
+	/**
+	 * Goes through the users attributes and updates the first name, last name, username, and bio
+	 */
+	updateProfile(fname: string, lname: string, username: string, bio: string): boolean {
+		if (this.userList.find(user => user.username === username)) {
+			if (this.currentUser.username === username) {
+				this.currentUser.fname = fname;
+				this.currentUser.lname = lname;
+				this.currentUser.username = username;
+				this.currentUser.bio = bio;
+				return true;
+
+			}
+
+			console.log("username already taken");
+			return false;
+		}
+
+		this.currentUser.fname = fname;
+		this.currentUser.lname = lname;
+		this.currentUser.username = username;
+		this.currentUser.bio = bio;
+
+
+		return true;
+
+	}
+
+	/**
+	 * Returns the current user to easily get their attributes
+	 */
+	
+	getUser(): User {
+		return this.currentUser;
+
+	}
+
+
 
 }
 

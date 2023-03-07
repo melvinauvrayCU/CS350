@@ -85,7 +85,7 @@ align-items: baseline;
 }
 
 .flexHorizontal div:nth-child(1) {
-  flex: 2.25;
+  flex: 1.5;
   width: 60%;
 }
 

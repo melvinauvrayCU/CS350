@@ -1,3 +1,4 @@
+import { IngredientCat, Conversion } from "./PantryModels";
 import { Recipe } from "./recipeModel";
 import { User } from "./userModel";
 
@@ -37,6 +38,24 @@ export class API {
 	recipeList: Recipe[] = [
 		new Recipe("Americain burger", "True og burger", 2, []),
 	];
+	ingredientCatList: IngredientCat[] = [
+		new IngredientCat("I", "Protein", ["Beef", "Chicken"]),
+		new IngredientCat("I", "Dairy", ["Milk", "Cheese"]),
+		new IngredientCat("U", "Silverware", ["Spoon", "Knife"]),
+		new IngredientCat("U", "Electric Appliances", ["Blender", "Food Proccessor"]),
+	];
+	utensilCatList: IngredientCat[] = [
+
+	];
+	alergies: string[] = [
+		"Milk",
+		"Clarkson"
+	];
+	unitOptions: string[] = [
+		"Cups",
+		"Gallons",
+	];
+	conversion: Conversion = new Conversion(1,"");
 
 	/*
 	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
@@ -85,6 +104,79 @@ export class API {
 		return true;
 	}
 
+// ----IngredientCatagory Methods----
+
+getIngredientCats(): IngredientCat[] {
+	return this.ingredientCatList;
+}
+
+removeIngredientCat(id: number): IngredientCat[] {
+	this.ingredientCatList = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+	return this.ingredientCatList;
+}
+
+createIngredientCat(name: string, ingredients: Array<string>): IngredientCat[] {
+	this.ingredientCatList.push(new IngredientCat("I", name, ingredients));
+	return this.ingredientCatList;
+}
+
+getIngredientCat(id: number): IngredientCat {
+	return this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+}
+
+removeIngredient(id: number, name: string): IngredientCat[] {
+	const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+	const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+	temp.ingredients = temp.ingredients.filter(ingredient => ingredient !== name);
+	templist.push(temp);
+	this.ingredientCatList = templist;
+	return this.ingredientCatList;
+}
+
+createIngredient(id: number, name: string): IngredientCat[] {
+	const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+	const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+	temp.ingredients.push(name);
+	templist.push(temp);
+	this.ingredientCatList = templist;
+	return this.ingredientCatList;
+}
+
+// ----UtensilCatagory Methods----
+
+createUtensilCat(name: string, utensils: Array<string>): IngredientCat[] {
+	this.ingredientCatList.push(new IngredientCat("U", name, utensils));
+	return this.ingredientCatList;
+}
+
+//----Allergy Methods----
+
+getAllergies(): string[] {
+	return this.alergies;
+}
+
+removeAllergy(name: string) : string[] {
+this.alergies = this.alergies.filter(allergy => allergy !== name);
+	return this.alergies;
+}
+
+createAllergy(name: string) : void {
+	this.alergies.push(name);
+}
+
+//----Conversion Methods----
+
+getUnitOptions() : string[] {
+	return this.unitOptions;
+}
+
+changePeopleEating(people: number) : void {
+	this.conversion.people = people;
+}
+
+changeUnitConversion(unit: string) : void {
+	this.conversion.unit = unit;
+}
 
 	/**
 	 * Login a user: The user needs to enter their username and password. If username matches the password they are logged in

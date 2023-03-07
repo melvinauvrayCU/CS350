@@ -37,6 +37,7 @@ export class API {
 	 */
 	recipeList: Recipe[] = [
 		new Recipe("Americain burger", "True og burger", 2, [], 3),
+		new Recipe("French Burger","A burger, but french", 1,[],4),
 	];
 
 	/*
@@ -57,17 +58,16 @@ export class API {
 
 	/**
 	 * List of all Categories, this is temporary because we don't have the backend setup yet.
-	 * Its type is an array of Recipe class, defined in another file.
-	 * Same as above with recipeList
+	 * Its type is an array of Category class, defined in another file.
+	 * Will have a title and an array of recipes associated with category
 	 */
 	categoryList: Category[] = [
-		new Category("Recommneded"),
-		new Category("Highest Rated"),
-		new Category("Breakfast"),
-		new Category("Lunch"),
-		new Category("Dinner"),
+		new Category("Recommneded", this.recipeList),
+		new Category("Highest Rated", this.recipeList),
+		new Category("Recent", this.recipeList),
+		new Category("Frequently Cooked", this.recipeList),
 	];
-
+	
 	// * ------------------- Start of the API call methods ------------------------
 
 	/**
@@ -83,6 +83,8 @@ export class API {
 	getCategories(): Category[] {
 		return this.categoryList;
 	}
+
+
 
 
 	/**

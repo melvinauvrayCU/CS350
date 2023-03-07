@@ -9,36 +9,19 @@ export default {
         category: {
             type: Category,
             required: true,
-        }
+        },
     }
 };
 </script>
 
 <template>
-    <div class="CategoryComponent">
-        <div class="containerText">
+    <div class="category">
             <h2>{{ category.title }}</h2>
-        </div>
     </div>
 </template>
 
 <style scoped>
-
-.CategoryComponent {
-    background-color: grey;
-    width: 200px;
-    border-radius: 5px;
-    padding: 2px;
-    margin: 20px;
-    flex-direction: row;
-}
-
-.containerText {
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    font-display: center;
+.category{
+    margin-left: 10px;
 }
 </style>

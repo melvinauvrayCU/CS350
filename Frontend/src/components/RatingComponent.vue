@@ -22,6 +22,7 @@ export default {
     methods: {
         setRating(value: number) {
             this.currentrating = value;
+            this.$emit('input',value);
         },
     }
 };
@@ -33,7 +34,7 @@ export default {
             v-for="i in 5"
             :key="i"
             @click="setRating(i)"
-            :class="{ 'text-yellow-400': rating >= i }">
+            :class="{ 'text-yellow-400': currentrating >= i }">
         <i class="fa fa-star"></i>
         </span>
     </div>
@@ -41,7 +42,7 @@ export default {
 
 <style scoped>
 .fa-star {
-    font-size: 20px;
+    font-size: 25px;
     color: lightgrey;
     opacity: 50%;
     margin-right: 5px;

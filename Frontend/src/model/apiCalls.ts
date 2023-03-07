@@ -105,32 +105,19 @@ export class API {
 	 */
 	createRecipe(recipeObject: Recipe): boolean {
 		this.recipeList.push(recipeObject);
-
-		// Will update the category list that a newly created recipe belongs in
-		let categoryFound = false;
-		recipeObject.tags.some(tag => {
-
-			const categoryIndex = this.categoryList.findIndex(category =>
-				category.categoryTag === tag
-				);
-				if (categoryIndex > -1) {
-					this.categoryList[categoryIndex].linkedRecipeList.push(recipeObject);
-					categoryFound = true;
-					return true; // exit the loop early
-				}
-				return false;
-			});
-			if (!categoryFound) {
-				const newCategory = new Category(recipeObject.tags[0], recipeObject.tags[0], [
-					recipeObject,
-
-				]);
+		recipeObject.tags.forEach((tag) => {
+			const categoryIndex = this.categoryList.findIndex((category) => category.categoryTag === tag);
+			if (categoryIndex > -1) {
+				this.categoryList[categoryIndex].linkedRecipeList.push(recipeObject);
+			} else {
+				const newCategory = new Category(tag, tag, [recipeObject]);
 				this.categoryList.push(newCategory);
 			}
-			console.log(this.recipeList);
-			return true;
+		});
+		console.log(this.recipeList);
+		return true;
 	}
-
+	
 
 	/**
 	 * Login a user: The user needs to enter their username and password. If username matches the password they are logged in

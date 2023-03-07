@@ -111,8 +111,8 @@ export default {
 .stars {
     display: flex;
     flex-direction: row;
-    margin-top: 120px;
-    margin-left: -120px;
+    margin-top: 115px;
+    margin-left: -145px;
 }
 
 .stars__star {

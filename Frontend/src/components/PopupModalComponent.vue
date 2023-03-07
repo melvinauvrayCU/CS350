@@ -77,4 +77,20 @@ export default {
     padding-top: 5px;
     padding-right: 10px;
   }
+
+
+  .btn-cancel {
+  margin-top: 10px;
+  width: 50%;
+  float: left;
+}
+
+.btn-confirm {
+  margin-top: 10px;
+  width: 50%;
+  float: right;
+}
+
+
+
 </style>

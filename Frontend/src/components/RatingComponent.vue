@@ -1,7 +1,4 @@
 <script lang="ts">
-import { API } from "@/model/apiCalls";
-
-
 export default {
     name: "RatingComponent",
     props: {

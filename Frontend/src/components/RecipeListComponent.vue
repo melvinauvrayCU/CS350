@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { Recipe } from "@/model/recipeModel";
 import RecipeComponent from "@/components/RecipeComponent.vue";
+
 export default {
     name: "RecipeListComponent",
     // This component will require an array of Recipe, since we want to display a full recipe list.
@@ -15,7 +16,7 @@ export default {
 };
 </script>
 <template>
-    <div>
+    <div class="recipe-list">
         <!-- 4 different properties are passed to this component here: -->
         <!-- First, when we receive the signal "delete-recipe" (see component RecipeComponent), we want to delete a recipe. -->
         <!-- However we can't delete a recipe here since we are in a component file and not a page file. -->
@@ -35,3 +36,13 @@ export default {
             :recipe="recipe" :isUserAuthenticated="isUserAuthenticated" />
     </div>
 </template>
+
+<style>
+.recipe-list {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    overflow-x: auto;
+    width: 97vw;
+}
+</style>

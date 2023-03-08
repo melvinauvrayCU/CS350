@@ -43,7 +43,7 @@ export default {
         descriptionValue: "",
         cooktimeValue: "",
         preptimeValue: "",
-      }],1),
+      }], 1),
       mode: "create",
       messageText: "",
       messageType: "success"
@@ -172,9 +172,11 @@ export default {
           @clicked="addStep" />
         <hr>
       </div>
-      <InputField id="recipeRating" labelText="Rate your recipe:"
-        placeholder="Rate your recipe on a scale from 1-10" v-model="recipeTempObject.rating"
-        :mandatory="true" inputType="number" min="1" max="10" />
+
+      <PageSeparator title="⭐ Initial rating" />
+
+      <InputField id="recipeRating" labelText="Rate your recipe:" placeholder="Rate your recipe on a scale from 1-10"
+        v-model="recipeTempObject.rating" :mandatory="true" inputType="number" min="1" max="10" />
 
 
       <CustomButton v-if="mode === 'create'" type="neutral" effect="plain" text="Create the recipe !"
@@ -253,7 +255,7 @@ form input {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: 40px;
+
 }
 
 .containerAddStep hr {

@@ -43,6 +43,14 @@ export default {
         <CustomButton type="neutral" :effect="$route.name === 'createRecipe' ? 'plain' : 'empty'" text="Create Recipe"
           titleText="Create Recipe" />
       </RouterLink>
+      <RouterLink v-if="checkIfLoggedIn()" to="/pantry">
+        <CustomButton type="neutral" :effect="$route.name === 'pantry' ? 'plain' : 'empty'" text="Pantry"
+          titleText="Pantry" />
+      </RouterLink>
+      <RouterLink v-if="checkIfLoggedIn()" to="/profile">
+        <CustomButton type="neutral" :effect="$route.name === 'profilepage' ? 'plain' : 'empty'" text="Profile"
+          titleText="Profile" />
+      </RouterLink>
       <RouterLink v-if="!checkIfLoggedIn()" to="/login">
         <CustomButton type="neutral" :effect="$route.name === 'Login' ? 'plain' : 'empty'" text="Login"
           titleText="Login" />
@@ -53,10 +61,7 @@ export default {
         <CustomButton type="neutral" :effect="$route.name === 'Signup' ? 'plain' : 'empty'" text="Signup"
           titleText="Signup" />
       </RouterLink>
-      <RouterLink v-if="checkIfLoggedIn()" to="/profile">
-        <CustomButton type="neutral" :effect="$route.name === 'profilepage' ? 'plain' : 'empty'" text="Profile"
-          titleText="Profile" />
-      </RouterLink>
+
 
     </nav>
   </header>
@@ -89,32 +94,6 @@ nav {
 nav>* {
   margin: 0 10px;
 }
-
-/* a {
-  text-decoration: none;
-  color: var(--color-text);
-  cursor: pointer;
-}
-
-nav a {
-  box-shadow: inset 0 0 0 0 var(--color-text);
-  padding: 0 1rem;
-  margin: 0 10px;
-  transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
-  font-size: 1.4em;
-  line-height: 1.7;
-}
-
-nav a:hover {
-  color: #fff;
-  box-shadow: inset 200px 0 0 0 var(--color-text);
-  ;
-}
-
-nav .router-link-active {
-  box-shadow: inset 200px 0 0 0 var(--color-text);
-  color: #fff;
-} */
 
 h1 a {
   font-family: "title";

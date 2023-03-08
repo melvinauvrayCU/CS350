@@ -17,22 +17,25 @@ export class Recipe {
 	description: string;
 	numberPeople: number;
 	steps: Step[];
-	createdCounter: number;
 	rating: number;
+	tags: string[];
 
-	constructor(title: string, description: string, numberPeople: number, steps: Step[],rating: number) {
+	constructor(title: string, description: string, numberPeople: number, steps: Step[], rating: number, tags: string[] = []) {
 		// We set the id automatically with the static field, so it is auto incrementing.
 		this.id = Recipe.idCounter;
 		Recipe.idCounter++;
 
-		this.createdCounter=0;
-		this.rating=rating;
+		this.createdCounter = 0;
+		this.rating = rating;
 
 		// We create the recipe from the properties passed in parameters.
 		this.title = title;
 		this.description = description;
 		this.numberPeople = numberPeople;
 		this.steps = steps;
+		this.rating = rating;
+		// Default tags for now will be recommended and recent for when a recipe is created
+		this.tags = tags.length ? tags : ["Recommended", "Recent"];
 	}
 }
 

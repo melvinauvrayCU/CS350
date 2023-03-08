@@ -3,6 +3,7 @@ import { API } from "@/model/apiCalls";
 import { Recipe } from "@/model/recipeModel";
 import RatingComponent from "./RatingComponent.vue";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
+import router from "@/router/index";
 
 export default {
     name: "RecipeComponent",
@@ -16,6 +17,26 @@ export default {
             type: Recipe,
             required: true
         },
+        isUserAuthenticated: {
+            type: Boolean,
+            required: true
+        },
+    },
+    methods: {
+        editRecipe(event: MouseEvent) {
+            event.stopPropagation();
+
+            router.push({ name: "createRecipe", params: { id: this.recipe.id } });
+        },
+        deleteRecipeSignal(event: MouseEvent, id: number) {
+            event.stopPropagation();
+
+            this.$emit('delete-recipe', id)
+        },
+
+        viewRecipe() {
+            router.push({ name: "viewRecipe", params: { id: this.recipe.id } });
+        },
     },
 };
 </script>
@@ -24,29 +45,30 @@ export default {
     <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
-    <div class="RecipeComponent">
+    <div class="RecipeComponent" @click="viewRecipe">
         <div class="containerText">
             <h3 class="recipe-title">{{ recipe.title }}</h3>
             <p class="recipe-descrip">{{ recipe.description }}</p>
         </div>
         <div class="flexFill"></div>
 
-        <div class="delete-button"> 
+        <div class="delete-button">
             <!-- On clicking on the button, we want to delete the recipe,-->
             <!-- Since we are in the component file, we can't touch the API, we are allowed to do so only in Page files, -->
             <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
             <!-- and we don't forget to attach the id of the recipe we want to delete. -->
-            <CustomButton titleText="Click to delete" text="Delete" effect="empty" @click="$emit('delete-recipe',recipe.id)"/>
-            <!--
-                Here is the code for the other button I had working, trying to fix layout of new custom button
-                but old code is here just in case
+            <div class="recipebuttons">
+                <CustomButton v-if="isUserAuthenticated" text="Delete" type="neutral" effect="empty" icon="trash"
+                    titleText="Click to delete the recipe" @click="(event) => deleteRecipeSignal(event, recipe.id)" />
 
-                <button class="delete-button__button" @click="$emit('delete-recipe', recipe.id)"> Delete </button> 
-            -->
+
+                <CustomButton v-if="isUserAuthenticated" text="Edit" type="neutral" effect="empty" icon="add"
+                    titleText="Click to edit the recipe" @click="(event) => editRecipe(event)" />
+            </div>
         </div>
         <div class="stars">
-            <RatingComponent class="stars__star" :rating="recipe.rating" :recipeId="recipe.id"/>
-        </div>     
+            <RatingComponent class="stars__star" :rating="recipe.rating" :recipeId="recipe.id" />
+        </div>
     </div>
 </template>
 
@@ -57,14 +79,32 @@ export default {
     border-color: var(--color-accent);
     border-radius: 5px;
     width: 450px;
-    height: 175px;
     display: flex;
     padding: 20px 20px;
     margin-left: 20px;
+    cursor: pointer;
+    transition: border-color .4s ease;
+    min-height: 175px;
+}
+
+.RecipeComponent:hover {
+    border-color: var(--color-accent-light)
 }
 
 .containerText {
     flex-direction: row;
+}
+
+.recipebuttons {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.recipebuttons div {
+    padding: 5px;
+
 }
 
 .recipe-title {
@@ -88,31 +128,17 @@ export default {
     display: flex;
     cursor: pointer;
     margin-top: -10px;
-    margin-left: 60px;
+    margin-left: 40px;
+    margin-bottom: 30px;
 }
-
-/**
-.delete-button__button {
-    background-color: red;
-    border: 1px solid red;
-    border-radius: 3px;
-    font-size: 10px;
-    color: white;
-}
-
-.delete-button__button:hover {
-    background-color: darkred;
-    border: 1px solid darkred;
-    border-radius: 3px;
-}
-*/
 
 
 .stars {
     display: flex;
     flex-direction: row;
-    margin-top: 115px;
-    margin-left: -145px;
+    position: absolute;
+    bottom: 5px;
+    right: -50px;
 }
 
 .stars__star {
@@ -126,6 +152,5 @@ h3 {
     margin-bottom: 5px;
     font-weight: 350;
 }
-
 </style>
 

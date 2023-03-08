@@ -10,6 +10,11 @@ export default {
     props: {
         categories: Array<Category>,
         recipes: Array<Recipe>,
+
+        isUserAuthenticated: {
+            type: Boolean,
+            required: true
+        }
     },
     components: {
         CategoryComponent,
@@ -18,10 +23,10 @@ export default {
     methods: {
         getRecipesForCategory(category: Category) {
             return this.recipes?.filter((recipe) =>
-            category.linkedRecipeList.some((linkedRecipe) => linkedRecipe.id === recipe.id)
+                category.linkedRecipeList.some((linkedRecipe) => linkedRecipe.id === recipe.id)
             );
         },
-     },
+    },
 };
 
 </script>
@@ -29,11 +34,10 @@ export default {
 <template>
     <div class="categoryRecipeList">
         <div v-for="category in categories" :key="category.id">
-            <CategoryComponent :category="category"/>
+            <CategoryComponent :category="category" />
 
-            <RecipeListComponent  
-                :recipes="getRecipesForCategory(category)"
-                @delete-recipe="(id) => $emit('delete-recipe',id)" />
-        </div> 
+            <RecipeListComponent :recipes="getRecipesForCategory(category)"
+                @delete-recipe="(id) => $emit('delete-recipe', id)" :isUserAuthenticated="isUserAuthenticated" />
+        </div>
     </div>
 </template>

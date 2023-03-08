@@ -20,22 +20,20 @@ export default {
         };
     },
     methods: {
-        setRating(value: number) {
+        setRating(event: MouseEvent, value: number) {
+            event.stopPropagation();
             this.currentrating = value;
-            this.$emit("input",value);
+            this.$emit("input", value);
         },
     }
 };
 </script>
 
 <template>
-    <div >
-        <span
-            v-for="i in 5"
-            :key="i"
-            @click="setRating(i)"
+    <div>
+        <span v-for="i in 5" :key="i" @click="(event) => setRating(event, i)"
             :class="{ 'text-yellow-400': currentrating >= i }">
-        <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
         </span>
     </div>
 </template>

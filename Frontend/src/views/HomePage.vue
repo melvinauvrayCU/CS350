@@ -14,6 +14,16 @@ export default {
     SearchBarComponent,
     MessageComponent,
   },
+  props: {
+    messageTextParam: {
+      type: String,
+      default: ""
+    },
+    messageTypeParam: {
+      type: String as () => "success" | "warning",
+      default: "success"
+    }
+  },
   // For the data we will use the list of recipe.
   // This may have a strange look at first:
   // The first bracket is defining the type of the datas
@@ -22,12 +32,16 @@ export default {
   data(): {
     recipes: Array<Recipe>,
     categories: Array<Category>,
-    message: string,
+    messageText: string,
+    messageType: "success" | "warning",
+    isAuthenticated: boolean,
   } {
     return {
       recipes: [],
       categories: [],
-      message: "",
+      messageText: "",
+      messageType: "success",
+      isAuthenticated: false,
     };
   },
   methods: {
@@ -38,7 +52,8 @@ export default {
      */
     deleteRecipe(id: number) {
       // Show a success message when the recipe is deleted
-      this.message = "Recipe deleted sucessfully"
+      this.messageText = "Recipe deleted sucessfully"
+      this.messageType = "success"
       this.recipes = API.instance.removeRecipe(id);
     },
     handleSearch(searchText: string) {
@@ -50,8 +65,16 @@ export default {
    * We want to load the datas from the API, so we retrieve the list of recipes.
    */
   created() {
-      this.categories = API.instance.getCategories();
-      this.recipes = API.instance.getRecipes();
+    this.categories = API.instance.getCategories();
+    this.recipes = API.instance.getRecipes();
+    this.isAuthenticated = API.instance.isLoggedIn();
+  },
+  /**
+   * We use mounted because we want to init these two variables after the page being created
+   */
+  mounted() {
+    this.messageText = this.messageTextParam;
+    this.messageType = this.messageTypeParam;
   }
 };
 </script>
@@ -59,11 +82,13 @@ export default {
 <template>
   <main>
     <div>
-      <SearchBarComponent @search="handleSearch"/>
+      <SearchBarComponent @search="handleSearch" />
     </div>
     <div>
-      <CategoryListComponent :categories="categories" :recipes="recipes" @delete-recipe="deleteRecipe" />
+      <CategoryListComponent :categories="categories" :recipes="recipes" @delete-recipe="deleteRecipe"
+        :isUserAuthenticated="isAuthenticated" />
     </div>
-    <message-component type="success" v-model="message" />
+
+    <MessageComponent :type="messageType" v-model="messageText" />
   </main>
 </template>

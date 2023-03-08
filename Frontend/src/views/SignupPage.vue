@@ -53,11 +53,8 @@ export default {
           this.messageType = "warning";
         } else {
 
-          this.messageText = "Welcome!";
-          this.messageType = "success";
-          setTimeout(() => {
-            this.$router.push("/");
-          }, 1000);
+          this.$router.push({ name: "home", params: { messageTextParam: "Welcome!", messageTypeParam: "success" } });
+
         }
 
       } else {
@@ -143,6 +140,7 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 30px;
 }
 
 .inputbox {

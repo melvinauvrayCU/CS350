@@ -43,6 +43,8 @@ export default {
         descriptionValue: "",
         cooktimeValue: "",
         preptimeValue: "",
+        ingredients: [],
+        utensils: []
       }], 1),
       mode: "create",
       messageText: "",
@@ -117,6 +119,8 @@ export default {
         descriptionValue: "",
         cooktimeValue: "",
         preptimeValue: "",
+        ingredients: [],
+        utensils: []
       });
     },
 

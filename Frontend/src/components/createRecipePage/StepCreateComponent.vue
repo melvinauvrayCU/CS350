@@ -3,7 +3,8 @@ import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
 import type { Step } from "@/model/recipeModel";
 import type { PropType } from "vue";
-import CustomSelectField from "@/components/formComponents/CustomSelectFieldComponent.vue";
+import CustomSelectIngredients from "@/components/formComponents/CustomSelectIngredientsComponent.vue";
+import CustomSelectUtensils from "@/components/formComponents/CustomSelectUtensilsComponent.vue"
 
 export default {
     name: "StepCreate",
@@ -35,7 +36,8 @@ export default {
     components: {
         CustomButton,
         InputField,
-        CustomSelectField
+        CustomSelectIngredients,
+        CustomSelectUtensils
     },
     methods: {
         updateDescription() {
@@ -70,8 +72,6 @@ export default {
                 initialHeight="100" maxLength="650" v-model="descriptionPrivateValue"
                 @update:modelValue="updateDescription" />
 
-            <CustomSelectField labelText="Ingredients:" />
-
             <div class="flexHorizontal">
                 <InputField :id="'cooktime' + stepObject.stepId" labelText="Cook time:" inputType="time"
                     v-model="cooktimePrivateValue" @update:modelValue="updateCooktime" />
@@ -79,6 +79,11 @@ export default {
                 <InputField :id="'preptime' + stepObject.stepId" labelText="Preparation time:" inputType="time"
                     v-model="preptimePrivateValue" @update:modelValue="updatePreptime" />
             </div>
+
+            <CustomSelectIngredients v-model="stepObject.ingredients" />
+
+            <CustomSelectUtensils v-model="stepObject.utensils" />
+
         </div>
     </div>
 </template>

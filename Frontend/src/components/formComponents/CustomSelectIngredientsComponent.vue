@@ -1,17 +1,18 @@
 <script lang="ts">
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
+import type { Ingredient } from "@/model/recipeModel";
 
 export default {
-    name: "CustomSelectField",
+    name: "CustomSelectIngredients",
     props: {
-        labelText: {
-            type: String,
+        modelValue: {
+            type: Object as () => Ingredient[],
             required: true
         }
     },
     data(): {
         isDropdownOpen: boolean,
-        fullItemsList: { ingredient: string, selected: boolean }[],
+        fullItemsList: Ingredient[],
         searchText: string,
     } {
         return {
@@ -27,42 +28,42 @@ export default {
         closeDropdown() {
             this.isDropdownOpen = false;
         },
-        filteredList(): { ingredient: string, selected: boolean }[] {
+        filteredList(): Ingredient[] {
             return this.fullItemsList.filter((entry) =>
-                entry.ingredient.toLowerCase().includes(this.searchText.toLowerCase())
+                entry.name.toLowerCase().includes(this.searchText.toLowerCase())
             );
         },
-        onSelectItem(event: MouseEvent, searchItem: { ingredient: string, selected: boolean }) {
-            this.fullItemsList = this.fullItemsList.map((entry) => {
-                if (entry.ingredient === searchItem.ingredient) {
-                    entry.selected = !entry.selected;
-                }
-                return entry;
-            });
+        onSelectItem(searchItem: Ingredient) {
+            let tempModelValue = this.modelValue;
+            if (tempModelValue.find(ing => ing.name === searchItem.name)) {
+                tempModelValue = tempModelValue.filter(ingr => ingr.name !== searchItem.name);
+            } else {
+                tempModelValue.push(searchItem)
+            }
+            this.$emit("update:modelValue", tempModelValue);
             this.closeDropdown();
         },
         enterPressed() {
             if (this.filteredList().length === 0) {
-                this.fullItemsList.push({ ingredient: this.searchText, selected: true });
+                const newIngredient: Ingredient = { name: this.searchText, quantity: "", unit: "g" };
+                let tempModelValue = this.modelValue;
+                tempModelValue.push(newIngredient);
+                this.fullItemsList.push(newIngredient)
+                this.$emit("update:modelValue", tempModelValue);
                 this.searchText = "";
                 this.closeDropdown();
             }
-        },
-        selectedList() {
-            return this.fullItemsList.filter(entry =>
-                entry.selected
-            );
         }
     },
     created() {
-        this.fullItemsList = [{ ingredient: "Item 1", selected: false },
-        { ingredient: "Item 2", selected: false },
-        { ingredient: "Item 3", selected: false },
-        { ingredient: "Item 4", selected: false },
-        { ingredient: "Item 5", selected: false },
-        { ingredient: "Item 6", selected: false },
-        { ingredient: "Item 7", selected: false },
-        { ingredient: "Item 8", selected: false },
+        this.fullItemsList = [{ name: "Item 1", quantity: "", unit: "g" },
+        { name: "Item 2", quantity: "", unit: "g" },
+        { name: "Item 3", quantity: "", unit: "g" },
+        { name: "Item 4", quantity: "", unit: "g" },
+        { name: "Item 5", quantity: "", unit: "g" },
+        { name: "Item 6", quantity: "", unit: "g" },
+        { name: "Item 7", quantity: "", unit: "g" },
+        { name: "Item 8", quantity: "", unit: "g" },
         ];
     },
     components: { InputField }
@@ -71,8 +72,8 @@ export default {
 
 <template>
     <div class="CustomSelectField" v-click-outside="closeDropdown">
-        <label>{{ labelText }}</label>
-        <button @click="toggleDropdown" :class="'noSelection' + (isDropdownOpen ? ' dropdownOpen' : '')">Click to select
+        <label>Ingredients:</label>
+        <button @click="toggleDropdown" :class="'noSelection' + (isDropdownOpen ? ' dropdownOpen' : '')">Click to add
             ingredients...</button>
         <transition name="openTransition">
             <div v-if="isDropdownOpen" class="dropdownContainer">
@@ -81,9 +82,10 @@ export default {
                 <div>
                     <div class="dropdownListItems" v-if="filteredList().length !== 0">
                         <transition-group name="listItemTransition">
-                            <div class="dropdownItem" v-for="searchItem in filteredList()" :key="searchItem.ingredient"
-                                @click="onSelectItem($event, searchItem)" :class="searchItem.selected ? 'selected' : ''">
-                                {{ searchItem.ingredient }}
+                            <div class="dropdownItem" v-for="searchItem in filteredList()" :key="searchItem.name"
+                                @click="onSelectItem(searchItem)"
+                                :class="modelValue.find(ingr => ingr.name === searchItem.name) ? 'selected' : ''">
+                                {{ searchItem.name }}
                             </div>
                         </transition-group>
                     </div>
@@ -95,12 +97,17 @@ export default {
             </div>
         </transition>
         <div class="containerChosenList">
-            <div class="chosenItem" v-for="item in selectedList()" :key="item.ingredient">
-                <p>{{ item.ingredient }}</p>
+            <div class="chosenItem" v-for="item in modelValue" :key="item.name">
+                <p>{{ item.name }}</p>
                 <hr>
                 <div class="containerQqt">
-                    <InputField :id="'qtt' + item.ingredient" labelText="" placeholder="Quantity" inputType="number" min="1"
-                        max="50000" :mandatory="true" :inline=true />
+                    <InputField :id="'qtt' + item.name" labelText="" placeholder="Quantity" inputType="number" min="1"
+                        max="50000" :mandatory="true" :inline=true v-model="item.quantity" />
+
+                </div>
+                <div class="containerUnit">
+                    <InputField :id="'unit' + item.name" labelText="" placeholder="Unit" inputType="select"
+                        :options="['kg', 'g', 'mg', 'l', 'ml']" v-model="item.unit" />
                 </div>
             </div>
         </div>
@@ -115,25 +122,36 @@ export default {
 }
 
 .containerQqt input,
-.containerQqt div {
+.containerQqt div,
+.containerUnit select,
+.containerUnit div {
     margin: 0 !important;
     font-size: 1em !important;
 }
 </style>
 <style scoped>
+.CustomSelectField {
+    margin: 20px 0;
+}
+
 .containerQqt {
     width: 130px;
+    margin-right: 5px;
+}
+
+.containerUnit {
+    width: 90px;
 }
 
 .containerChosenList {
-    padding: 10px;
+    padding: 5px 10px 10px 10px;
 }
 
 .chosenItem {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 10px 20px;
+    padding: 5px 20px;
 }
 
 .chosenItem hr {
@@ -285,7 +303,6 @@ button {
     width: 100%;
     text-align: left;
     background-color: var(--color-background);
-    z-index: 5;
 }
 
 button:hover {

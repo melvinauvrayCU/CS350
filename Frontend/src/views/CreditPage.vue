@@ -1,5 +1,4 @@
 <script lang="ts">
-import { API } from "@/model/apiCalls";
 import MessageComponent from "@/components/MessageComponent.vue";
 import PageTitle from "@/components/PageTitleComponent.vue";
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
@@ -7,7 +6,7 @@ import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
 import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
 
 export default {
-    name: "CreateLoginPage",
+    name: "CreditPage",
     components: {
         MessageComponent,
         PageTitle,

@@ -31,7 +31,7 @@ export default {
         deleteRecipeSignal(event: MouseEvent, id: number) {
             event.stopPropagation();
 
-            this.$emit('delete-recipe', id)
+            this.$emit("delete-recipe", id);
         },
 
         viewRecipe() {

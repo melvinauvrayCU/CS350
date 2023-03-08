@@ -25,7 +25,6 @@ export class Recipe {
 		this.id = Recipe.idCounter;
 		Recipe.idCounter++;
 
-		this.createdCounter = 0;
 		this.rating = rating;
 
 		// We create the recipe from the properties passed in parameters.

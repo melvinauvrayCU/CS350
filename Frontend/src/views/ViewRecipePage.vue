@@ -7,57 +7,59 @@ import PageSeparator from "@/components/PageSeparatorComponent.vue";
 import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
 import router from "@/router";
 
- export default{
-    name: "ViewRecipePage",
-    props: {
-        id: { type: String, default: "0" }
-    },
-    data(): {
-        recipe: Recipe;
-    } {
-        return {
-            recipe: API.instance.getRecipe(parseInt(this.id)),
-        };
-    },
-    /**We use this method to say that the recipe was cooked and push the user back to the home page */
-    methods: {
-        recipeDone(){
-            this.recipe.createdCounter++;
-            router.push({name: "home"});
-        }
+export default {
+  name: "ViewRecipePage",
+  props: {
+    id: { type: String, default: "0" }
+  },
+  data(): {
+    recipe: Recipe | undefined;
+  } {
+    return {
+      recipe: API.instance.getRecipe(parseInt(this.id)),
+    };
+  },
+  /**We use this method to say that the recipe was cooked and push the user back to the home page */
+  methods: {
+    recipeDone() {
+      if (this.recipe) {
+        router.push({ name: "home" });
+      }
 
-    },
-    /**We use the StepView to view the steps the custmo button for the recipe completed button and the page 
-     * separator and background icons for formatting
-     */
-    components: { 
-        StepView,
-        CustomButton,
-        PageSeparator,
-        BackgroundIcons, },
+    }
+
+  },
+  /**We use the StepView to view the steps the custmo button for the recipe completed button and the page 
+   * separator and background icons for formatting
+   */
+  components: {
+    StepView,
+    CustomButton,
+    PageSeparator,
+    BackgroundIcons,
+  },
 };
 
 </script>
 <template>
   <main class="ViewRecipePage">
     <div class="contentContainer">
-      <h1 class="title">{{ recipe.title }}</h1>
+      <h1 class="title">{{ recipe?.title }}</h1>
 
       <PageSeparator title="Description"></PageSeparator>
-      <h2 class="subtitle">{{ recipe.description }}</h2>
-      <p>Cooks for {{ recipe.numberPeople }} people</p>
+      <h2 class="subtitle">{{ recipe?.description }}</h2>
+      <p>Cooks for {{ recipe?.numberPeople }} people</p>
 
       <PageSeparator title="Recipe Steps"></PageSeparator>
       <transition-group name="list">
-        <StepView v-for="(step, index) in recipe.steps" :key="step.stepId" :stepObject="step"
-          :stepIndex="index + 1" :stepIndexLength="recipe.steps.length"
-          v-model:descriptionModelValue="step.descriptionValue" v-model:cooktimeModelValue="step.cooktimeValue"
-          v-model:preptimeModelValue="step.preptimeValue"  />
-        </transition-group>
+        <StepView v-for="(step, index) in recipe?.steps" :key="step.stepId" :stepObject="step" :stepIndex="index + 1"
+          :stepIndexLength="recipe?.steps.length || 0" v-model:descriptionModelValue="step.descriptionValue"
+          v-model:cooktimeModelValue="step.cooktimeValue" v-model:preptimeModelValue="step.preptimeValue" />
+      </transition-group>
 
       <CustomButton text="Recipe Completed!" type="neutral" effect="empty" icon="add"
-        titleText="Click to complete the recipe and return home" @clicked="recipeDone" />  
-    </div>    
+        titleText="Click to complete the recipe and return home" @clicked="recipeDone" />
+    </div>
     <BackgroundIcons></BackgroundIcons>
   </main>
 </template>
@@ -92,7 +94,8 @@ import router from "@/router";
   justify-content: center;
 
 }
-.contentContainer{
+
+.contentContainer {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -101,11 +104,12 @@ import router from "@/router";
 }
 
 .title {
-    font: bolder;
-    font-size:1000;
+  font: bolder;
+  font-size: 1000;
 }
-.subtitle{
-    font-size:600;
+
+.subtitle {
+  font-size: 600;
 }
 
 

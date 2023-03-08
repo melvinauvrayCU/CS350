@@ -52,8 +52,8 @@ export default {
      */
     deleteRecipe(id: number) {
       // Show a success message when the recipe is deleted
-      this.messageText = "Recipe deleted sucessfully"
-      this.messageType = "success"
+      this.messageText = "Recipe deleted sucessfully";
+      this.messageType = "success";
       this.recipes = API.instance.removeRecipe(id);
     },
     handleSearch(searchText: string) {

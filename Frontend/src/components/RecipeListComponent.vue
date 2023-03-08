@@ -1,11 +1,13 @@
 <script lang="ts">
 import type { Recipe } from "@/model/recipeModel";
 import RecipeComponent from "@/components/RecipeComponent.vue";
+
 export default {
     name: "RecipeListComponent",
     // This component will require an array of Recipe, since we want to display a full recipe list.
     props: {
         recipes: Array<Recipe>,
+        isUserAuthenticated: Boolean,
     },
     // We will use smaller components in this list, such as the RecipeComponent.
     components: {
@@ -14,7 +16,7 @@ export default {
 };
 </script>
 <template>
-    <div>
+    <div class="recipe-list">
         <!-- 4 different properties are passed to this component here: -->
         <!-- First, when we receive the signal "delete-recipe" (see component RecipeComponent), we want to delete a recipe. -->
         <!-- However we can't delete a recipe here since we are in a component file and not a page file. -->
@@ -31,6 +33,16 @@ export default {
         <!-- Lastly, we have the ":recipe" field, which is the props we will pass to the child. -->
         <!-- Each RecipeComponent requires a recipe props (see the component's file), so we are giving it through this property. -->
         <RecipeComponent @delete-recipe="(id) => $emit('delete-recipe', id)" v-for="recipe in recipes" :key="recipe.id"
-            :recipe="recipe" />
+            :recipe="recipe" :isUserAuthenticated="isUserAuthenticated" />
     </div>
 </template>
+
+<style>
+.recipe-list {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    overflow-x: auto;
+    width: 97vw;
+}
+</style>

@@ -37,10 +37,21 @@ export class API {
 	 * But obviously we will not have any persistency of our datas when reloading the website.
 	 */
 	recipeList: Recipe[] = [
-		new Recipe("Americain burger", "True og burger", 2, [], 3, ["Recommended","Recent"]),
-		new Recipe("French Burger","A burger, but french", 1,[],4, ["Highest Rated","Frequently Cooked"]),
-		new Recipe("Blueberry Pancakes","Pancakes with blueberries", 3,[],5, ["Recommended","Highest Rated","Recent","Frequently Cooked"]),
-		new Recipe("Pancakes","Pancakes but plain", 3,[],4, ["Highest Rated","Recent"]),
+		new Recipe("Americain burger", "True og burger", 2, [{
+			stepId: 0,
+			descriptionValue: "First description of first step",
+			cooktimeValue: "12:00",
+			preptimeValue: "02:00",
+		},
+		{
+			stepId: 1,
+			descriptionValue: "First description of second step",
+			cooktimeValue: "16:00",
+			preptimeValue: "02:00",
+		}], 3, ["Recommended", "Recent"]),
+		new Recipe("French Burger", "A burger, but french", 1, [], 4, ["Highest Rated", "Frequently Cooked"]),
+		new Recipe("Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"]),
+		new Recipe("Pancakes", "Pancakes but plain", 3, [], 4, ["Highest Rated", "Recent"]),
 	];
 	ingredientCatList: IngredientCat[] = [
 		new IngredientCat("I", "Protein", ["Beef", "Chicken"]),
@@ -59,7 +70,7 @@ export class API {
 		"Cups",
 		"Gallons",
 	];
-	conversion: Conversion = new Conversion(1,"");
+	conversion: Conversion = new Conversion(1, "");
 
 	/*
 	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
@@ -89,7 +100,7 @@ export class API {
 		new Category("Recent", "Recent", this.recipeList),
 		new Category("Frequently Cooked", "Frequently Cooked", this.recipeList,),
 	];
-	
+
 	// * ------------------- Start of the API call methods ------------------------
 
 	/**
@@ -106,6 +117,12 @@ export class API {
 		return this.categoryList;
 	}
 
+	getRecipe(id: number): Recipe | undefined {
+		const recipeObj = this.recipeList.find((recipe) => recipe.id === id);
+		if (recipeObj === undefined)
+			return undefined;
+		return JSON.parse(JSON.stringify(recipeObj));
+	}
 
 	/**
 	 * Remove a recipe with the specified id in paramter and returns the new full list of recipes. 
@@ -138,79 +155,96 @@ export class API {
 		return true;
 	}
 
-// ----IngredientCatagory Methods----
+	/**
+	 * Edit a recipe
+	 * @param recipeId Id of the recipe to be edited
+	 * @param recipeObj New recipe object to replace the old one
+	 */
+	editRecipe(recipeId: number, recipeObj: Recipe): boolean {
+		this.recipeList = this.recipeList.map(recipe => {
+			// We go through all recipes, if the id is the one we're looking for then we return the new obj, else the old obj
+			if (recipe.id === recipeId) {
+				return recipeObj;
+			} else {
+				return recipe;
+			}
+		});
+		return true;
+	}
 
-getIngredientCats(): IngredientCat[] {
-	return this.ingredientCatList;
-}
+	// ----IngredientCatagory Methods----
 
-removeIngredientCat(id: number): IngredientCat[] {
-	this.ingredientCatList = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
-	return this.ingredientCatList;
-}
+	getIngredientCats(): IngredientCat[] {
+		return this.ingredientCatList;
+	}
 
-createIngredientCat(name: string, ingredients: Array<string>): IngredientCat[] {
-	this.ingredientCatList.push(new IngredientCat("I", name, ingredients));
-	return this.ingredientCatList;
-}
+	removeIngredientCat(id: number): IngredientCat[] {
+		this.ingredientCatList = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+		return this.ingredientCatList;
+	}
 
-getIngredientCat(id: number): IngredientCat {
-	return this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
-}
+	createIngredientCat(name: string, ingredients: Array<string>): IngredientCat[] {
+		this.ingredientCatList.push(new IngredientCat("I", name, ingredients));
+		return this.ingredientCatList;
+	}
 
-removeIngredient(id: number, name: string): IngredientCat[] {
-	const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
-	const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
-	temp.ingredients = temp.ingredients.filter(ingredient => ingredient !== name);
-	templist.push(temp);
-	this.ingredientCatList = templist;
-	return this.ingredientCatList;
-}
+	getIngredientCat(id: number): IngredientCat {
+		return this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+	}
 
-createIngredient(id: number, name: string): IngredientCat[] {
-	const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
-	const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
-	temp.ingredients.push(name);
-	templist.push(temp);
-	this.ingredientCatList = templist;
-	return this.ingredientCatList;
-}
+	removeIngredient(id: number, name: string): IngredientCat[] {
+		const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+		const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+		temp.ingredients = temp.ingredients.filter(ingredient => ingredient !== name);
+		templist.push(temp);
+		this.ingredientCatList = templist;
+		return this.ingredientCatList;
+	}
 
-// ----UtensilCatagory Methods----
+	createIngredient(id: number, name: string): IngredientCat[] {
+		const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
+		const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+		temp.ingredients.push(name);
+		templist.push(temp);
+		this.ingredientCatList = templist;
+		return this.ingredientCatList;
+	}
 
-createUtensilCat(name: string, utensils: Array<string>): IngredientCat[] {
-	this.ingredientCatList.push(new IngredientCat("U", name, utensils));
-	return this.ingredientCatList;
-}
+	// ----UtensilCatagory Methods----
 
-//----Allergy Methods----
+	createUtensilCat(name: string, utensils: Array<string>): IngredientCat[] {
+		this.ingredientCatList.push(new IngredientCat("U", name, utensils));
+		return this.ingredientCatList;
+	}
 
-getAllergies(): string[] {
-	return this.alergies;
-}
+	//----Allergy Methods----
 
-removeAllergy(name: string) : string[] {
-this.alergies = this.alergies.filter(allergy => allergy !== name);
-	return this.alergies;
-}
+	getAllergies(): string[] {
+		return this.alergies;
+	}
 
-createAllergy(name: string) : void {
-	this.alergies.push(name);
-}
+	removeAllergy(name: string): string[] {
+		this.alergies = this.alergies.filter(allergy => allergy !== name);
+		return this.alergies;
+	}
 
-//----Conversion Methods----
+	createAllergy(name: string): void {
+		this.alergies.push(name);
+	}
 
-getUnitOptions() : string[] {
-	return this.unitOptions;
-}
+	//----Conversion Methods----
 
-changePeopleEating(people: number) : void {
-	this.conversion.people = people;
-}
+	getUnitOptions(): string[] {
+		return this.unitOptions;
+	}
 
-changeUnitConversion(unit: string) : void {
-	this.conversion.unit = unit;
-}
+	changePeopleEating(people: number): void {
+		this.conversion.people = people;
+	}
+
+	changeUnitConversion(unit: string): void {
+		this.conversion.unit = unit;
+	}
 
 	/**
 	 * Login a user: The user needs to enter their username and password. If username matches the password they are logged in
@@ -301,7 +335,7 @@ changeUnitConversion(unit: string) : void {
 	/**
 	 * Returns the current user to easily get their attributes
 	 */
-	
+
 	getUser(): User {
 		return this.currentUser;
 

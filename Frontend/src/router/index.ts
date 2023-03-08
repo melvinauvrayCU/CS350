@@ -6,12 +6,14 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
+      path: "/:messageTextParam?/:messageTypeParam?",
       name: "home",
       component: HomePage,
+      props: route => ({ messageTextParam: route.params.messageTextParam, messageTypeParam: route.params.messageTypeParam })
     },
     {
-      path: "/createRecipe",
+      path: "/createRecipe/:id?",
+      props: true,
       name: "createRecipe",
       component: () => import("../views/CreateRecipePage.vue"),
     },
@@ -47,7 +49,13 @@ const router = createRouter({
       name: "editprofile",
       component: () => import("../views/EditProfile.vue"),
 
-    }
+    },
+    {
+      path: "/viewRecipe/:id",
+      name: "viewRecipe",
+      props: true,
+      component: () => import("../views/ViewRecipePage.vue"),
+    },
   ],
 });
 

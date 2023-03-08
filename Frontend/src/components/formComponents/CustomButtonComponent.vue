@@ -42,7 +42,7 @@ export default {
     text-align: center;
     padding: 10px 45px;
     position: relative;
-    background-color: transparent;
+    background-color: var(--color-background);
     cursor: pointer;
     z-index: 1;
     text-decoration: none;
@@ -89,9 +89,6 @@ export default {
     color: var(--color-background);
 }
 
-.empty.neutral:active {
-    border-color: var(--color-background);
-}
 
 /** success */
 .empty.success {
@@ -128,6 +125,7 @@ export default {
     position: relative;
     text-decoration: none;
     font-size: 1.2em;
+    font-family: "common";
     padding: 10px 45px;
     border-radius: 40px;
     overflow: hidden;
@@ -235,7 +233,7 @@ export default {
 
 /** Commons */
 button:active {
-    border-color: var(--color-background) !important;
+    border-color: transparent !important;
 }
 
 /*---- inline style----*/

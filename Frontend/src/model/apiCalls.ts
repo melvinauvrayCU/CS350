@@ -84,6 +84,7 @@ export class API {
 		new User("Ava.Megyeri", "Password", "megyeram@clarkson.edu"),
 		new User("petesupreme", "password1", "dorovip@clarkson.edu"),
 		new User("a", "a", "a@clarkson.edu"),
+		new User("Melvin Auvray", "melvin", "auvraym@clarkson.edu"),
 
 	];
 	currentUser: User = new User("", "", "");

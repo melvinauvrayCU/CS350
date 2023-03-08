@@ -83,12 +83,17 @@ export default {
     padding: 20px 20px;
     margin-left: 20px;
     cursor: pointer;
-    transition: border-color .4s ease;
+    transition: border-color .4s ease, box-shadow .4s ease;
     min-height: 175px;
 }
 
 .RecipeComponent:hover {
-    border-color: var(--color-accent-light)
+    border-color: var(--color-accent-light);
+    box-shadow: rgb(0 0 0 / 22%) 0px 2px 18px 0px;
+}
+
+.RecipeComponent:active {
+    box-shadow: unset;
 }
 
 .containerText {

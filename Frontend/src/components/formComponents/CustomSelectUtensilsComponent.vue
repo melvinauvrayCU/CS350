@@ -93,10 +93,12 @@ export default {
             </div>
         </transition>
         <div class="containerChosenList">
-            <div class="chosenItem" v-for="item in modelValue" :key="item">
-                <p>{{ item }}</p>
-                <hr>
-            </div>
+            <transition-group name="listItemTransition">
+                <div class="chosenItem" v-for="item in modelValue" :key="item">
+                    <p>{{ item }}</p>
+                    <hr>
+                </div>
+            </transition-group>
         </div>
 
     </div>

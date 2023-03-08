@@ -38,9 +38,9 @@ export class User {
 
 	}
 	setname(): void {
-		const length = (Math.random() * this.username.length) + 1;
-		this.fname = this.username.substring(1, length / 2);
-		this.lname = this.username.substring(length / 2, length);
+		// const length = (Math.random() * this.username.length) + 1;
+		this.fname = this.username.substring(0, this.username.length / 2);
+		this.lname = this.username.substring(this.username.length / 2, this.username.length);
 
 		// if (this.userList.find(user => user.username === this.currentUser.username) !== undefined) {
 		// 	this.userList.find(user => user.username === this.currentUser.username).fname = this.currentUser.fname;

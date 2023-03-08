@@ -93,19 +93,23 @@ export default {
             </div>
         </transition>
         <div class="containerChosenList">
-            <div class="chosenItem" v-for="item in modelValue" :key="item.name">
-                <p>{{ item.name }}</p>
-                <hr>
-                <div class="containerQqt">
-                    <InputField :id="'qtt' + item.name" labelText="" placeholder="Quantity" inputType="number" min="1"
-                        max="50000" :mandatory="true" :inline=true v-model="item.quantity" />
+            <transition-group name="listItemTransition">
+                <div class="chosenItem" v-for="item in modelValue" :key="item.name">
+                    <p>{{ item.name }}</p>
+                    <hr>
+                    <div class="containerQqt">
+                        <InputField :id="'qtt' + item.name" labelText="" placeholder="Quantity" inputType="number" min="1"
+                            max="50000" :mandatory="true" :inline=true v-model="item.quantity" />
 
+                    </div>
+                    <div class="containerUnit">
+                        <InputField :id="'unit' + item.name" labelText="" placeholder="Unit" inputType="select"
+                            :options="['Lbs', 'Oz', 'Tbsp', 'Tsp', 'C', 'G', 'kg', 'g', 'mg', 'l', 'ml']"
+                            v-model="item.unit" />
+                    </div>
                 </div>
-                <div class="containerUnit">
-                    <InputField :id="'unit' + item.name" labelText="" placeholder="Unit" inputType="select"
-                        :options="['kg', 'g', 'mg', 'l', 'ml']" v-model="item.unit" />
-                </div>
-            </div>
+            </transition-group>
+
         </div>
 
     </div>

@@ -29,7 +29,7 @@ export default {
     <div>
         <button @click="$emit('clicked')" :class="effect + ' ' + type + ((icon !== '') ? ' icon ' + icon : '')"
             :title="titleText">
-           <h3 v-if="effect !== 'inline'">{{ text }}</h3>
+            <h3 v-if="effect !== 'inline'">{{ text }}</h3>
         </button>
     </div>
 </template>
@@ -233,7 +233,7 @@ export default {
 
 /** Commons */
 button:active {
-    border-color: transparent !important;
+    border-color: var(--color-background) !important;
 }
 
 /*---- inline style----*/
@@ -292,7 +292,7 @@ button:active {
     right: 9.5px;
 }
 
-.inline.x::before{
+.inline.x::before {
     content: "\f00d";
     right: 11px;
 }
@@ -335,5 +335,4 @@ button:active {
     background-color: var(--color-accent);
     color: #fff;
 }
-
 </style>

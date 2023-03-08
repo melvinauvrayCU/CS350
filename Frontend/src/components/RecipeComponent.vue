@@ -21,19 +21,19 @@ export default {
     },
     data(): {
         isModalVisible: boolean,
-    }{
+    } {
         return {
             isModalVisible: false
         };
     },
 
-    methods : {
-        showModal(){
-    this.isModalVisible = true;
-  },
-  closeModal(){
-    this.isModalVisible = false;
-  }
+    methods: {
+        showModal() {
+            this.isModalVisible = true;
+        },
+        closeModal() {
+            this.isModalVisible = false;
+        }
 
     },
 };
@@ -50,29 +50,30 @@ export default {
         </div>
         <div class="flexFill"></div>
 
-        <div class="delete-button"> 
+        <div class="delete-button">
             <!-- On clicking on the button, we want to delete the recipe,-->
             <!-- Since we are in the component file, we can't touch the API, we are allowed to do so only in Page files, -->
             <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
             <!-- and we don't forget to attach the id of the recipe we want to delete. -->
             <!-- <CustomButton titleText="Click to delete" text="Delete" effect="empty" @click="$emit('delete-recipe',recipe.id)"/> -->
             <!-- <button class="delete-button__button" @click="$emit('delete-recipe', recipe.id)"> Delete </button>  -->
-            <CustomButton titleText="Click to delete" text="Delete" effect="plain" @click="showModal"/>
-             
-            <!--
-                Here is the code for the other button I had working, trying to fix layout of new custom button
-                but old code is here just in case
+            <CustomButton titleText="Click to delete" text="Delete" effect="plain" @click="showModal" />
 
-                <button class="delete-button__button" @click="$emit('delete-recipe', recipe.id)"> Delete </button> 
-            <CustomButton titleText="Click to delete" text="Delete" effect="plain" @click="showModal"/>
-        <PopupModal @close-modal = "closeModal" @confirm-modal = "$emit('delete-recipe', recipe.id)"  @cancel-modal = "closeModal" v-show = "isModalVisible"  />
-            -->
+            <!--
+                    Here is the code for the other button I had working, trying to fix layout of new custom button
+                    but old code is here just in case
+
+                    <button class="delete-button__button" @click="$emit('delete-recipe', recipe.id)"> Delete </button> 
+                <CustomButton titleText="Click to delete" text="Delete" effect="plain" @click="showModal"/>
+            <PopupModal @close-modal = "closeModal" @confirm-modal = "$emit('delete-recipe', recipe.id)"  @cancel-modal = "closeModal" v-show = "isModalVisible"  />
+                -->
         </div>
 
         <div class="stars">
-            <RatingComponent class="stars__star" :rating="recipe.rating" :recipeId="recipe.id"/>
+            <RatingComponent class="stars__star" :rating="recipe.rating" :recipeId="recipe.id" />
         </div>
-        <PopupModal @close-modal = "closeModal" @confirm-modal = "$emit('delete-recipe', recipe.id)"  @cancel-modal = "closeModal" v-show = "isModalVisible"  />     
+        <PopupModal @close-modal="closeModal" @confirm-modal="$emit('delete-recipe', recipe.id)" @cancel-modal="closeModal"
+            v-show="isModalVisible" />
     </div>
 </template>
 
@@ -152,6 +153,5 @@ h3 {
     margin-bottom: 5px;
     font-weight: 350;
 }
-
 </style>
 

@@ -45,5 +45,24 @@ export default {
     margin: 10px;
     overflow-x: auto;
     width: 97vw;
+    padding-bottom: 10px;
+}
+
+.recipe-list::-webkit-scrollbar {
+    width: 12px;
+    background-color: var(--color-background-extra-light);
+}
+
+.recipe-list::-webkit-scrollbar-thumb {
+    background-color: var(--color-background-light);
+    transition-duration: 0.4s;
+}
+
+.recipe-list::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-accent-light);
+}
+
+.recipe-list::-webkit-scrollbar-thumb:active {
+    background-color: var(--color-accent);
 }
 </style>

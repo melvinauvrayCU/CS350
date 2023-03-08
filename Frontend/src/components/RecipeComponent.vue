@@ -30,10 +30,11 @@ export default {
 
             router.push({ name: "createRecipe", params: { id: this.recipe.id } });
         },
-        deleteRecipeSignal(event: MouseEvent, id: number) {
+        deleteRecipeSignal(event: MouseEvent) {
+            console.error(event)
             event.stopPropagation();
 
-            this.$emit("delete-recipe", id);
+            this.$emit("delete-recipe", this.recipe.id);
         },
 
         viewRecipe() {
@@ -88,8 +89,8 @@ export default {
         <div class="stars">
             <RatingComponent class="stars__star" :rating="recipe.rating" :recipeId="recipe.id" />
         </div>
-        <PopupModal @close-modal="event => closeModal(event)" @confirm-modal="$emit('delete-recipe', recipe.id)"
-            @cancel-modal="closeModal" v-show="isModalVisible" />
+        <PopupModal @click="event => { event.stopPropagation() }" @close-modal="closeModal"
+            @confirm-modal="deleteRecipeSignal" @cancel-modal="closeModal" v-show="isModalVisible" />
     </div>
 </template>
 

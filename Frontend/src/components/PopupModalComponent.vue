@@ -21,17 +21,17 @@ export default {
           <h2>Are you sure you want to delete this recipe?</h2>
           <div class="btn-close">
             <CustomButton type="danger" effect="inline" text="" titleText="Close category" icon="x"
-              @clicked="$emit('close-modal')" />
+              @click="(event) => $emit('close-modal', event)" />
           </div>
           <div class="buttonsContainer">
             <div class="btn-cancel">
               <CustomButton type="neutral" effect="empty" text="Cancel" titleText="cancel"
-                @clicked="$emit('cancel-modal')" />
+                @click="(event) => $emit('cancel-modal', event)" />
 
             </div>
             <div class="btn-confirm">
               <CustomButton type="success" effect="plain" text="Confirm" titleText="confirm"
-                @clicked="$emit('confirm-modal')" />
+                @click="(event) => $emit('confirm-modal', event)" />
 
             </div>
 

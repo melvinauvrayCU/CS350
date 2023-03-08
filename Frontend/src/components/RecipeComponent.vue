@@ -2,6 +2,7 @@
 import { API } from "@/model/apiCalls";
 import { Recipe } from "@/model/recipeModel";
 import RatingComponent from "./RatingComponent.vue";
+import PopupModal from "@/components/PopupModalComponent.vue";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import router from "@/router/index";
 
@@ -10,6 +11,7 @@ export default {
     components: {
         RatingComponent,
         CustomButton,
+        PopupModal
     },
     props: {
         // This component will have a props named recipe, which will be of type a single Recipe, and is mandatory.
@@ -28,16 +30,33 @@ export default {
 
             router.push({ name: "createRecipe", params: { id: this.recipe.id } });
         },
-        deleteRecipeSignal(event: MouseEvent, id: number) {
+        deleteRecipeSignal(event: MouseEvent) {
+            console.error(event)
             event.stopPropagation();
 
-            this.$emit("delete-recipe", id);
+            this.$emit("delete-recipe", this.recipe.id);
         },
 
         viewRecipe() {
             router.push({ name: "viewRecipe", params: { id: this.recipe.id } });
         },
+        showModal(event: MouseEvent) {
+            event.stopPropagation();
+            this.isModalVisible = true;
+        },
+        closeModal(event: MouseEvent) {
+            event.stopPropagation();
+
+            this.isModalVisible = false;
+        }
     },
+    data(): {
+        isModalVisible: boolean,
+    } {
+        return {
+            isModalVisible: false
+        };
+    }
 };
 </script>
 
@@ -59,16 +78,19 @@ export default {
             <!-- and we don't forget to attach the id of the recipe we want to delete. -->
             <div class="recipebuttons">
                 <CustomButton v-if="isUserAuthenticated" text="Delete" type="neutral" effect="empty" icon="trash"
-                    titleText="Click to delete the recipe" @click="(event) => deleteRecipeSignal(event, recipe.id)" />
+                    titleText="Click to delete the recipe" @click="(event) => showModal(event)" />
 
 
                 <CustomButton v-if="isUserAuthenticated" text="Edit" type="neutral" effect="empty" icon="add"
                     titleText="Click to edit the recipe" @click="(event) => editRecipe(event)" />
             </div>
         </div>
+
         <div class="stars">
             <RatingComponent class="stars__star" :rating="recipe.rating" :recipeId="recipe.id" />
         </div>
+        <PopupModal @click="event => { event.stopPropagation() }" @close-modal="closeModal"
+            @confirm-modal="deleteRecipeSignal" @cancel-modal="closeModal" v-show="isModalVisible" />
     </div>
 </template>
 

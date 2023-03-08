@@ -9,6 +9,10 @@ export default {
         modelValue: {
             type: Object as () => (string)[],
             required: true
+        },
+        utensilList: {
+            type: Object as () => string[],
+            required: true
         }
     },
     data(): {
@@ -56,15 +60,7 @@ export default {
         }
     },
     created() {
-        this.fullItemsList = ["Item 1",
-            "Item 2",
-            "Item 3",
-            "Item 4",
-            "Item 5",
-            "Item 6",
-            "Item 7",
-            "Item 8",
-        ];
+        this.fullItemsList = this.utensilList;
     },
     components: { InputField }
 };

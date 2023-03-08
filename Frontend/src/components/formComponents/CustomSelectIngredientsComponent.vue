@@ -8,6 +8,10 @@ export default {
         modelValue: {
             type: Object as () => Ingredient[],
             required: true
+        },
+        ingredientList: {
+            type: Object as () => Ingredient[],
+            required: true
         }
     },
     data(): {
@@ -56,15 +60,7 @@ export default {
         }
     },
     created() {
-        this.fullItemsList = [{ name: "Item 1", quantity: "", unit: "g" },
-        { name: "Item 2", quantity: "", unit: "g" },
-        { name: "Item 3", quantity: "", unit: "g" },
-        { name: "Item 4", quantity: "", unit: "g" },
-        { name: "Item 5", quantity: "", unit: "g" },
-        { name: "Item 6", quantity: "", unit: "g" },
-        { name: "Item 7", quantity: "", unit: "g" },
-        { name: "Item 8", quantity: "", unit: "g" },
-        ];
+        this.fullItemsList = this.ingredientList;
     },
     components: { InputField }
 };

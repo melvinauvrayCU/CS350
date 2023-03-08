@@ -1,7 +1,7 @@
 <script lang="ts">
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
-import type { Step } from "@/model/recipeModel";
+import type { Ingredient, Step } from "@/model/recipeModel";
 import type { PropType } from "vue";
 import CustomSelectIngredients from "@/components/formComponents/CustomSelectIngredientsComponent.vue";
 import CustomSelectUtensils from "@/components/formComponents/CustomSelectUtensilsComponent.vue"
@@ -19,6 +19,14 @@ export default {
         },
         stepIndexLength: {
             type: Number,
+            required: true
+        },
+        utensilList: {
+            type: Object as () => string[],
+            required: true
+        },
+        ingredientList: {
+            type: Object as () => Ingredient[],
             required: true
         }
     },
@@ -80,9 +88,9 @@ export default {
                     v-model="preptimePrivateValue" @update:modelValue="updatePreptime" />
             </div>
 
-            <CustomSelectIngredients v-model="stepObject.ingredients" />
+            <CustomSelectIngredients v-model="stepObject.ingredients" :ingredientList="ingredientList" />
 
-            <CustomSelectUtensils v-model="stepObject.utensils" />
+            <CustomSelectUtensils v-model="stepObject.utensils" :utensilList="utensilList" />
 
         </div>
     </div>

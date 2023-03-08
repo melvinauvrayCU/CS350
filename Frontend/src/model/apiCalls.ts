@@ -1,6 +1,6 @@
 import { IngredientCat, Conversion } from "./PantryModels";
 import { Category } from "./categoryModel";
-import { Recipe } from "./recipeModel";
+import { Recipe, type Ingredient } from "./recipeModel";
 import { User } from "./userModel";
 
 /**
@@ -42,12 +42,16 @@ export class API {
 			descriptionValue: "First description of first step",
 			cooktimeValue: "12:00",
 			preptimeValue: "02:00",
+			ingredients: [],
+			utensils: []
 		},
 		{
 			stepId: 1,
 			descriptionValue: "First description of second step",
 			cooktimeValue: "16:00",
 			preptimeValue: "02:00",
+			ingredients: [],
+			utensils: []
 		}], 3, ["Recommended", "Recent"]),
 		new Recipe("French Burger", "A burger, but french", 1, [], 4, ["Highest Rated", "Frequently Cooked"]),
 		new Recipe("Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"]),
@@ -99,6 +103,29 @@ export class API {
 		new Category("Highest Rated", "Highest Rated", this.recipeList),
 		new Category("Recent", "Recent", this.recipeList),
 		new Category("Frequently Cooked", "Frequently Cooked", this.recipeList,),
+	];
+
+	ingredientList: Ingredient[] = [
+		{ name: "Salt", quantity: "", unit: "g" },
+		{ name: "Beef", quantity: "", unit: "g" },
+		{ name: "Pepper", quantity: "", unit: "g" },
+		{ name: "Butter", quantity: "", unit: "g" },
+		{ name: "Cheddar", quantity: "", unit: "g" },
+		{ name: "Bread", quantity: "", unit: "g" },
+		{ name: "Onion", quantity: "", unit: "g" }
+	];
+
+	utensilList: string[] = [
+		"Chef's knife",
+		"Cutting board",
+		"Mixing bowls",
+		"Wooden spoon",
+		"Measuring cups and spoons",
+		"Whisk",
+		"Tongs",
+		"Spatula",
+		"Oven mitts",
+		"Colander",
 	];
 
 	// * ------------------- Start of the API call methods ------------------------
@@ -341,6 +368,13 @@ export class API {
 
 	}
 
+	getIngredientList(): Ingredient[] {
+		return this.ingredientList;
+	}
+
+	getUtensilList(): string[] {
+		return this.utensilList;
+	}
 
 
 }

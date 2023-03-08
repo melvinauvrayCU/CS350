@@ -104,8 +104,8 @@ export default {
 }
 
 .title {
-  font: bolder;
-  font-size: 1000;
+  font-family: "title";
+  font-weight: bold;
 }
 
 .subtitle {

@@ -6,7 +6,7 @@ import CustomButton from "@/components/formComponents/CustomButtonComponent.vue"
 import StepCreate from "@/components/createRecipePage/StepCreateComponent.vue";
 import PageSeparator from "@/components/PageSeparatorComponent.vue";
 import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
-import { Recipe, type Step } from "@/model/recipeModel";
+import { Recipe, type Ingredient, type Step } from "@/model/recipeModel";
 import MessageComponent from "@/components/MessageComponent.vue";
 import router from "@/router/index";
 
@@ -33,6 +33,8 @@ export default {
     mode: "create" | "edit",
     messageText: string,
     messageType: "success" | "warning",
+    fullIngredientList: Ingredient[],
+    fullUtensilList: string[],
   } {
     // We are setting the title and description datas that will be linked to the form.
     // And a boolean created variable, which will be true when a recipe has been created to display a success message.
@@ -48,7 +50,9 @@ export default {
       }], 1),
       mode: "create",
       messageText: "",
-      messageType: "success"
+      messageType: "success",
+      fullIngredientList: [],
+      fullUtensilList: [],
     };
   },
   methods: {
@@ -130,6 +134,10 @@ export default {
 
   },
   created() {
+
+    this.fullIngredientList = API.instance.getIngredientList();
+    this.fullUtensilList = API.instance.getUtensilList();
+
     // If the id parameter is not empty, then it means we will edit a recipe, so we get the current recipe from an API call and change the mode
     if (this.id !== "") {
       const recipeObject = API.instance.getRecipe(parseInt(this.id));
@@ -168,7 +176,8 @@ export default {
         <StepCreate v-for="(step, index) in recipeTempObject.steps" :key="step.stepId" :stepObject="step"
           :stepIndex="index + 1" :stepIndexLength="recipeTempObject.steps.length"
           v-model:descriptionModelValue="step.descriptionValue" v-model:cooktimeModelValue="step.cooktimeValue"
-          v-model:preptimeModelValue="step.preptimeValue" @stepDeleted="deleteStep" />
+          v-model:preptimeModelValue="step.preptimeValue" @stepDeleted="deleteStep" :ingredientList="fullIngredientList"
+          :utensilList="fullUtensilList" />
       </transition-group>
 
       <div class="containerAddStep">

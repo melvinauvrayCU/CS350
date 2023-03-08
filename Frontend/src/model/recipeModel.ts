@@ -43,4 +43,12 @@ export type Step = {
 	descriptionValue: string,
 	cooktimeValue: string,
 	preptimeValue: string,
+	ingredients: Ingredient[],
+	utensils: string[]
+}
+
+export type Ingredient = {
+	name: string,
+	quantity: string,
+	unit: string, // TODO: Change this to a more restrictive type
 }

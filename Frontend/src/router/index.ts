@@ -56,6 +56,11 @@ const router = createRouter({
       props: true,
       component: () => import("../views/ViewRecipePage.vue"),
     },
+    {
+      path: "/credits",
+      name: "credits",
+      component: () => import("../views/CreditPage.vue"),
+    },
   ],
 });
 

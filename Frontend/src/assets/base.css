@@ -24,12 +24,13 @@
 
   --color-text: #2f2e2e;
   --color-text-light: #858585;
+  --color-text-placeholder: #757575;
 
   --color-accent: #fa8072;
   --color-accent-light: #faaca3;
   
   /* --color-primary: green; */
-  /* --color-black: black; */
+  --color-black: black;
   --color-danger: #ff3a3a;
   --color-danger-light: #fa8888;
   

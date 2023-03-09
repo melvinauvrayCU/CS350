@@ -37,9 +37,9 @@ export class API {
 	 * But obviously we will not have any persistency of our datas when reloading the website.
 	 */
 	recipeList: Recipe[] = [
-		new Recipe("Americain burger", "True og burger", 2, [{
+		new Recipe("Americain burger", "The best burger you will ever eat", 2, [{
 			stepId: 0,
-			descriptionValue: "First description of first step",
+			descriptionValue: "Cook the steak",
 			cooktimeValue: "12:00",
 			preptimeValue: "02:00",
 			ingredients: [],
@@ -47,8 +47,16 @@ export class API {
 		},
 		{
 			stepId: 1,
-			descriptionValue: "First description of second step",
+			descriptionValue: "Cook the onions",
 			cooktimeValue: "16:00",
+			preptimeValue: "02:00",
+			ingredients: [],
+			utensils: []
+		},
+		{
+			stepId: 2,
+			descriptionValue: "Put steak and onions inside bread",
+			cooktimeValue: "00:00",
 			preptimeValue: "02:00",
 			ingredients: [],
 			utensils: []
@@ -68,7 +76,6 @@ export class API {
 	];
 	alergies: string[] = [
 		"Milk",
-		"Clarkson"
 	];
 	unitOptions: string[] = [
 		"Cups",

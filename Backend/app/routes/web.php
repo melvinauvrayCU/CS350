@@ -13,14 +13,14 @@ use App\Models\User;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/hello', function () {
-    return view('hello');
-});
+// Route::get('/hello', function () {
+//     return view('hello');
+// });
 
-Route::get('/users', function () {
-    return User::all();
-});
+// Route::get('/users', function () {
+//     return User::all();
+// });

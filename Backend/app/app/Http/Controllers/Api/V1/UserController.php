@@ -9,6 +9,9 @@ use App\Http\Resources\V1\UserCollection;
 use Illuminate\Http\Request;
 use App\Filters\V1\UserFilter;
 
+/**
+ * Class that handles the different requests method for the /users/ endpoint
+ */
 class UserController extends Controller
 {
 

@@ -13,7 +13,7 @@ class UpdateRecipeRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return true; // TODO: Change this
     }
 
     /**
@@ -43,7 +43,7 @@ class UpdateRecipeRequest extends FormRequest
         }
     }
 
-
+    // Convert camelCase to camel_case format
     protected function prepareForValidation()
     {
         if ($this->numberPeople)

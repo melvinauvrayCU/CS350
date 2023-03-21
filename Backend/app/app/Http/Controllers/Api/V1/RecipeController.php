@@ -11,6 +11,9 @@ use App\Http\Resources\V1\RecipeCollection;
 use Illuminate\Http\Request;
 use App\Filters\V1\RecipeFilter;
 
+/**
+ * Class that handles the different requests method for the /recipes/ endpoint
+ */
 class RecipeController extends Controller
 {
     /**

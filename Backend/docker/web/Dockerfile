@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install -y \
     && a2enmod \
     rewrite
 
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+
 # Add the user UID:1000, GID:1000, home at /app
 RUN groupadd -r app -g 1000 && useradd -u 1000 -r -g app -m -d /app -s /sbin/nologin -c "App user" app && \
     chmod 755 /var/www/html

@@ -106,7 +106,7 @@ export default {
       let noErrors: boolean = true;
       if (this.recipeTempObject.title === ""
         || this.recipeTempObject.description === "" || this.recipeTempObject.description.length > 650
-        || this.recipeTempObject.numberPeople < 1)
+        || this.recipeTempObject.numberPeople < 1 || this.recipeTempObject.pictureUrl === "")
         noErrors = false;
 
       this.recipeTempObject.steps.forEach(step => {

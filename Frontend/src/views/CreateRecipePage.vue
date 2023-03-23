@@ -8,6 +8,7 @@ import PageSeparator from "@/components/PageSeparatorComponent.vue";
 import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
 import { Recipe, type Ingredient, type Step } from "@/model/recipeModel";
 import MessageComponent from "@/components/MessageComponent.vue";
+import ImageInputField from "@/components/formComponents/ImageInputFieldComponent.vue";
 import router from "@/router/index";
 
 export default {
@@ -19,7 +20,8 @@ export default {
     StepCreate,
     PageSeparator,
     BackgroundIcons,
-    MessageComponent
+    MessageComponent,
+    ImageInputField
   },
   props: {
     /** Id is the props we retrieve from URL parameter when we want to edit a recipe */
@@ -47,7 +49,7 @@ export default {
         preptimeValue: "",
         ingredients: [],
         utensils: []
-      }], 1),
+      }], 1, ""),
       mode: "create",
       messageText: "",
       messageType: "success",
@@ -165,6 +167,9 @@ export default {
           placeholder="Please enter the number of people this recipe is for..." v-model="recipeTempObject.numberPeople"
           inputType="number" min="1" max="50" :mandatory="true" />
       </div>
+
+      <ImageInputField id="recipePicture" labelText="Recipe picture:" :mandatory="true"
+        v-model="recipeTempObject.pictureUrl" :recipeTitle="mode === 'edit' ? recipeTempObject.title : ''" />
 
       <InputField id="recipeDescription" labelText="Recipe description:"
         placeholder="Tell us some global informations about your recipe..." v-model="recipeTempObject.description"

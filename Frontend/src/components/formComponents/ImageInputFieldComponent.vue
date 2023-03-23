@@ -125,9 +125,6 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
 
-    /* Add the blur effect */
-    filter: blur(6px);
-    -webkit-filter: blur(6px);
 
     height: 100%;
     width: 100%;

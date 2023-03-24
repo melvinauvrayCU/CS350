@@ -19,8 +19,9 @@ export class Recipe {
 	steps: Step[];
 	rating: number;
 	tags: string[];
+	pictureUrl: string;
 
-	constructor(title: string, description: string, numberPeople: number, steps: Step[], rating: number, tags: string[] = []) {
+	constructor(title: string, description: string, numberPeople: number, steps: Step[], rating: number, pictureUrl: string, tags: string[] = []) {
 		// We set the id automatically with the static field, so it is auto incrementing.
 		this.id = Recipe.idCounter;
 		Recipe.idCounter++;
@@ -35,6 +36,9 @@ export class Recipe {
 		this.rating = rating;
 		// Default tags for now will be recommended and recent for when a recipe is created
 		this.tags = tags.length ? tags : ["Recommended", "Recent"];
+
+		// Picture
+		this.pictureUrl = pictureUrl;
 	}
 }
 

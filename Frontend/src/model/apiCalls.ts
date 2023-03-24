@@ -60,10 +60,10 @@ export class API {
 			preptimeValue: "02:00",
 			ingredients: [],
 			utensils: []
-		}], 3, ["Recommended", "Recent"]),
-		new Recipe("French Burger", "A burger, but french", 1, [], 4, ["Highest Rated", "Frequently Cooked"]),
-		new Recipe("Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"]),
-		new Recipe("Pancakes", "Pancakes but plain", 3, [], 4, ["Highest Rated", "Recent"]),
+		}], 3, "https://www.photodoiso.fr/inc/image/oiseaux/1790.jpgT.jpg", ["Recommended", "Recent"]),
+		new Recipe("French Burger", "A burger, but french", 1, [], 4, "", ["Highest Rated", "Frequently Cooked"]),
+		new Recipe("Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, "", ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"]),
+		new Recipe("Pancakes", "Pancakes but plain", 3, [], 4, "", ["Highest Rated", "Recent"]),
 	];
 	ingredientCatList: IngredientCat[] = [
 		new IngredientCat("I", "Protein", ["Beef", "Chicken"]),

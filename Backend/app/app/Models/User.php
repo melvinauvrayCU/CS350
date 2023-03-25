@@ -15,5 +15,10 @@ class User extends Model
         return $this->hasMany(Recipe::class);
     }
 
+    public function ingredientCategories()
+    {
+        return $this->hasMany(IngredientCategory::class);
+    }
+
     protected $table = 'users';
 }

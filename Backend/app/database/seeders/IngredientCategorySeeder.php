@@ -15,6 +15,6 @@ class IngredientCategorySeeder extends Seeder
      */
     public function run()
     {
-        IngredientCategory::factory()->count(10)->hasIngredients(10)->create();
+        IngredientCategory::factory()->count(10)->hasIngredients(15)->create();
     }
 }

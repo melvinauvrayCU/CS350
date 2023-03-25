@@ -11,7 +11,7 @@ class Ingredient extends Model
 
     protected $fillable = [
         'name',
-        'category_id',
+        'ingredient_category_id',
     ];
 
     public function ingredientCategory()

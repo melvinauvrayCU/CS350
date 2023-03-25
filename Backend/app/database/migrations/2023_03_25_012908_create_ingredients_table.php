@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('category_id')->nullable();
+            $table->integer('ingredient_category_id')->nullable();
             $table->timestamps();
         });
     }

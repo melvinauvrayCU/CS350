@@ -13,7 +13,7 @@ class StoreIngredientRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true; // TODO: Change this with auth system
     }
 
     /**
@@ -24,7 +24,15 @@ class StoreIngredientRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'unique:ingredients'],
+            'ingredientCategoryId' => ['nullable', 'exists:ingredient_categories,id'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'ingredient_category_id' => $this->ingredientCategoryId,
+        ]);
     }
 }

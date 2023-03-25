@@ -18,8 +18,7 @@ class IngredientFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
-            'category_id' => IngredientCategory::factory(),
+            'name' => $this->faker->name()
         ];
     }
 }

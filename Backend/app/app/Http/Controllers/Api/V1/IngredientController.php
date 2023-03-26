@@ -23,18 +23,6 @@ class IngredientController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreIngredientRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreIngredientRequest $request)
-    {
-        // TODO: Is this really usefull ?
-        // return new IngredientResource(Ingredient::create($request->all()));
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Ingredient  $ingredient

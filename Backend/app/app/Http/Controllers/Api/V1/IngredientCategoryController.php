@@ -82,8 +82,19 @@ class IngredientCategoryController extends Controller
      * @param  \App\Models\IngredientCategory  $ingredientCategory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(IngredientCategory $ingredientCategory)
+    public function destroy($id)
     {
-        //
+        try {
+            $ingredientCategory = IngredientCategory::findOrFail($id);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Ingredient category not found'], 404);
+        }
+
+        try {
+            $ingredientCategory->delete();
+            return response()->json(['success' => 'Ingredient category deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete ingredient category'], 500);
+        }
     }
 }

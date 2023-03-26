@@ -6,6 +6,7 @@ use App\Models\IngredientCategory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreIngredientCategoryRequest;
 use App\Http\Requests\UpdateIngredientCategoryRequest;
+use App\Http\Resources\V1\IngredientCategoryCollection;
 
 class IngredientCategoryController extends Controller
 {
@@ -16,7 +17,7 @@ class IngredientCategoryController extends Controller
      */
     public function index()
     {
-        //
+        return new IngredientCategoryCollection(IngredientCategory::all());
     }
 
     /**

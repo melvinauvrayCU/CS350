@@ -21,7 +21,7 @@ class IngredientCategory extends Model
 
     public function ingredients()
     {
-        return $this->hasMany(Ingredient::class);
+        return $this->belongsToMany(Ingredient::class, 'ingredient_ingredient_category');
     }
 
     protected $table = 'ingredient_categories';

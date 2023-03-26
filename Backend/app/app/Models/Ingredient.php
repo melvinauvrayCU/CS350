@@ -11,12 +11,11 @@ class Ingredient extends Model
 
     protected $fillable = [
         'name',
-        'ingredient_category_id',
     ];
 
-    public function ingredientCategory()
+    public function ingredientCategories()
     {
-        return $this->belongsTo(IngredientCategory::class);
+        return $this->belongsToMany(IngredientCategory::class, 'ingredient_ingredient_category');
     }
 
     protected $table = 'ingredients';

@@ -23,5 +23,5 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('users', UserController::class);
     Route::apiResource('recipes', RecipeController::class);
     Route::apiResource('ingredients', IngredientController::class);
-    Route::apiResource('ingredientCategories', IngredientCategory::class);
+    Route::apiResource('ingredientcategories', IngredientCategoryController::class);
 });

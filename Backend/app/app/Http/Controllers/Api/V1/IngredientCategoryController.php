@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreIngredientCategoryRequest;
 use App\Http\Requests\UpdateIngredientCategoryRequest;
 use App\Http\Resources\V1\IngredientCategoryCollection;
+use App\Http\Resources\V1\IngredientCategoryResource;
 
 class IngredientCategoryController extends Controller
 {
@@ -38,7 +39,7 @@ class IngredientCategoryController extends Controller
      */
     public function store(StoreIngredientCategoryRequest $request)
     {
-        //
+        return new IngredientCategoryResource(IngredientCategory::create($request->all()));
     }
 
     /**

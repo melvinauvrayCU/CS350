@@ -13,7 +13,7 @@ class StoreIngredientCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true; // TODO: Do something with this
     }
 
     /**
@@ -24,7 +24,15 @@ class StoreIngredientCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ["required"],
+            'userId' => ["required", 'exists:users,id']
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'user_id' => $this->userId,
+        ]);
     }
 }

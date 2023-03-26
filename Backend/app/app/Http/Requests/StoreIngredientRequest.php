@@ -24,15 +24,8 @@ class StoreIngredientRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:ingredients'],
-            'ingredientCategoryId' => ['nullable', 'exists:ingredient_categories,id'],
+            'name' => 'required|string',
+            'ingredientCategoryId' => 'nullable|integer|exists:ingredient_categories,id'
         ];
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'ingredient_category_id' => $this->ingredientCategoryId,
-        ]);
     }
 }

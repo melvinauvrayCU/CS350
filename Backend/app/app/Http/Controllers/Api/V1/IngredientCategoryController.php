@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Models\IngredientCategory;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreIngredientCategoryRequest;
-use App\Http\Requests\UpdateIngredientCategoryRequest;
 use App\Http\Resources\V1\IngredientCategoryCollection;
 use App\Http\Resources\V1\IngredientCategoryResource;
 
@@ -16,19 +16,20 @@ class IngredientCategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new IngredientCategoryCollection(IngredientCategory::all());
-    }
+        // // TODO: Restrict this to specific user
+        // return new IngredientCategoryCollection(IngredientCategory::all());
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $userId = $request->input('userId');
+
+        if (!$userId) {
+            return response()->json(['error' => 'User ID is required.'], 400);
+        }
+
+        $ingredientCategories = IngredientCategory::where('user_id', $userId)->get();
+
+        return new IngredientCategoryCollection($ingredientCategories);
     }
 
     /**
@@ -40,40 +41,6 @@ class IngredientCategoryController extends Controller
     public function store(StoreIngredientCategoryRequest $request)
     {
         return new IngredientCategoryResource(IngredientCategory::create($request->all()));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\IngredientCategory  $ingredientCategory
-     * @return \Illuminate\Http\Response
-     */
-    public function show(IngredientCategory $ingredientCategory)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\IngredientCategory  $ingredientCategory
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(IngredientCategory $ingredientCategory)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateIngredientCategoryRequest  $request
-     * @param  \App\Models\IngredientCategory  $ingredientCategory
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateIngredientCategoryRequest $request, IngredientCategory $ingredientCategory)
-    {
-        //
     }
 
     /**

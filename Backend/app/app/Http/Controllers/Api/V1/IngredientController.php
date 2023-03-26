@@ -22,6 +22,19 @@ class IngredientController extends Controller
         return new IngredientCollection(Ingredient::all());
     }
 
+    public function store(StoreIngredientRequest $request)
+    {
+        $ingredient = Ingredient::firstOrCreate(['name' => $request->name]);
+
+        if ($request->has('ingredientCategoryId')) {
+            $categoryIngredient = IngredientCategory::findOrFail($request->categoryIngredientId);
+            $ingredient->ingredientCategories()->syncWithoutDetaching($categoryIngredient->id);
+        }
+
+        return new IngredientResource($ingredient);
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *

@@ -22,4 +22,9 @@ class Recipe extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function recipeSteps()
+    {
+        return $this->hasMany(RecipeSteps::class);
+    }
 }

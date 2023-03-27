@@ -35,30 +35,30 @@ class RecipeController extends Controller
         }
         return new RecipeCollection($recipes->paginate()->appends($request->query()));
         // If an id parameter is present, return the recipe with the specified id
-    // if ($id) {
-    //     $recipe = Recipe::find($id);
+        // if ($id) {
+        //     $recipe = Recipe::find($id);
 
-    //     if (!$recipe) {
-    //         return response()->json(['message' => 'Recipe not found'], 404);
-    //     }
+        //     if (!$recipe) {
+        //         return response()->json(['message' => 'Recipe not found'], 404);
+        //     }
 
-    //     return new RecipeResource($recipe);
-    // }
+        //     return new RecipeResource($recipe);
+        // }
 
-    // // Otherwise, apply the recipe filter and return a collection of recipes
-    // $filter = new RecipeFilter();
-    // $filterItems = $filter->transform($request);
+        // // Otherwise, apply the recipe filter and return a collection of recipes
+        // $filter = new RecipeFilter();
+        // $filterItems = $filter->transform($request);
 
-    // $includeUser = $request->query('includeUser');
+        // $includeUser = $request->query('includeUser');
 
-    // $recipes = Recipe::where($filterItems);
+        // $recipes = Recipe::where($filterItems);
 
-    // if ($includeUser) {
-    //     $recipes = $recipes->with('user');
-    // }
+        // if ($includeUser) {
+        //     $recipes = $recipes->with('user');
+        // }
 
-    // return new RecipeCollection($recipes->paginate()->appends($request->query()));
-}
+        // return new RecipeCollection($recipes->paginate()->appends($request->query()));
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -91,7 +91,6 @@ class RecipeController extends Controller
     public function show(Recipe $recipe)
     {
         return new RecipeResource($recipe);
-        
     }
 
     /**
@@ -114,6 +113,6 @@ class RecipeController extends Controller
      */
     public function destroy(Recipe $recipe)
     {
-        //
+        $recipe->delete();
     }
 }

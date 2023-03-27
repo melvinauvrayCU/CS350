@@ -13,12 +13,13 @@ class Recipe extends Model
         'title',
         'description',
         'number_people',
+        'image_url',
         'rating',
         'user_id',
     ];
 
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

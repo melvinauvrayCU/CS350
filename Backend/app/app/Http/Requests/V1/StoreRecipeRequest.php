@@ -24,10 +24,11 @@ class StoreRecipeRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required'],
-            'description' => ['required'],
-            'numberPeople' => ['required'],
-            'rating' => ['required'],
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'numberPeople' => 'required|integer|min:1',
+            'rating' => 'required|integer|min:1|max:5',
+            'imageUrl' => 'string',
             'userId' => ['required'],
         ];
     }
@@ -36,6 +37,7 @@ class StoreRecipeRequest extends FormRequest
     {
         $this->merge([
             'number_people' => $this->numberPeople,
+            'image_url' => $this->imageUrl,
             'user_id' => $this->userId,
         ]);
     }

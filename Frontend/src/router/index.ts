@@ -61,6 +61,11 @@ const router = createRouter({
       name: "credits",
       component: () => import("../views/CreditPage.vue"),
     },
+    {
+      path: "/searchresults",
+      name: "searchresults",
+      component: () => import("../views/SearchResultPage.vue")
+    }
   ],
 });
 
@@ -70,7 +75,6 @@ router.beforeEach((to, from, next) => {
   if (to.name === "profilepage" && !isAuthenticated) next({ name: "Login" });
   else next();
 });
-
 
 
 export default router;

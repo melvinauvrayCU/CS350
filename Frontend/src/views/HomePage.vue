@@ -11,7 +11,6 @@ export default {
   // We using the recipe list component in this page
   components: {
     CategoryListComponent,
-    SearchBarComponent,
     MessageComponent,
   },
   props: {
@@ -81,9 +80,6 @@ export default {
 
 <template>
   <main>
-    <div>
-      <SearchBarComponent @search="handleSearch" />
-    </div>
     <div>
       <CategoryListComponent :categories="categories" :recipes="recipes" @delete-recipe="deleteRecipe"
         :isUserAuthenticated="isAuthenticated" />

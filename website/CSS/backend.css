@@ -1,0 +1,48 @@
+.backendCategory {
+    color: var(--dk-gr);
+    margin-bottom: 10px;
+}
+
+hr {
+    border: 1px solid var(--dk-gr);
+    margin: 0;
+    width: 100%;
+}
+
+a {
+    color: var(--dk-grey);
+    transition-duration: .4s;
+}
+
+
+a:hover {
+    color: var(--yellow);
+}
+
+.title {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.endpoint {
+    margin: 20px 0;
+}
+
+.endpoint p {
+    margin: 7px 0;
+}
+
+.endpoint ul {
+    margin: 5px;
+}
+
+.endpoint p, .endpoint ul {
+    margin-left: 20px;
+}
+
+.method {
+    background-color: var(--lt-grey);
+    padding: 5px;
+    border: 1px dotted var(--dk-grey);
+}

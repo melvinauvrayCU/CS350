@@ -14,6 +14,7 @@ class Recipe extends Model
         'description',
         'number_people',
         'image_url',
+        'recipe_steps',
         'rating',
         'user_id',
     ];

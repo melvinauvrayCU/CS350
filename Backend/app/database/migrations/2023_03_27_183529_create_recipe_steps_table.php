@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('prep_time')->nullable();
             //ingredients
             //utensils
+            $table->integer("recipe_id");
             $table->timestamps();
         });
     }

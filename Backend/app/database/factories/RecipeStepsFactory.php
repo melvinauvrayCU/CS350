@@ -20,6 +20,7 @@ class RecipeStepsFactory extends Factory
             'description' => fake()->text(),
             'cook_time' => fake()->time(),
             'prep_time' => fake()->time(),
+            'recipe_id' => fake()->numberBetween(1,50)
         ];
     }
 }

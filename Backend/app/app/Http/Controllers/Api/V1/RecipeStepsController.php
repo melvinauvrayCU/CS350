@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\StoreRecipeStepsRequest;
 use App\Http\Requests\UpdateRecipeStepsRequest;
+use App\Http\Controllers\Controller;
 use App\Models\RecipeSteps;
 
 class RecipeStepsController extends Controller

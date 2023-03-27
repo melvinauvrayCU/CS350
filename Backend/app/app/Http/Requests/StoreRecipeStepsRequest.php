@@ -24,7 +24,7 @@ class StoreRecipeStepsRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            
         ];
     }
 }

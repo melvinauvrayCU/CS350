@@ -13,4 +13,12 @@ class RecipeSteps extends Model
         return $this->belongsTo(Recipe::Class);
 
     }
+
+
+    //something like this for ingredients, would be the same for utensils
+    /**
+     * public function ingredients(){
+     * return $this->hasMany(ingredients::class)
+     * }
+     */
 }

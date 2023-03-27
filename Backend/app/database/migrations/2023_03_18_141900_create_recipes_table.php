@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('number_people');
             $table->string('image_url');
             $table->integer('rating');
+            $table->json('recipe_steps');
             $table->integer('user_id');
             $table->timestamps();
         });

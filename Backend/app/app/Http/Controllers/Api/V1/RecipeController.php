@@ -34,30 +34,6 @@ class RecipeController extends Controller
             $recipes = $recipes->with('user');
         }
         return new RecipeCollection($recipes->paginate()->appends($request->query()));
-        // If an id parameter is present, return the recipe with the specified id
-        // if ($id) {
-        //     $recipe = Recipe::find($id);
-
-        //     if (!$recipe) {
-        //         return response()->json(['message' => 'Recipe not found'], 404);
-        //     }
-
-        //     return new RecipeResource($recipe);
-        // }
-
-        // // Otherwise, apply the recipe filter and return a collection of recipes
-        // $filter = new RecipeFilter();
-        // $filterItems = $filter->transform($request);
-
-        // $includeUser = $request->query('includeUser');
-
-        // $recipes = Recipe::where($filterItems);
-
-        // if ($includeUser) {
-        //     $recipes = $recipes->with('user');
-        // }
-
-        // return new RecipeCollection($recipes->paginate()->appends($request->query()));
     }
 
     /**
@@ -69,16 +45,6 @@ class RecipeController extends Controller
     public function store(StoreRecipeRequest $request)
     {
         return new RecipeResource(Recipe::create($request->all()));
-        // $validatedData = $request ->validate([
-        //     'title' => 'required|string',
-        //     'description' => 'required|string',
-        //     'number_people' => 'required|integer|min:1',
-        //     'rating' => 'required|integer|min:1|max:5',
-        //     'image_url'=> 'nullable|string',
-        // ]);
-
-        // $recipe = Recipe::create($validatedData);
-        // return new RecipeResource($recipe);
 
     }
 

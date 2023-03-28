@@ -2,7 +2,6 @@
 import type { Recipe } from '@/model/recipeModel';
 import RecipeListComponent from './RecipeListComponent.vue';
 
-
 export default {
     name: "SearchResultsComponent",
     components: {

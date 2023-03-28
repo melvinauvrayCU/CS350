@@ -3,7 +3,6 @@ import { RouterLink } from "vue-router";
 import { API } from "@/model/apiCalls";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import SearchBarComponent from "./SearchBarComponent.vue";
-import SearchResultsComponent from "./SearchResultsComponent.vue";
 
 export default {
   name: "HeaderMenuComponent",

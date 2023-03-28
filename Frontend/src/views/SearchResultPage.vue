@@ -59,7 +59,6 @@ export default {
     <div class="contentContainer">
         <PageTitleComponent :text="`Search Results for '${$route.query.q}'`"/>
         <SearchResultsComponent :recipes="matchingRecipes" @search="onSearch"/>
-
     </div>
 </template>
 

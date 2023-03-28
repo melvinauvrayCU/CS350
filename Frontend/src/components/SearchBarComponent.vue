@@ -13,6 +13,12 @@ export default {
             searchText: "",
         };
     },
+    methods: {
+        // To reset the textbox to empty after a search is performed
+        resetText() {
+            this.searchText = ""
+        }
+    }
 };
 </script>
 
@@ -22,7 +28,7 @@ export default {
             <InputField id="searchName" labelText="" placeholder="Search for...." v-model="searchText" :mandatory="false" />
         </div>
         <div class="search-button">
-            <CustomButton type="neutral" text="Search" titleText="Search" @click="$emit('search', searchText)"/>
+            <CustomButton type="neutral" text="Search" titleText="Search" @click="$emit('search', searchText); resetText();"/>
         </div>
     </div>
 </template>

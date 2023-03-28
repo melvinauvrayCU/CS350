@@ -47,6 +47,14 @@ export default {
                 this.$emit("search", this.searchText);
             })
         }
+    },
+    methods: {
+        resetFilteredRecipes() {
+            this.filteredRecipes = this.recipes;
+        }
+    },
+    created() {
+        this.resetFilteredRecipes();
     }
 }
 </script>

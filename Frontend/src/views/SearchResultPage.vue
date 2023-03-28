@@ -14,36 +14,51 @@ export default {
         recipes: Array<Recipe>,
         matchingRecipes: Array<Recipe>,
         isAuthenticated: boolean,
+        searchQuery: string,
     } {
         return {
             recipes: [],
             matchingRecipes: [],
-            isAuthenticated: false
+            isAuthenticated: false,
+            searchQuery: '',
         };
     },
     created() {
         this.recipes= API.instance.getRecipes()
         this.isAuthenticated = API.instance.isLoggedIn();
-        const searchQuery = this.$route.query.q as string;
-        if (searchQuery) {
+        this.searchQuery = this.$route.query.q as string;
+        this.updateMatchingRecipes();
+    },
+    methods: {
+        updateMatchingRecipes() {
             this.matchingRecipes = this.recipes.filter((recipe) => {
-                const nameMatch = recipe.title.toLowerCase().includes(searchQuery.toLowerCase());
-                const descriptionMatch = recipe.description.toLowerCase().includes(searchQuery.toLowerCase());
-                const tagMatch = recipe.tags.includes(searchQuery.toLowerCase());
-                const ratingMatch = recipe.rating.toString().includes(searchQuery.toLowerCase());
+                const nameMatch = recipe.title.toLowerCase().includes(this.searchQuery.toLowerCase());
+                const descriptionMatch = recipe.description.toLowerCase().includes(this.searchQuery.toLowerCase());
+                const tagMatch = recipe.tags.includes(this.searchQuery.toLowerCase());
+                const ratingMatch = recipe.rating.toString().includes(this.searchQuery.toLowerCase());
                 return nameMatch || descriptionMatch || tagMatch || ratingMatch;
             });
-        } else {
-            this.matchingRecipes = this.recipes;
-        }
+        },
+        onSearch(query: string) {
+            this.searchQuery = query;
+            this.updateMatchingRecipes();
+            this.$router.push({ query: { q: query } });
+        },
     },
+    watch: {
+        '$route.query.q'(newQuery: string) {
+            this.searchQuery = newQuery;
+            this.updateMatchingRecipes();
+        }
+    }
+        
 }
 </script>
 
 <template>
     <div class="contentContainer">
-        <PageTitleComponent text="Search Results" hello/>
-        <SearchResultsComponent :recipes="matchingRecipes"/>
+        <PageTitleComponent :text="`Search Results for '${$route.query.q}'`"/>
+        <SearchResultsComponent :recipes="matchingRecipes" @search="onSearch"/>
 
     </div>
 </template>

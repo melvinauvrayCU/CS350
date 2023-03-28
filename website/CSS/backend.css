@@ -1,6 +1,7 @@
 .backendCategory {
     color: var(--dk-gr);
     margin-bottom: 10px;
+    margin-top: 60px;
 }
 
 hr {
@@ -26,7 +27,7 @@ a:hover {
 }
 
 .endpoint {
-    margin: 20px 0;
+    margin: 40px 0;
 }
 
 .endpoint p {
@@ -45,4 +46,5 @@ a:hover {
     background-color: var(--lt-grey);
     padding: 5px;
     border: 1px dotted var(--dk-grey);
+    margin-right: 10px;
 }

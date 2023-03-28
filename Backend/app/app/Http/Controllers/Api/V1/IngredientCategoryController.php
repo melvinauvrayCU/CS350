@@ -18,9 +18,6 @@ class IngredientCategoryController extends Controller
      */
     public function index(Request $request)
     {
-        // // TODO: Restrict this to specific user
-        // return new IngredientCategoryCollection(IngredientCategory::all());
-
         $userId = $request->input('userId');
 
         if (!$userId) {

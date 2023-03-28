@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('description');
             $table->string('cook_time')->nullable();
             $table->string('prep_time')->nullable();
+            $table->integer("recipe_id");
+            // $table->foreign('recipe_id')->references('id')->on('recipes')->onDelete('cascade');
             //ingredients
             //utensils
-            $table->integer("recipe_id");
+            
             $table->timestamps();
         });
     }

@@ -28,6 +28,7 @@ class StoreRecipeRequest extends FormRequest
             'description' => 'required|string',
             'numberPeople' => 'required|integer|min:1',
             'rating' => 'required|integer|min:1|max:5',
+            'recipe_steps' => 'required|array|min:1',
             'imageUrl' => 'string',
             'userId' => ['required'],
         ];
@@ -39,6 +40,8 @@ class StoreRecipeRequest extends FormRequest
             'number_people' => $this->numberPeople,
             'image_url' => $this->imageUrl,
             'user_id' => $this->userId,
+            'recipe_steps' => $this->recipeSteps
+
         ]);
     }
 }

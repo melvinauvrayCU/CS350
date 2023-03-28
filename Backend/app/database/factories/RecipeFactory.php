@@ -30,4 +30,12 @@ class RecipeFactory extends Factory
             'rating' => fake()->numberBetween(1, 5),
         ];
     }
+    public function configure()
+    {
+        return $this->afterCreating(function (Recipe $recipe) {
+            $recipe->recipeSteps()->saveMany(RecipeStep::factory()->count(3)->create([
+                'recipe_id' => $recipe->id,
+            ]));
+        });
+    }
 }

@@ -27,7 +27,7 @@ class IngredientController extends Controller
         $ingredient = Ingredient::firstOrCreate(['name' => $request->name]);
 
         if ($request->has('ingredientCategoryId')) {
-            $categoryIngredient = IngredientCategory::findOrFail($request->categoryIngredientId);
+            $categoryIngredient = IngredientCategory::findOrFail($request->ingredientCategoryId);
             $ingredient->ingredientCategories()->syncWithoutDetaching($categoryIngredient->id);
         }
 

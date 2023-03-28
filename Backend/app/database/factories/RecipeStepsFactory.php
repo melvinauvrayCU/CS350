@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Recipe;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RecipeSteps>
@@ -20,7 +21,7 @@ class RecipeStepsFactory extends Factory
             'description' => fake()->text(),
             'cook_time' => fake()->time(),
             'prep_time' => fake()->time(),
-            'recipe_id' => fake()->numberBetween(1,50)
+            'recipe_id' => Recipe::factory(),
         ];
     }
 }

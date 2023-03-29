@@ -16,7 +16,7 @@ class RecipeStepsController extends Controller
      */
     public function index()
     {
-        //
+        return RecipeSteps::all();
     }
 
     /**

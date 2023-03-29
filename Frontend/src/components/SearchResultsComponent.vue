@@ -23,14 +23,15 @@ export default {
             if (this.searchText.length === 0) {
                 return this.recipes;
             }
-        const searchTerms = this.searchText.toLowerCase().split(' ');
-        return this.recipes.filter((recipe) => {
-            return searchTerms.some(term => {
-            const nameMatch = recipe.title.toLowerCase().includes(term);
-            const descriptionMatch = recipe.description.toLowerCase().includes(term);
-            const tagMatch = recipe.tags.some(tag => tag.toLowerCase().includes(term));
-            const ratingMatch = recipe.rating.toString().includes(term);
-            return nameMatch || descriptionMatch || tagMatch || ratingMatch;
+            const searchTerms = this.searchText.toLowerCase().split(' ');
+                return this.recipes.filter((recipe) => {
+                    return searchTerms.some(term => {
+                    const nameMatch = recipe.title.toLowerCase().includes(term);
+                    const descriptionMatch = recipe.description.toLowerCase().includes(term);
+                    const tagMatch = recipe.tags.some(tag => tag.toLowerCase().includes(term));
+                    const ratingMatch = (this.searchText.toLowerCase().endsWith(' stars') && recipe.rating === parseInt(this.searchText.toLowerCase().replace(' stars', '')))
+                                    || (this.searchText.toLowerCase().endsWith(' star') && recipe.rating === parseInt(this.searchText.toLowerCase().replace(' star', '')));
+                    return nameMatch || descriptionMatch || tagMatch || ratingMatch;
             });
         });
         },
@@ -60,7 +61,7 @@ export default {
 
 <template>
     <div class="containerText">
-        <div v-if="filteredRecipes.length === 0">
+        <div v-if="filteredRecipes.length === 0 && searchText.length === 0">
             <h3>No matching recipes found.</h3>
         </div>
         <div v-else>

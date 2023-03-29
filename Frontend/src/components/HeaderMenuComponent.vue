@@ -44,12 +44,13 @@ export default {
     <div class="flexFill"></div>
 
     <nav v-if="!$route.meta.hideNavbar">
-      <SearchBarComponent @search="performSearch"/>
+      <SearchBarComponent @search="performSearch" />
+
       <RouterLink to="/">
-        <CustomButton type="neutral" :effect="$route.name === 'home' ? 'plain' : 'empty'" text="Home" titleText="Home" />
+        <CustomButton type="neutral" :effect="$route.name === 'home' ? 'plain' : 'empty'" text="Home" titleText="Home"/>
       </RouterLink>
       <RouterLink v-if="checkIfLoggedIn()" to="/createRecipe">
-        <CustomButton type="neutral" :effect="$route.name === 'createRecipe' ? 'plain' : 'empty'" text="Create Recipe"
+        <CustomButton type="neutral" :effect="$route.name === 'createRecipe' ? 'plain' : 'empty'" text="Create"
           titleText="Create Recipe" />
       </RouterLink>
       <RouterLink v-if="checkIfLoggedIn()" to="/pantry">

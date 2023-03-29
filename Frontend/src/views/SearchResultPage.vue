@@ -35,9 +35,11 @@ export default {
                 const nameMatch = recipe.title.toLowerCase().includes(this.searchQuery.toLowerCase());
                 const descriptionMatch = recipe.description.toLowerCase().includes(this.searchQuery.toLowerCase());
                 const tagMatch = recipe.tags.includes(this.searchQuery.toLowerCase());
-                const ratingMatch = recipe.rating.toString().includes(this.searchQuery.toLowerCase());
+                // Users will most likely look up "3 stars" or "1 star", this handles the stars/star ending
+                const ratingMatch = (this.searchQuery.toLowerCase().endsWith(' stars') && recipe.rating === parseInt(this.searchQuery.toLowerCase().replace(' stars', '')))
+                                    || (this.searchQuery.toLowerCase().endsWith(' star') && recipe.rating === parseInt(this.searchQuery.toLowerCase().replace(' star', '')));
                 return nameMatch || descriptionMatch || tagMatch || ratingMatch;
-            });
+        });
         },
         onSearch(query: string) {
             this.searchQuery = query;

@@ -46,7 +46,7 @@ export default {
     flex-direction: row;
     margin-left: 20px;
     margin-top: 5px;
-    margin-right: 2px;
+    margin-right: -5px;
 }
 
 .search-button {

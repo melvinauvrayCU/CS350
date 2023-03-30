@@ -14,7 +14,7 @@ class RecipeSteps extends Model
         'description',
         'cook_time',
         'prep_time',
-        'user_id',
+        'recipe_id',
     ];
     public function recipe()
     {

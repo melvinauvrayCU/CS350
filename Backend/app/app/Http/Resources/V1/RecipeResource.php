@@ -34,4 +34,14 @@ class RecipeResource extends JsonResource
 
         return $data;
     }
+
+
+    public function with($request)
+    {
+        return [
+            'data' => [
+                'recipeSteps' => new RecipeStepsCollection($this->recipe_steps),
+            ],
+        ];
+    }
 }

@@ -6,6 +6,8 @@ use App\Http\Requests\StoreRecipeStepsRequest;
 use App\Http\Requests\UpdateRecipeStepsRequest;
 use App\Http\Controllers\Controller;
 use App\Models\RecipeSteps;
+use App\Http\Resources\V1\RecipeStepResource;
+use App\Http\Resources\V1\RecipeStepsCollection;
 
 class RecipeStepsController extends Controller
 {
@@ -48,7 +50,7 @@ class RecipeStepsController extends Controller
      */
     public function show(RecipeSteps $recipeSteps)
     {
-        //
+        return $recipeSteps;
     }
 
     /**

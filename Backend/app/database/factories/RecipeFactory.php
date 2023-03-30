@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
-use App\Models\RecipeSteps;
+use App\Models\RecipeStep;
 use App\Models\Recipe;
 
 /**
@@ -32,7 +32,7 @@ class RecipeFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Recipe $recipe) {
-            $recipe->recipeSteps()->saveMany(RecipeSteps::factory()->count(3)->create([
+            $recipe->recipeSteps()->saveMany(RecipeStep::factory()->count(3)->create([
                 'recipe_id' => $recipe->id,
             ]));
         });

@@ -22,4 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
     Route::apiResource('users', UserController::class);
     Route::apiResource('recipes', RecipeController::class);
+    Route::apiResource('ingredients', IngredientController::class);
+    Route::apiResource('ingredientcategories', IngredientCategoryController::class);
 });

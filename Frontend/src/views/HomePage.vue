@@ -3,7 +3,6 @@ import type { Recipe } from "@/model/recipeModel";
 import type { Category } from "@/model/categoryModel";
 import { API } from "../model/apiCalls";
 import CategoryListComponent from "@/components/CategoryListComponent.vue";
-import SearchBarComponent from "@/components/SearchBarComponent.vue";
 import MessageComponent from "@/components/MessageComponent.vue";
 
 export default {

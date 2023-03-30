@@ -104,6 +104,8 @@ export default {
     display: flex;
     padding: 20px 20px;
     margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     cursor: pointer;
     transition: border-color .4s ease, box-shadow .4s ease;
     min-height: 175px;

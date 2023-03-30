@@ -64,8 +64,19 @@ export default {
         <div v-if="filteredRecipes.length === 0 && searchText.length === 0">
             <h3>No matching recipes found.</h3>
         </div>
-        <div v-else>
+        <div v-else class="recipe-list-container">
             <RecipeListComponent :recipes="filteredRecipes"  />
         </div>
     </div>
 </template>
+
+<style scoped>
+.recipe-list-container .recipe-list {
+    align-items: center;
+    flex-direction: column;
+    overflow-y: auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-right: 12px; /* compensate for scrollbar width */
+}
+</style>

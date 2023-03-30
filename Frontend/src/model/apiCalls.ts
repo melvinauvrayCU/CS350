@@ -2,6 +2,9 @@ import { IngredientCat, Conversion } from "./PantryModels";
 import { Category } from "./categoryModel";
 import { Recipe, type Ingredient } from "./recipeModel";
 import { User } from "./userModel";
+import axios from "axios";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css"; // Import NProgress CSS
 
 /**
  * API Class, it will contain all the methods that will interact with the Backend / Datas.
@@ -21,8 +24,39 @@ export class API {
 
 	// Method to retrieve the API instance outside of this class
 	public static get instance(): API {
-		if (!API._instance)
+		if (!API._instance) {
+			// Add a request interceptor
+			axios.interceptors.request.use(function (config) {
+				// Do something before request is sent
+				NProgress.start();
+				const element = document.querySelector("header");
+				if (element) {
+					element.style.borderColor = "var(--color-background)";
+				}
+				return config;
+			}, function (error) {
+				// Do something with request error
+				console.error(error);
+				return Promise.reject(error);
+			});
+
+			// Add a response interceptor
+			axios.interceptors.response.use(function (response) {
+				// Do something with response data
+				NProgress.done();
+				const element = document.querySelector("header");
+				if (element) {
+					element.style.borderColor = "var(--color-accent)";
+				}
+				return response;
+			}, function (error) {
+				// Do something with response error
+				console.error(error);
+				return Promise.reject(error);
+			});
 			API._instance = new API();
+
+		}
 		return API._instance;
 	}
 	/* ----------- End of Singleton design pattern ------------------------ */
@@ -113,15 +147,6 @@ export class API {
 		new Category("Frequently Cooked", "Frequently Cooked", this.recipeList,),
 	];
 
-	ingredientList: Ingredient[] = [
-		{ name: "Salt", quantity: "", unit: "g" },
-		{ name: "Beef", quantity: "", unit: "g" },
-		{ name: "Pepper", quantity: "", unit: "g" },
-		{ name: "Butter", quantity: "", unit: "g" },
-		{ name: "Cheddar", quantity: "", unit: "g" },
-		{ name: "Bread", quantity: "", unit: "g" },
-		{ name: "Onion", quantity: "", unit: "g" }
-	];
 
 	utensilList: string[] = [
 		"Chef's knife",
@@ -135,6 +160,8 @@ export class API {
 		"Oven mitts",
 		"Colander",
 	];
+
+	private _apiUrl: string = "https://www.api.cs350.melvinauvray.com/api/v1";
 
 	// * ------------------- Start of the API call methods ------------------------
 
@@ -376,8 +403,39 @@ export class API {
 
 	}
 
-	getIngredientList(): Ingredient[] {
-		return this.ingredientList;
+	/**
+	 * Note that this method is async so we can await it somewhere else to wait for the datas.
+	 */
+	async getIngredientList(): Promise<Ingredient[]> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: Ingredient[] = [];
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.get(this._apiUrl + "/ingredients");
+
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = (response.data.data).map((data: any) => {
+				/** 
+				 * Since we will populate our returning array that is of type Ingredient[],
+				 * We make sure that this temp variable is of type Ingredient, so we don't push weird things into our array.
+				 */
+				const ingredientToReturn: Ingredient = { "name": data.name };
+				return ingredientToReturn;
+			});
+		} catch (error) {
+			/** If we have an error, we log it */
+			console.error(error);
+		}
+		/** We return our data */
+		return returnDatas;
 	}
 
 	getUtensilList(): string[] {

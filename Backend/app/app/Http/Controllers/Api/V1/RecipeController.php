@@ -45,7 +45,6 @@ class RecipeController extends Controller
     public function store(StoreRecipeRequest $request)
     {
         return new RecipeResource(Recipe::create($request->all()));
-
     }
 
     /**

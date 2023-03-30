@@ -2,13 +2,14 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Recipe;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RecipeSteps>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RecipeStep>
  */
-class RecipeStepsFactory extends Factory
+class RecipeStepFactory extends Factory
 {
     /**
      * Define the model's default state.

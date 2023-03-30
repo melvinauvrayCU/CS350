@@ -23,7 +23,7 @@ class RecipeResource extends JsonResource
             'numberPeople' => $this->number_people,
             'rating' => $this->rating,
             'imageUrl' => $this->image_url,
-            'recipeSteps' => new RecipeStepsCollection($this->recipeSteps),
+            'recipeSteps' => new RecipeStepCollection($this->recipeSteps),
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
         ];
@@ -40,7 +40,7 @@ class RecipeResource extends JsonResource
     {
         return [
             'data' => [
-                'recipeSteps' => new RecipeStepsCollection($this->recipe_steps),
+                'recipeSteps' => new RecipeStepCollection($this->recipeSteps),
             ],
         ];
     }

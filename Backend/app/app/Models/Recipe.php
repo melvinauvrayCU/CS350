@@ -25,6 +25,6 @@ class Recipe extends Model
 
     public function recipeSteps()
     {
-        return $this->hasMany(RecipeSteps::class);
+        return $this->hasMany(RecipeStep::class);
     }
 }

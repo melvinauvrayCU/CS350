@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Requests\StoreRecipeStepsRequest;
-use App\Http\Requests\UpdateRecipeStepsRequest;
 use App\Http\Controllers\Controller;
-use App\Models\RecipeSteps;
+use App\Http\Requests\StoreRecipeStepRequest;
+use App\Http\Requests\UpdateRecipeStepRequest;
+use App\Models\RecipeStep;
 use App\Http\Resources\V1\RecipeStepResource;
-use App\Http\Resources\V1\RecipeStepsCollection;
+use App\Http\Resources\V1\RecipeStepCollection;
 
-class RecipeStepsController extends Controller
+class RecipeStepController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class RecipeStepsController extends Controller
      */
     public function index()
     {
-        return new RecipeStepsCollection(RecipeSteps::paginate());
+        return new RecipeStepCollection(RecipeStep::paginate());
     }
 
     /**
@@ -34,32 +34,32 @@ class RecipeStepsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreRecipeStepsRequest  $request
+     * @param  \App\Http\Requests\StoreRecipeStepRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRecipeStepsRequest $request)
+    public function store(StoreRecipeStepRequest $request)
     {
-        return new RecipeStepResource(RecipeSteps::create($request->all()));
+        return new RecipeStepResource(RecipeStep::create($request->all()));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\RecipeSteps  $recipeSteps
+     * @param  \App\Models\RecipeStep  $recipeStep
      * @return \Illuminate\Http\Response
      */
-    public function show(RecipeSteps $recipeSteps)
+    public function show(RecipeStep $recipestep)
     {
-        return new RecipeStepResource($recipeSteps);
+        return new RecipeStepResource($recipestep);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\RecipeSteps  $recipeSteps
+     * @param  \App\Models\RecipeStep  $recipeStep
      * @return \Illuminate\Http\Response
      */
-    public function edit(RecipeSteps $recipeSteps)
+    public function edit(RecipeStep $recipeStep)
     {
         //
     }
@@ -67,11 +67,11 @@ class RecipeStepsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateRecipeStepsRequest  $request
-     * @param  \App\Models\RecipeSteps  $recipeSteps
+     * @param  \App\Http\Requests\UpdateRecipeStepRequest  $request
+     * @param  \App\Models\RecipeStep  $recipeStep
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRecipeStepsRequest $request, RecipeSteps $recipeSteps)
+    public function update(UpdateRecipeStepRequest $request, RecipeStep $recipeStep)
     {
         //
     }
@@ -79,10 +79,10 @@ class RecipeStepsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\RecipeSteps  $recipeSteps
+     * @param  \App\Models\RecipeStep  $recipeStep
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RecipeSteps $recipeSteps)
+    public function destroy(RecipeStep $recipeStep)
     {
         //
     }

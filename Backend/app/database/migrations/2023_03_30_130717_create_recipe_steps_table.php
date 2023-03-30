@@ -22,7 +22,7 @@ return new class extends Migration
             // $table->foreign('recipe_id')->references('id')->on('recipes')->onDelete('cascade');
             //ingredients
             //utensils
-            
+
             $table->timestamps();
         });
     }

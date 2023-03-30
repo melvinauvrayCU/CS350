@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class RecipeStepsSeeder extends Seeder
+class RecipeStepSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,5 @@ class RecipeStepsSeeder extends Seeder
     public function run()
     {
         //
-    
     }
 }

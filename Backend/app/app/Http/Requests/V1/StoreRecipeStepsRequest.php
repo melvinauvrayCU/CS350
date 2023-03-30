@@ -13,7 +13,7 @@ class StoreRecipeStepsRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,21 @@ class StoreRecipeStepsRequest extends FormRequest
     public function rules()
     {
         return [
-            
+            'description' => 'required|string',
+            'cookTime' => 'required|string',
+            'prepTime' => 'required|string',
+            'recipeId' => 'required'
+
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'cook_time' => $this->cook_time,
+            'prep_time' => $this->prep_time,
+            'recipe_id' => $this->recipeId
+
+        ]);
     }
 }

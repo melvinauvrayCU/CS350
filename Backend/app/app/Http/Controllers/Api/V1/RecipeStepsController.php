@@ -18,7 +18,7 @@ class RecipeStepsController extends Controller
      */
     public function index()
     {
-        return RecipeSteps::all();
+        return new RecipeStepsCollection(RecipeSteps::paginate());
     }
 
     /**
@@ -39,7 +39,7 @@ class RecipeStepsController extends Controller
      */
     public function store(StoreRecipeStepsRequest $request)
     {
-        //
+        return new RecipeStepResource(RecipeSteps::create($request->all()));
     }
 
     /**
@@ -50,7 +50,7 @@ class RecipeStepsController extends Controller
      */
     public function show(RecipeSteps $recipeSteps)
     {
-        return $recipeSteps;
+        return new RecipeStepResource($recipeSteps);
     }
 
     /**

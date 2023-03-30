@@ -12,6 +12,10 @@ export default {
             type: Array as () => Recipe[],
             required: true,
         },
+        isUserAuthenticated: {
+            type: Boolean,
+            required: true,
+        }
     },
     data() {
         return {
@@ -65,7 +69,11 @@ export default {
             <h3>No matching recipes found.</h3>
         </div>
         <div v-else class="recipe-list-container">
-            <RecipeListComponent :recipes="filteredRecipes"  />
+            <RecipeListComponent 
+            :recipes="filteredRecipes" 
+            :isUserAuthenticated="isUserAuthenticated"
+            @editRecipe="(recipe) => $emit('edit-recipe', recipe)" 
+            @delete-recipe="(id) => $emit('delete-recipe', id)" />
         </div>
     </div>
 </template>
@@ -75,8 +83,8 @@ export default {
     align-items: center;
     flex-direction: column;
     overflow-y: auto;
-    margin-top: 20px;
-    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: px;
     padding-right: 12px; /* compensate for scrollbar width */
 }
 </style>

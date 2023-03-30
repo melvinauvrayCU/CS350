@@ -60,7 +60,7 @@ export default {
 <template>
     <div class="contentContainer">
         <PageTitleComponent :text="`Search Results for '${$route.query.q}'`"/>
-        <SearchResultsComponent :recipes="matchingRecipes" @search="onSearch"/>
+        <SearchResultsComponent :recipes="matchingRecipes" @search="onSearch" :isUserAuthenticated="isAuthenticated"/>
     </div>
 </template>
 

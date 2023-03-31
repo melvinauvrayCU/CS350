@@ -16,7 +16,7 @@ export default {
     methods: {
         // To reset the textbox to empty after a search is performed
         resetText() {
-            this.searchText = ""
+            this.searchText = "";
         },
         // To perform the search only if the search text is not empty
         performSearch() {
@@ -32,10 +32,11 @@ export default {
 <template>
     <div class="SearchBarComponent">
         <div class="search-bar">
-            <InputField id="searchName" labelText="" placeholder="Search for...." v-model="searchText" :mandatory="false" @keyup.enter="$emit('search',searchText); resetText();"/>
+            <InputField id="searchName" labelText="" placeholder="Search for...." v-model="searchText" :mandatory="false"
+                @keyup.enter="$emit('search', searchText); resetText();" />
         </div>
         <div class="search-button">
-            <CustomButton type="neutral" text="Search" titleText="Search" @click="performSearch"/>
+            <CustomButton type="neutral" text="Search" titleText="Search" @click="performSearch" />
         </div>
     </div>
 </template>
@@ -59,5 +60,4 @@ export default {
     width: 100%;
     margin-top: -10px;
 }
-
 </style>

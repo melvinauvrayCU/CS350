@@ -9,12 +9,12 @@ import BackgroundIconsComponent from "@/components/BackgroundIconsComponent.vue"
 export default {
     name: "ForgotPasswordPage",
     components: {
-        MessageComponent,
-        PageTitleComponent,
-        InputFieldComponent,
-        CustomButtonComponent,
-
-    },
+    MessageComponent,
+    PageTitleComponent,
+    InputFieldComponent,
+    CustomButtonComponent,
+    BackgroundIconsComponent
+},
 
     data(): {
         username: string,
@@ -37,15 +37,17 @@ export default {
     },
 
     methods: {
-        async checkSecurityQuestion() {
-            const result = await API.instance.checkSecurityQuestion(this.username, this.securityQuestion, this.securityAnswer);
-            if (result) {
-                this.showResetPasswordForm = true;
-            } else {
-                this.messageType = "warning";
-                this.messageText = "Sorry, that is not the correct answer to the security question.";
-            }
-        },
+      async checkSecurityQuestion() {
+        await this.generateSecurityQuestion();
+        const result = await API.instance.checkSecurityQuestion(this.username, this.securityQuestion, this.securityAnswer);
+        if (result) {
+            this.showResetPasswordForm = true;
+        } else {
+            this.messageType = "warning";
+            this.messageText = "Sorry, that is not the correct answer to the security question.";
+        }
+      },
+
         async resetPassword() {
             const result = await API.instance.resetPassword(this.username, this.password);
             if (result === "success") {
@@ -55,16 +57,21 @@ export default {
                 this.messageType = "warning";
                 this.messageText = "Could not reset password."
             }
+        },
+        async generateSecurityQuestion() {
+            const user = await API.instance.getUser();
+            if (user) {
+                const questions = [user.securityQuestions[0].question, user.securityQuestions[1].question, user.securityQuestions[2].question];
+                const randomIndex = Math.floor(Math.random() * questions.length);
+                this.securityQuestion = questions[randomIndex];
+                this.securityAnswer = user.securityQuestions[randomIndex].answer;
+            } else {
+              this.securityQuestion = "Unable to generate security question."
+            }
         }
     },
     async created() {
-        const user = await API.instance.getUser();
-        if (user) {
-            const questions = [user.securityQuestions[0].question, user.securityQuestions[1].question, user.securityQuestions[2].question];
-            const randomIndex = Math.floor(Math.random() * questions.length);
-            this.securityQuestion = questions[randomIndex];
-            this.securityAnswer = user.securityQuestions[randomIndex].answer;
-        }
+      this.generateSecurityQuestion();
     }
 };
 
@@ -73,16 +80,18 @@ export default {
 
 <template>
     <section>
-        <PageTitleComponent text="Forgot Password"/>  
+        <PageTitleComponent text="Forgot Password"/>
+        <p>Q{{ securityQuestion }}</p> 
+        <p>A{{ securityAnswer }}</p>
       <div class="border">
         <div class="ForgotPasswordPage">
-  
+
+          
             <InputFieldComponent id="username" inputType="text" labelText="Enter Your Username or Email:" max-length="200" placeholder="Username or Email"
                 v-model="username" :mandatory="true" />
 
-            <InputFieldComponent id="securityQuestion" inputType="text" labelText="${{securityQuestion}}" max-length="200" placeholder="Answer"
+            <InputFieldComponent id="securityQuestion" inputType="text" :labelText="`Security Question: ${securityQuestion}`" max-length="200" placeholder="Answer"
                     v-model="securityAnswer" :mandatory="true" />
-
 
             <CustomButtonComponent titleText="Submit Answer" text="Submit" effect="plain" @click="checkSecurityQuestion()" />
 
@@ -108,7 +117,7 @@ export default {
         </div>
       </div>
       <MessageComponent :type="messageType" v-model="messageText" />
-      <BackgroundIcons />
+      <BackgroundIconsComponent />
   
     </section>
   </template>

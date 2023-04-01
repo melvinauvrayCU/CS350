@@ -9,7 +9,12 @@ class RecipeStep extends Model
 {
     use HasFactory;
     protected $table = 'recipe_steps';
-    // protected $connection = 'mysql';
+
+    protected $fillable = [
+        'description',
+        'cook_time',
+        'prep_time',
+    ];
 
     public function recipe()
     {

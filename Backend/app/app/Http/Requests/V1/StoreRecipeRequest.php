@@ -23,25 +23,38 @@ class StoreRecipeRequest extends FormRequest
      */
     public function rules()
     {
+        // return [
+        //     'title' => 'required|string',
+        //     'description' => 'required|string',
+        //     'numberPeople' => 'required|integer|min:1',
+        //     'rating' => 'required|integer|min:1|max:5',
+        //     '*.recipe_steps' => 'required|array|min:1',
+        //     'imageUrl' => 'string',
+        //     'userId' => ['required'],
+        // ];
+
         return [
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'numberPeople' => 'required|integer|min:1',
-            'rating' => 'required|integer|min:1|max:5',
-            '*.recipe_steps' => 'required|array|min:1',
-            'imageUrl' => 'string',
-            'userId' => ['required'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'number_people' => ['required', 'integer'],
+            'image_url' => ['nullable', 'string', 'url'],
+            'user_id' => ["required", 'exists:users,id'],
+            'rating' => ['required', 'integer', 'min:1', 'max:5'],
+            'steps' => ['required', 'array'],
+            'steps.*.description' => ['required', 'string'],
+            'steps.*.cook_time' => ['required', 'string'],
+            'steps.*.prep_time' => ['required', 'string'],
         ];
     }
 
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'number_people' => $this->numberPeople,
-            'image_url' => $this->imageUrl,
-            'user_id' => $this->userId,
-            'recipe_steps' => $this->recipeSteps
+    // protected function prepareForValidation()
+    // {
+    //     $this->merge([
+    //         'number_people' => $this->numberPeople,
+    //         'image_url' => $this->imageUrl,
+    //         'user_id' => $this->userId,
+    //         'recipe_steps' => $this->recipeSteps
 
-        ]);
-    }
+    //     ]);
+    // }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Recipe;
+use App\Models\RecipeStep;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\StoreRecipeRequest;
 use App\Http\Requests\V1\UpdateRecipeRequest;
@@ -44,10 +45,37 @@ class RecipeController extends Controller
      */
     public function store(StoreRecipeRequest $request)
     {
-        return new RecipeResource(Recipe::create($request->all()));
+        // return new RecipeResource(Recipe::create($request->all()));
+
+        $recipeData = $request->only([
+            'title',
+            'description',
+            'number_people',
+            'image_url',
+            'rating',
+            'user_id'
+        ]);
+
+        // $recipeData['user_id'] = $request->user()->id; // assuming you are using Laravel's authentication system
+
+        $recipe = Recipe::create($recipeData);
+
+        $stepsData = $request->input('steps', []);
+
+        $steps = collect($stepsData)->map(function ($stepData) {
+            return new RecipeStep([
+                'description' => $stepData['description'],
+                'prep_time' => $stepData['prep_time'],
+                'cook_time' => $stepData['cook_time'],
+            ]);
+        });
+
+        $recipe->recipeSteps()->saveMany($steps);
+
+        return new RecipeResource($recipe);
     }
 
-    
+
 
     /**
      * Display the specified resource.

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="CSS/common_to_all_pages.css">
+    <link rel="stylesheet" href="CSS/menu.css">
+    <link rel="stylesheet" href="CSS/backend.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS350 Project</title>
+</head>
+
+<body>
+    <header>
+        <a href="index.html">
+            <img src="image/logo.png" alt="Clarkson's Logo">
+            <h2>CS350 Project</h2>
+        </a>
+        <div class="emptyflex"></div>
+        <nav>
+            <div class="dropdowncontainer">
+                <div class="dropdowntitle">Team ↓</div>
+                <div class="dropdowncontent">
+                    <a href="weeklyreports.html">Weekly Reports</a>
+                </div>
+            </div>
+
+            <div class="dropdowncontainer">
+                <div class="dropdowntitle">Project ↓</div>
+                <div class="dropdowncontent">
+                    <a href="overview.html">Overview</a>
+                    <a href="designdocument.html">Design document</a>
+                    <a href="requirements.html">Requirements</a>
+                    <a href="softwaretestplan.html">Software TestPlan</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <h1>Backend documentation</h1>
+        <p>URL to the api: <a href="https://api.cs350.melvinauvray.com/api/v1">api.cs350.melvinauvray.com/api/v1</a>
+            (version
+            can change)</p>
+
+        <h2 class="backendCategory">Ingredients</h2>
+        <hr>
+        <div class="endpoint">
+            <div class="title">
+                <span class="method">GET</span>
+                /ingredients
+            </div>
+            <p>Description: Retrieve the list of all existing ingredients on the app.</p>
+            <p>Body parameters:</p>
+            <ul>
+                <li>
+                    -
+                </li>
+            </ul>
+            <p>Answer:</p>
+            <ul>
+                <li>
+                    Array of ingredient
+                    <ul>
+                        <li><strong>id</strong></li>
+                        <li><strong>name</strong></li>
+                    </ul>
+
+                </li>
+            </ul>
+        </div>
+        <div class="endpoint">
+            <div class="title">
+                <span class="method">POST</span>
+                /ingredients
+            </div>
+            <p>Description: Create a new ingredient if it doesn't exist. The id of an ingredient category can be given,
+                if it is, the newly created ingredient is attached to this category. If the ingredient was already
+                created, the existing ingredient is atached to the category.</p>
+            <p>Body parameters:</p>
+            <ul>
+                <li>
+                    - <strong>name</strong>: string, required. Name of the ingredient.
+                </li>
+                <li>
+                    - <strong>ingredientCategoryId</strong>: integer, optional. Id of an existing ingredient category.
+                </li>
+            </ul>
+            <p>Answer:</p>
+            <ul>
+                <li>
+                    The new ingredient just created.
+                    <ul>
+                        <li><strong>id</strong></li>
+                        <li><strong>name</strong></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="endpoint">
+            <div class="title">
+                <span class="method">DELETE</span>
+                /ingredients/{ingredient_id}
+            </div>
+            <p>Description: remove an ingredient from a category.</p>
+            <p>Body parameters:</p>
+            <ul>
+                <li>
+                    - <strong>ingredientCategory</strong>: integer, required. Id of the ingredient category you want
+                    to remove the ingredient from.
+                </li>
+            </ul>
+            <p>Answer:</p>
+            <ul>
+                <li>
+                    Error message if the category is not found or is not attached to the
+                    ingredient.
+                </li>
+                <li>
+                    Success message if the ingredient has been removed from the category.
+                </li>
+            </ul>
+        </div>
+
+        <h2 class="backendCategory">Ingredient Categories</h2>
+        <hr>
+        <div class="endpoint">
+            <div class="title">
+                <span class="method">GET</span>
+                /ingredientcategories
+            </div>
+            <p>Description: Retrieve the list of ingredient categories of a specific user. The list of ingredients is
+                also attached inside each category.</p>
+            <p>Body parameters:</p>
+            <ul>
+                <li>
+                    - <strong>userId</strong>: integer, required. Id of the user you want to retrieve the ingredient
+                    categories from.
+                </li>
+            </ul>
+            <p>Answer:</p>
+            <ul>
+                <li>
+                    Error message if the user does not exist.
+                </li>
+                <li>
+                    <strong>data</strong>: array of categories
+                    <ul>
+                        <li>
+                            <strong>id</strong>: id of the category.
+                        </li>
+
+                        <li><strong>name</strong>: name of the category.</li>
+                        <li><strong>ingredients</strong>: array of ingredients attached to this category.
+                            <ul>
+                                <li><strong>id</strong>: id of the ingredient</li>
+                                <li><strong>name</strong>: name of the ingredient</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="endpoint">
+            <div class="title">
+                <span class="method">POST</span>
+                /ingredientcategories
+            </div>
+            <p>Description: Create a new ingredient category.</p>
+            <p>Body parameters:</p>
+            <ul>
+                <li>
+                    - <strong>name</strong>: string, required. Name of the category. </li>
+
+                <li>- <strong>userId</strong>: integer, required. Id of the user that is creating the category. </li>
+
+            </ul>
+            <p>Answer:</p>
+            <ul>
+                <li>
+                    Error message if some required fields from body are missing.
+                </li>
+                <li>
+                    <strong>data</strong>: newly created category.
+                    <ul>
+                        <li>
+                            <strong>id</strong>: id of the category.
+                        </li>
+
+                        <li><strong>name</strong>: name of the category.</li>
+                        <li><strong>ingredients</strong>: array of ingredients attached to this category.
+                            <ul>
+                                <li>Empty because the category was just created.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="endpoint">
+            <div class="title">
+                <span class="method">DELETE</span>
+                /ingredientcategories/{category_id}
+            </div>
+            <p>Description: Delete an ingredient category.</p>
+            <p>Body parameters:</p>
+            <ul>
+                <li>
+                    - </li>
+            </ul>
+            <p>Answer:</p>
+            <ul>
+                <li>
+                    Error message if category is not found or if something went wrong during deleting phase.
+                </li>
+                <li>
+                    Success message if category has been deleted.
+                </li>
+            </ul>
+        </div>
+    </section>
+</body>
+
+</html>

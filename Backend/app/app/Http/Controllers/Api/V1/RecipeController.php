@@ -45,8 +45,6 @@ class RecipeController extends Controller
      */
     public function store(StoreRecipeRequest $request)
     {
-        // return new RecipeResource(Recipe::create($request->all()));
-
         $recipeData = $request->only([
             'title',
             'description',
@@ -55,8 +53,6 @@ class RecipeController extends Controller
             'rating',
             'user_id'
         ]);
-
-        // $recipeData['user_id'] = $request->user()->id; // assuming you are using Laravel's authentication system
 
         $recipe = Recipe::create($recipeData);
 

@@ -84,7 +84,7 @@ export default {
 
         <div class="forgot">
           <p>
-            <router-link to="/">Forgot Password?</router-link>
+            <router-link to="forgotPassword">Forgot Password?</router-link>
           </p>
         </div>
 

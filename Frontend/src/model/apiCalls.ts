@@ -88,18 +88,83 @@ export class API {
 	and if a user is not defined then we need tell the user they need to sign up
 	*/
 	userList: User[] = [
-		new User("Ava.Megyeri", "Password", "megyeram@clarkson.edu"),
-		new User("petesupreme", "password1", "dorovip@clarkson.edu"),
-		new User("a", "a", "a@clarkson.edu"),
-		new User("Melvin Auvray", "melvin", "auvraym@clarkson.edu"),
-
+		new User("Ava.Megyeri", "Password", "megyeram@clarkson.edu", [
+			{
+				question: "What is the first name of your best friend in high school?",
+				answer: "Bella"
+			},
+			{
+				question: "What is the name of your first pet?",
+				answer: "Max"
+			},
+			{
+				question: "What was your high school mascot?",
+				answer: "Eagles"
+			},
+		]),
+		new User("petesupreme", "password1", "dorovip@clarkson.edu", [
+			{
+				question: "What is the name of your first pet?",
+				answer: "Chloe",
+			},
+			{
+				question: "Where did you go the first time you flew on a plane?",
+				answer: "Florida",
+			},
+			{
+				question: "What is your mother's maiden name?",
+				answer: "Smith"
+			},
+		]),
+		new User("a", "a", "a@clarkson.edu", [
+			{
+				question:"What is the first name of your best friend in high school?",
+				answer:"a"
+			},
+			{
+				question:"What was the name of your first boyfriend/girlfriend?",
+				answer:"a"
+			},
+			{
+				question:"What is your mother's maiden name?",
+				answer:"a"
+			},
+		]),
+		new User("Melvin Auvray", "melvin", "auvraym@clarkson.edu", [
+			{
+				question:"What is the name of your first pet?",
+				answer:"Fluffy"
+			},
+			{
+				question:"Where did you go the first time you flew on a plane?",
+				answer:"California"
+			},
+			{
+				question:"What is the first name of your best friend in high school?",
+				answer:"Lilly"
+			},
+		]),
 	];
-	currentUser: User = new User("", "", "");
+	currentUser: User = new User("", "", "",[]);
 
 	/** 
 	 * variable to check if a user is logged in or not 
 	 */
 	loggedIn: boolean = false;
+
+	/**
+	 * Auto generated security questions to ask new users
+	 * Used for resetting password
+	 */
+	securityQuestions: String[] = [
+		new String("What is the first name of your best friend in high school?"),
+		new String("What is the name of your first pet?"),
+		new String("Where did you go the first time you flew on a plane?"),
+		new String("What was your high school mascot?"),
+		new String("What was the name of your first boyfriend/girlfriend?"),
+		new String("What is your mother's maiden name?"),
+
+	];
 
 	/**
 	 * List of all Categories, this is temporary because we don't have the backend setup yet.
@@ -314,7 +379,7 @@ export class API {
 			return false;
 		} else {
 
-			this.userList.push(new User(email, username, password));
+			this.userList.push(new User(email, username, password,[]));
 			console.log("User created!");
 			this.loggedIn = true;
 			return true;
@@ -385,5 +450,40 @@ export class API {
 	}
 
 
+	/**
+	 * Security Questions / Answers
+	 */
+
+	checkSecurityQuestion(username: string, question: string, answer: string): Boolean {
+		const user = this.userList.find(user => user.username === username);
+		
+		if (!user){
+			throw new Error(`User '${username}' not found`);
+		}
+
+		const securityQuestion = user.securityQuestions.find(q => q.question === question);
+		if (!securityQuestion) {
+			throw new Error(`Security question not found`);
+		}
+
+		if (securityQuestion.answer === answer) {
+			return true;
+		} else {
+			throw new Error(`Incorrect answer to security question`);
+		}
+	}
+
+	/**
+	 * Reset password
+	 */
+	resetPassword(username: string, newPassword: string) {
+		const userIndex = this.userList.findIndex(user => user.username === username);
+		if (userIndex > -1) {
+			this.userList[userIndex].password = newPassword;
+			return "success";
+		} else {
+			return "failure";
+		}
+	}
 }
 

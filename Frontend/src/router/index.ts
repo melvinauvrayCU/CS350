@@ -39,6 +39,14 @@ const router = createRouter({
       }
     },
     {
+      path: "/forgotPassword",
+      name: "forgotPassword",
+      component: () => import("../views/ForgotPasswordPage.vue"),
+      meta: {
+        hideNavbar: true,
+      }
+    },
+    {
       path: "/profile",
       name: "profilepage",
       component: () => import("../views/ProfilePage.vue"),

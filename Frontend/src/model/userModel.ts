@@ -20,9 +20,10 @@ export class User {
 	fname: string;
 	lname: string;
 	bio: string;
+	securityQuestions: { question: string, answer: string}[];
 
 	//Creates a user
-	constructor(username: string, password: string, email: string) {
+	constructor(username: string, password: string, email: string, securityQuestions: { question: string, answer: string}[]) {
 		// We set the id automatically with the static field, so it is auto incrementing.
 		this.id = User.idCounter;
 		User.idCounter++;
@@ -34,6 +35,8 @@ export class User {
 		this.fname = "";
 		this.lname = "";
 		this.bio = "";
+		this.securityQuestions = securityQuestions;
+
 		this.setname();
 
 	}
@@ -46,4 +49,6 @@ export class User {
 		// 	this.userList.find(user => user.username === this.currentUser.username).fname = this.currentUser.fname;
 		// }
 	}
+
+	
 }

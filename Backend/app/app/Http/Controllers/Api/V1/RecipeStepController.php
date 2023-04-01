@@ -8,6 +8,9 @@ use App\Http\Requests\UpdateRecipeStepRequest;
 use App\Models\RecipeStep;
 use App\Http\Resources\V1\RecipeStepResource;
 use App\Http\Resources\V1\RecipeStepCollection;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use App\Http\Requests\V1\BulkStoreRecipestepRequest;
 
 class RecipeStepController extends Controller
 {
@@ -21,15 +24,7 @@ class RecipeStepController extends Controller
         return new RecipeStepCollection(RecipeStep::paginate());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -40,6 +35,15 @@ class RecipeStepController extends Controller
     public function store(StoreRecipeStepRequest $request)
     {
         return new RecipeStepResource(RecipeStep::create($request->all()));
+    }
+
+    public function bulkStore(BulkStoreRecipestepRequest $request)
+    {
+        $bulk = collect($request->all())->map(function ($arr, $key) {
+            return Arr::except($arr, ['cookTime', 'prepTime', 'recipeId']);
+        });
+
+        RecipeStep::insert($bulk->toArray());
     }
 
     /**
@@ -53,16 +57,7 @@ class RecipeStepController extends Controller
         return new RecipeStepResource($recipestep);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\RecipeStep  $recipeStep
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(RecipeStep $recipeStep)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.

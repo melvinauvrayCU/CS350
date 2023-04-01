@@ -28,7 +28,7 @@ class StoreRecipeRequest extends FormRequest
             'description' => 'required|string',
             'numberPeople' => 'required|integer|min:1',
             'rating' => 'required|integer|min:1|max:5',
-            'recipe_steps' => 'required|array|min:1',
+            '*.recipe_steps' => 'required|array|min:1',
             'imageUrl' => 'string',
             'userId' => ['required'],
         ];

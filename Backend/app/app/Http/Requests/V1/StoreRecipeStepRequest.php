@@ -35,8 +35,8 @@ class StoreRecipeStepRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'cook_time' => $this->cook_time,
-            'prep_time' => $this->prep_time,
+            'cook_time' => $this->cookTime,
+            'prep_time' => $this->prepTime,
             'recipe_id' => $this->recipeId
 
         ]);

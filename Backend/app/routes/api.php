@@ -25,4 +25,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('recipesteps', RecipeStepController::class);
     // Route::get('recipes/{id}', [RecipeController::class, 'index']);
     // Route::post('recipes', [RecipeController::class, 'store']);
+
+    Route::post('recipesteps/bulk', ['uses' => 'RecipeStepController@bulkStore' ]);
 });

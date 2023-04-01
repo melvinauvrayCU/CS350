@@ -47,6 +47,8 @@ class RecipeController extends Controller
         return new RecipeResource(Recipe::create($request->all()));
     }
 
+    
+
     /**
      * Display the specified resource.
      *

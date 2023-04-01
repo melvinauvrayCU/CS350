@@ -19,9 +19,7 @@ class RecipeStepResource extends JsonResource
             'description' => $this->description,
             'cookTime' => $this->cook_time,
             'prepTime' => $this->prep_time,
-            'recipeId' => $this->recipe_id,
-            'createdAt' => $this->created_at,
-            'updatedAt' => $this->updated_at,
+            'recipeId' => $this->recipe_id
         ];
     }
 }

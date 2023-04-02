@@ -10,6 +10,11 @@ class User extends Model
 {
 
     use HasFactory,HasApiTokens;
+    protected $fillable=[
+        'name',
+        'email',
+        'password',
+    ];
 
     public function recipes()
     {

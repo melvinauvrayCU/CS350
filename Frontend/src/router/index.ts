@@ -63,6 +63,11 @@ const router = createRouter({
       name: "credits",
       component: () => import("../views/CreditPage.vue"),
     },
+    {
+      path: "/searchresults",
+      name: "searchresults",
+      component: () => import("../views/SearchResultPage.vue")
+    }
   ],
 });
 
@@ -94,7 +99,6 @@ router.afterEach((to, from) => {
     element.style.borderColor = "var(--color-accent)";
   }
 });
-
 
 
 export default router;

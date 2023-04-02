@@ -441,7 +441,5 @@ export class API {
 	getUtensilList(): string[] {
 		return this.utensilList;
 	}
-
-
 }
 

@@ -51,14 +51,14 @@ class StoreRecipeRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            // 'number_people' => $this->numberPeople,
-            // 'image_url' => $this->imageUrl,
-            // 'user_id' => $this->userId,
-            'recipe_steps' => $this->recipeSteps
+    // protected function prepareForValidation()
+    // {
+    //     $this->merge([
+    //         // 'number_people' => $this->numberPeople,
+    //         // 'image_url' => $this->imageUrl,
+    //         // 'user_id' => $this->userId,
+    //         'recipe_steps' => $this->recipeSteps
 
-        ]);
-    }
+    //     ]);
+    // }
 }

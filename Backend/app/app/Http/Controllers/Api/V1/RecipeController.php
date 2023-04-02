@@ -11,6 +11,7 @@ use App\Http\Resources\V1\RecipeResource;
 use App\Http\Resources\V1\RecipeCollection;
 use Illuminate\Http\Request;
 use App\Filters\V1\RecipeFilter;
+use App\Models\Ingredient;
 
 /**
  * Class that handles the different requests method for the /recipes/ endpoint
@@ -57,18 +58,30 @@ class RecipeController extends Controller
 
         $recipe = Recipe::create($recipeData);
 
-        $stepsData = $request->input('steps', []);
+        $stepsData = $request->input('recipe_steps', []);
 
-        $steps = collect($stepsData)->map(function ($stepData) {
-            return new RecipeStep([
+        
+        
+
+        $steps = collect($stepsData)->map(function ($stepData) use (&$recipe){
+            $newstep = new RecipeStep([
                 'description' => $stepData['description'],
                 'prep_time' => $stepData['prep_time'],
-                'cook_time' => $stepData['cook_time'],
-                'ingredients' => $stepData['ingredients']
+                'cook_time' => $stepData['cook_time']
             ]);
+
+            $recipe->recipeSteps()->save($newstep);
+
+            collect($stepData['ingredients'])->map(function($ingredientData) use ($newstep){
+                $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
+                $ingredient->recipeSteps()->syncWithoutDetaching($newstep->id);
+                
+            });
+            return $newstep;
         });
 
-        $recipe->recipeSteps()->saveMany($steps);
+
+        
 
         return new RecipeResource($recipe);
     }

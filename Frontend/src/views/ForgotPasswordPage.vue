@@ -88,16 +88,24 @@ export default {
         <div class="ForgotPasswordPage">
 
             <div v-if="!showSecurityForm">
-              <InputFieldComponent id="username" inputType="text" labelText="Enter Your Username or Email:" max-length="200" placeholder="Username or Email"
+              <div class="username-input">
+                <InputFieldComponent id="username" inputType="text" labelText="Enter Your Username or Email:" max-length="200" placeholder="Username or Email"
                 v-model="username" :mandatory="true" />
-              <CustomButtonComponent titleText="Submit User" text="Next" effect="plain" @click="generateSecurityQuestion" :resetText="resetText"/>
+              </div>
+              <div class="next-button">
+                <CustomButtonComponent titleText="Submit User" text="Next" effect="plain" @click="generateSecurityQuestion" :resetText="resetText"/>
+              </div>
             </div>
 
             <div v-if="!showResetPasswordForm">
               <div v-if="showSecurityForm">
-                <InputFieldComponent id="securityQuestion" inputType="text" :labelText="`${securityQuestion}`" max-length="200" placeholder="Answer"
+                <div class="secuirty-question">
+                  <InputFieldComponent id="securityQuestion" inputType="text" :labelText="`${securityQuestion}`" max-length="200" placeholder="Answer"
                     v-model="securityAnswer" :mandatory="true" />
-                <CustomButtonComponent titleText="Submit Answer" text="Submit" effect="plain" @click="checkSecurityQuestion" />
+                </div>
+                <div class="submit-button">
+                  <CustomButtonComponent titleText="Submit Answer" text="Submit" effect="plain" @click="checkSecurityQuestion" />
+                </div>
               </div>
             </div>
             
@@ -180,5 +188,9 @@ section {
   justify-content: space-between;
   text-align: left;
   width: 100%;
+}
+
+.submit-button {
+
 }
 </style>

@@ -8,6 +8,7 @@ use App\Http\Resources\V1\UserResource;
 use App\Http\Resources\V1\UserCollection;
 use Illuminate\Http\Request;
 use App\Filters\V1\UserFilter;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * Class that handles the different requests method for the /users/ endpoint
@@ -71,4 +72,5 @@ class UserController extends Controller
     {
         //
     }
+
 }

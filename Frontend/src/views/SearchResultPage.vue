@@ -48,6 +48,11 @@ export default {
             this.updateMatchingRecipes();
             this.$router.push({ query: { q: query } });
         },
+        deleteRecipe(id: number) {
+            this.recipes = API.instance.removeRecipe(id);
+            this.updateMatchingRecipes();
+
+        }
     },
     watch: {
         "$route.query.q"(newQuery: string) {
@@ -63,7 +68,7 @@ export default {
     <div class="contentContainer">
         <PageTitleComponent :text="`Search Results for '${$route.query.q}'`" />
         <SearchResultsComponent :recipes="matchingRecipes" @search="onSearch" 
-            @delete-recipe="(id) => $emit('delete-recipe', id)" :isUserAuthenticated="isUserAuthenticated" />
+            @delete-recipe="deleteRecipe" :isUserAuthenticated="isUserAuthenticated"/>
     </div>
 </template>
 

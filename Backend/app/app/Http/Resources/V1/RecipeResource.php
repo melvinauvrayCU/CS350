@@ -31,6 +31,9 @@ class RecipeResource extends JsonResource
         if ($this->whenLoaded('user')) {
             $data['user'] = new UserResource($this->user);
         }
+        if (!$this->collection) {
+            $data['recipeSteps'] = new RecipeStepCollection($this->recipeSteps);
+        }
 
         return $data;
     }
@@ -38,10 +41,13 @@ class RecipeResource extends JsonResource
 
     public function with($request)
     {
-        return [
-            'data' => [
-                'recipeSteps' => new RecipeStepCollection($this->recipeSteps),
-            ],
-        ];
+        if ($this->collection) {
+            return [
+                'data' => [
+                    'recipeSteps' => new RecipeStepCollection($this->whenLoaded('recipeSteps')),
+                ],
+            ];
+        }
+        return [];
     }
 }

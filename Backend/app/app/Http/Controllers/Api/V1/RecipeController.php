@@ -34,6 +34,7 @@ class RecipeController extends Controller
         if ($includeUser) {
             $recipes = $recipes->with('user');
         }
+
         return new RecipeCollection($recipes->paginate()->appends($request->query()));
     }
 

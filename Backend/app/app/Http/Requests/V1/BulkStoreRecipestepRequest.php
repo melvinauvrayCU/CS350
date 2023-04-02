@@ -28,7 +28,8 @@ class BulkStoreRecipestepRequest extends FormRequest
             '*.description' => ['required', 'string'],
             '*.cookTime' => ['required', 'string'],
             '*.prepTime' => ['required', 'string'],
-            '*.recipeId' => ['required', 'integer']
+            '*.recipeId' => ['required', 'integer'],
+            '*.ingredients' => ['required', 'array']
         ];
     }
 
@@ -40,6 +41,7 @@ class BulkStoreRecipestepRequest extends FormRequest
             $obj['cook_time'] = $obj['cookTime'] ?? null;
             $obj['prep_time'] = $obj['prepTime'] ?? null;
             $obj['recipe_id'] = $obj['recipeId'] ?? null;
+            $obj['ingredients'] = $obj['ingredients'] ?? null;
 
             $data[] = $obj;
         }

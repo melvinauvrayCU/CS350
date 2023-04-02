@@ -44,15 +44,19 @@ class StoreRecipeRequest extends FormRequest
             'recipe_steps.*.description' => ['required', 'string'],
             'recipe_steps.*.cook_time' => ['required', 'string'],
             'recipe_steps.*.prep_time' => ['required', 'string'],
+            'recipe_steps.*.ingredients' => ['nullable', 'array'],
+            'recipe_steps.*.ingredients.*.name' => ['nullable', 'string'],
+
+
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            'number_people' => $this->numberPeople,
-            'image_url' => $this->imageUrl,
-            'user_id' => $this->userId,
+            // 'number_people' => $this->numberPeople,
+            // 'image_url' => $this->imageUrl,
+            // 'user_id' => $this->userId,
             'recipe_steps' => $this->recipeSteps
 
         ]);

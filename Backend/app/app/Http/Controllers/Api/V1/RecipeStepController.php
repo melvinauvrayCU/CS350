@@ -40,7 +40,7 @@ class RecipeStepController extends Controller
     public function bulkStore(BulkStoreRecipestepRequest $request)
     {
         $bulk = collect($request->all())->map(function ($arr, $key) {
-            return Arr::except($arr, ['cookTime', 'prepTime', 'recipeId']);
+            return Arr::except($arr, ['cookTime', 'prepTime', 'recipeId', 'ingredients']);
         });
 
         RecipeStep::insert($bulk->toArray());

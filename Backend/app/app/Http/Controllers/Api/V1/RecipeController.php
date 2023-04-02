@@ -64,6 +64,7 @@ class RecipeController extends Controller
                 'description' => $stepData['description'],
                 'prep_time' => $stepData['prep_time'],
                 'cook_time' => $stepData['cook_time'],
+                'ingredients' => $stepData['ingredients']
             ]);
         });
 

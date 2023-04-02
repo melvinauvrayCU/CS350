@@ -20,4 +20,9 @@ class RecipeStep extends Model
     {
         return $this->belongsTo(Recipe::class);
     }
+
+    public function ingredients()
+    {
+        return $this->belongsToMany(Ingredient::class, 'recipe_step_ingredient');
+    }
 }

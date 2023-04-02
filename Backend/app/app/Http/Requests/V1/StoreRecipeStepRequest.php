@@ -24,10 +24,12 @@ class StoreRecipeStepRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => 'required|string',
-            'cookTime' => 'required|string',
-            'prepTime' => 'required|string',
-            'recipeId' => 'required'
+            'description' => ['required', 'string'],
+            'cookTime' => ['required', 'string'],
+            'prepTime' => ['required', 'string'],
+            'recipeId' => ['required'],
+            'ingredients' => ['nullable', 'array'],
+            'ingredients.*.name' => ['required', 'string'],
 
         ];
     }

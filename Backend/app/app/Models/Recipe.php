@@ -13,12 +13,18 @@ class Recipe extends Model
         'title',
         'description',
         'number_people',
+        'image_url',
         'rating',
-        'user_id'
+        'user_id',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function recipeSteps()
+    {
+        return $this->hasMany(RecipeStep::class);
     }
 }

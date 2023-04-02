@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->integer('number_people');
+            $table->string('image_url');
             $table->integer('rating');
             $table->integer('user_id');
             $table->timestamps();

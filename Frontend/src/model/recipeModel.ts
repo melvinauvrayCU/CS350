@@ -52,6 +52,7 @@ export type Step = {
 }
 
 export type Ingredient = {
+	id: number,
 	name: string,
 	quantity?: string,
 	unit?: string, // TODO: Change this to a more restrictive type

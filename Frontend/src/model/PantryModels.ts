@@ -1,16 +1,14 @@
+import type { Ingredient } from "./recipeModel";
 
 export class IngredientCat {
-
-	private static idCounter: number = 0;
 
 	type: string;
 	id: number;
 	name: string;
-	ingredients: Array<string>;
+	ingredients: Ingredient[];
 
-	constructor(type: string, name: string, ingredients: Array<string>) {
-		this.id = IngredientCat.idCounter;
-		IngredientCat.idCounter++;
+	constructor(id: number, type: string, name: string, ingredients: Ingredient[]) {
+		this.id = id;
 
 		this.type = type;
 		this.name = name;

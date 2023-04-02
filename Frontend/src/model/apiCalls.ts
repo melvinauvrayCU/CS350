@@ -438,9 +438,12 @@ export class API {
 
 	getUser(): User {
 		return this.currentUser;
-
 	}
 
+	findUser(username: string): User | undefined {
+		return this.userList.find(user => user.username === username);
+	}
+	
 	getIngredientList(): Ingredient[] {
 		return this.ingredientList;
 	}
@@ -454,7 +457,7 @@ export class API {
 	 * Security Questions / Answers
 	 */
 
-	checkSecurityQuestion(username: string, question: string, answer: string): Boolean {
+	checkQuestion(username: string, question: string, answer: string): Boolean {
 		const user = this.userList.find(user => user.username === username);
 		
 		if (!user){

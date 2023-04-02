@@ -21,6 +21,7 @@ export default {
         password: string,
         securityQuestion: string,
         securityAnswer: string,
+        showSecurityForm: boolean,
         showResetPasswordForm: boolean,
         messageText: string,
         messageType: "success" | "warning",
@@ -31,15 +32,29 @@ export default {
             securityQuestion: "",
             securityAnswer: "",
             showResetPasswordForm: false,
+            showSecurityForm: false,
             messageText: "",
             messageType: "success"
         };
     },
 
     methods: {
+      async generateSecurityQuestion() {
+        const user = await API.instance.findUser(this.username);
+          if (user) {
+            const questions = user.securityQuestions.map(q => q.question);
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            this.securityQuestion = questions[randomIndex];
+            this.securityAnswer = user.securityQuestions[randomIndex].answer;
+            this.showSecurityForm = true;
+
+          } else {
+            this.securityQuestion = "Unable to generate security question.";
+          }
+      },
+
       async checkSecurityQuestion() {
-        await this.generateSecurityQuestion();
-        const result = await API.instance.checkSecurityQuestion(this.username, this.securityQuestion, this.securityAnswer);
+        const result = await API.instance.checkQuestion(this.username, this.securityQuestion, this.securityAnswer);
         if (result) {
             this.showResetPasswordForm = true;
         } else {
@@ -47,7 +62,6 @@ export default {
             this.messageText = "Sorry, that is not the correct answer to the security question.";
         }
       },
-
         async resetPassword() {
             const result = await API.instance.resetPassword(this.username, this.password);
             if (result === "success") {
@@ -58,21 +72,10 @@ export default {
                 this.messageText = "Could not reset password."
             }
         },
-        async generateSecurityQuestion() {
-            const user = await API.instance.getUser();
-            if (user) {
-                const questions = [user.securityQuestions[0].question, user.securityQuestions[1].question, user.securityQuestions[2].question];
-                const randomIndex = Math.floor(Math.random() * questions.length);
-                this.securityQuestion = questions[randomIndex];
-                this.securityAnswer = user.securityQuestions[randomIndex].answer;
-            } else {
-              this.securityQuestion = "Unable to generate security question."
-            }
+        resetText() {
+          this.username = "";
         }
     },
-    async created() {
-      this.generateSecurityQuestion();
-    }
 };
 
 
@@ -81,25 +84,32 @@ export default {
 <template>
     <section>
         <PageTitleComponent text="Forgot Password"/>
-        <p>Q{{ securityQuestion }}</p> 
-        <p>A{{ securityAnswer }}</p>
       <div class="border">
         <div class="ForgotPasswordPage">
 
-          
-            <InputFieldComponent id="username" inputType="text" labelText="Enter Your Username or Email:" max-length="200" placeholder="Username or Email"
+            <div v-if="!showSecurityForm">
+              <InputFieldComponent id="username" inputType="text" labelText="Enter Your Username or Email:" max-length="200" placeholder="Username or Email"
                 v-model="username" :mandatory="true" />
+              <CustomButtonComponent titleText="Submit User" text="Next" effect="plain" @click="generateSecurityQuestion" :resetText="resetText"/>
+            </div>
 
-            <InputFieldComponent id="securityQuestion" inputType="text" :labelText="`Security Question: ${securityQuestion}`" max-length="200" placeholder="Answer"
+            <div v-if="!showResetPasswordForm">
+              <div v-if="showSecurityForm">
+                <InputFieldComponent id="securityQuestion" inputType="text" :labelText="`${securityQuestion}`" max-length="200" placeholder="Answer"
                     v-model="securityAnswer" :mandatory="true" />
-
-            <CustomButtonComponent titleText="Submit Answer" text="Submit" effect="plain" @click="checkSecurityQuestion()" />
-
+                <CustomButtonComponent titleText="Submit Answer" text="Submit" effect="plain" @click="checkSecurityQuestion" />
+              </div>
+            </div>
+            
             <div v-if="showResetPasswordForm">
                 <InputFieldComponent id="new-password" inputType="password" labelText="New Password:" max-length="200" placeholder="New Password"
                     v-model="password" :mandatory="true" />
+                <InputFieldComponent id="new-password" inputType="password" labelText="Re-enter New Password:" max-length="200" placeholder="New Password"
+                    v-model="password" :mandatory="true" />
                 <CustomButtonComponent text="Reset Password" @click="resetPassword" />
             </div>
+
+            
           <div class="login">
             <p>
               <router-link to="login">Login</router-link>

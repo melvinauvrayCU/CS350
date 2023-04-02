@@ -85,6 +85,6 @@ export default {
     overflow-y: auto;
     margin-top: 10px;
     margin-bottom: px;
-    padding-right: 12px; /* compensate for scrollbar width */
+    padding-right: 12px;
 }
 </style>

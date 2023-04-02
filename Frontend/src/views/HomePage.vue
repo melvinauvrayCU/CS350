@@ -49,9 +49,6 @@ export default {
      * @param id id of the recipe you want to delete
      */
     deleteRecipe(id: number) {
-      // Show a success message when the recipe is deleted
-      this.messageText = "Recipe deleted sucessfully";
-      this.messageType = "success";
       this.recipes = API.instance.removeRecipe(id);
     },
     handleSearch(searchText: string) {

@@ -13,19 +13,19 @@ export default {
     data(): {
         recipes: Array<Recipe>,
         matchingRecipes: Array<Recipe>,
-        isAuthenticated: boolean,
+        isUserAuthenticated: boolean,
         searchQuery: string,
     } {
         return {
             recipes: [],
             matchingRecipes: [],
-            isAuthenticated: false,
+            isUserAuthenticated: false,
             searchQuery: "",
         };
     },
     created() {
         this.recipes = API.instance.getRecipes();
-        this.isAuthenticated = API.instance.isLoggedIn();
+        this.isUserAuthenticated = API.instance.isLoggedIn();
         this.searchQuery = this.$route.query.q as string;
         this.updateMatchingRecipes();
     },
@@ -62,7 +62,8 @@ export default {
 <template>
     <div class="contentContainer">
         <PageTitleComponent :text="`Search Results for '${$route.query.q}'`" />
-        <SearchResultsComponent :recipes="matchingRecipes" @search="onSearch" :isUserAuthenticated="isAuthenticated" />
+        <SearchResultsComponent :recipes="matchingRecipes" @search="onSearch" 
+            @delete-recipe="(id) => $emit('delete-recipe', id)" :isUserAuthenticated="isUserAuthenticated" />
     </div>
 </template>
 

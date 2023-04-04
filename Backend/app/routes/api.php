@@ -29,4 +29,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('recipes', RecipeController::class);
     Route::apiResource('ingredients', IngredientController::class);
     Route::apiResource('ingredientcategories', IngredientCategoryController::class);
+    Route::apiResource('recipesteps', RecipeStepController::class);
+    Route::post('recipesteps/bulk', ['uses' => 'RecipeStepController@bulkStore' ]);
 });

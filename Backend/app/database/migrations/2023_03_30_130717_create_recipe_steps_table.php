@@ -13,10 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ingredients', function (Blueprint $table) {
+        Schema::create('recipe_steps', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            
+            $table->string('description');
+            $table->string('cook_time')->nullable();
+            $table->string('prep_time')->nullable();
+            $table->integer("recipe_id");
+            //ingredients
+            //utensils
+
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ingredients');
+        Schema::dropIfExists('recipe_steps');
     }
 };

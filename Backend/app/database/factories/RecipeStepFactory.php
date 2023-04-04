@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Ingredient;
+use App\Models\Utensil;
 use App\Models\Recipe;
 use App\Models\RecipeStep;
 
@@ -34,6 +35,7 @@ class RecipeStepFactory extends Factory
     {
         return $this->afterCreating(function (RecipeStep $recipeStep) {
             $recipeStep->ingredients()->attach(Ingredient::factory()->count(3)->create()->pluck('id')->toArray());
+            $recipeStep->utensils()->attach(Utensil::factory()->count(3)->create()->pluck('id')->toArray());
         });
     }
 }

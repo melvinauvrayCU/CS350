@@ -30,6 +30,8 @@ class StoreRecipeStepRequest extends FormRequest
             'recipeId' => ['required'],
             'ingredients' => ['nullable', 'array'],
             'ingredients.*.name' => ['required', 'string'],
+            'utensils' => ['nullable', 'array'],
+            'utensils.*.name' => ['required', 'string'],
 
         ];
     }
@@ -40,7 +42,6 @@ class StoreRecipeStepRequest extends FormRequest
             'cook_time' => $this->cookTime,
             'prep_time' => $this->prepTime,
             'recipe_id' => $this->recipeId
-
         ]);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RecipeStepResource extends JsonResource
+class UtensilCategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,14 +14,25 @@ class RecipeStepResource extends JsonResource
      */
     public function toArray($request)
     {
-        return  [
+        return [
             'id' => $this->id,
-            'description' => $this->description,
-            'cookTime' => $this->cook_time,
-            'prepTime' => $this->prep_time,
-            'ingredients' => new IngredientCollection($this->ingredients),
+            'name' => $this->name,
             'utensils' => new UtensilCollection($this->utensils),
-            'recipeId' => $this->recipe_id
+        ];
+    }
+
+    /**
+     * Add additional data to the response.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     */
+    public function with($request)
+    {
+        return [
+            'data' => [
+                'utensils' => new UtensilCollection($this->utensils),
+            ],
         ];
     }
 }

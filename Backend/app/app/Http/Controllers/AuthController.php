@@ -45,7 +45,7 @@ class AuthController extends Controller
 
         if(!$user || !Hash::check($fields['password'], $user ->password)){
             return response([
-                'message' => 'User does not exist'
+                'message' => 'User credentials incorrect'
             ], 401);
         }
 

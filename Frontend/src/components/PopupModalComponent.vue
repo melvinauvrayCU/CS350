@@ -106,7 +106,7 @@ export default {
 .buttonsContainer {
   display: flex;
   flex-direction: row;
-  margin-boTtom: 20px;
+  margin-bottom: 20px;
   justify-content: center;
 }
 

@@ -12,6 +12,7 @@ use App\Http\Resources\V1\RecipeCollection;
 use Illuminate\Http\Request;
 use App\Filters\V1\RecipeFilter;
 use App\Models\Ingredient;
+use App\Models\Utensil;
 
 /**
  * Class that handles the different requests method for the /recipes/ endpoint
@@ -60,10 +61,7 @@ class RecipeController extends Controller
 
         $stepsData = $request->input('recipe_steps', []);
 
-        
-        
-
-        $steps = collect($stepsData)->map(function ($stepData) use (&$recipe){
+        collect($stepsData)->map(function ($stepData) use (&$recipe) {
             $newstep = new RecipeStep([
                 'description' => $stepData['description'],
                 'prep_time' => $stepData['prep_time'],
@@ -72,16 +70,17 @@ class RecipeController extends Controller
 
             $recipe->recipeSteps()->save($newstep);
 
-            collect($stepData['ingredients'])->map(function($ingredientData) use ($newstep){
+            collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
                 $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
                 $ingredient->recipeSteps()->syncWithoutDetaching($newstep->id);
-                
+            });
+
+            collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {
+                $utensil = Utensil::firstOrCreate(['name' => $utensilData["name"]]);
+                $utensil->recipeSteps()->syncWithoutDetaching($newstep->id);
             });
             return $newstep;
         });
-
-
-        
 
         return new RecipeResource($recipe);
     }

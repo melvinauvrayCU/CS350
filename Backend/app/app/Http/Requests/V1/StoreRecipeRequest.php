@@ -46,6 +46,8 @@ class StoreRecipeRequest extends FormRequest
             'recipe_steps.*.prep_time' => ['required', 'string'],
             'recipe_steps.*.ingredients' => ['nullable', 'array'],
             'recipe_steps.*.ingredients.*.name' => ['nullable', 'string'],
+            'recipe_steps.*.utensils' => ['nullable', 'array'],
+            'recipe_steps.*.utensils.*.name' => ['nullable', 'string'],
 
 
         ];

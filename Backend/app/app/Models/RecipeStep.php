@@ -25,4 +25,9 @@ class RecipeStep extends Model
     {
         return $this->belongsToMany(Ingredient::class, 'recipe_step_ingredient');
     }
+
+    public function utensils()
+    {
+        return $this->belongsToMany(Utensil::class, 'recipe_step_utensil');
+    }
 }

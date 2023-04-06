@@ -726,8 +726,31 @@ export class API {
 		return returnDatas;
 	}
 
-	getUtensilList(): string[] {
-		return this.utensilList;
+	async getUtensilList(): Promise<string[]> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: string[] = [];
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.get(this._apiUrl + "/utensils");
+
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = (response.data.data).map((data: any) => {
+				return data.name;
+			});
+		} catch (error) {
+			/** If we have an error, we log it */
+			console.error(error);
+		}
+		/** We return our data */
+		return returnDatas;
 	}
 }
 

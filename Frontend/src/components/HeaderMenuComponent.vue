@@ -45,9 +45,6 @@ export default {
 
     <nav v-if="!$route.meta.hideNavbar">
       <SearchBarComponent @search="performSearch" />
-      <RouterLink to="/">
-        <CustomButton type="neutral" :effect="$route.name === 'home' ? 'plain' : 'empty'" text="Home" titleText="Home" />
-      </RouterLink>
       <RouterLink v-if="checkIfLoggedIn()" to="/createRecipe">
         <CustomButton type="neutral" :effect="$route.name === 'createRecipe' ? 'plain' : 'empty'" text="Create"
           titleText="Create Recipe" />

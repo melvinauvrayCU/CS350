@@ -21,6 +21,7 @@ export default {
         password: string,
         securityQuestion: string,
         securityAnswer: string,
+        passwordCheck: string,
         showSecurityForm: boolean,
         showResetPasswordForm: boolean,
         messageText: string,
@@ -31,6 +32,7 @@ export default {
             password: "",
             securityQuestion: "",
             securityAnswer: "",
+            passwordCheck: "",
             showResetPasswordForm: false,
             showSecurityForm: false,
             messageText: "",
@@ -54,14 +56,23 @@ export default {
       },
 
       async checkSecurityQuestion() {
-        const result = await API.instance.checkQuestion(this.username, this.securityQuestion, this.securityAnswer);
-        if (result) {
-            this.showResetPasswordForm = true;
-        } else {
+        const user = await API.instance.findUser(this.username);
+        if (user) {
+          const securityQuestion = user.securityQuestions.find(q => q.question === this.securityQuestion);
+          if (securityQuestion && securityQuestion.answer === this.securityAnswer) {
+                this.showResetPasswordForm = true;
+          } else {
+            this.showResetPasswordForm = false;
             this.messageType = "warning";
             this.messageText = "Sorry, that is not the correct answer to the security question.";
+          }
+       } else {
+          this.showResetPasswordForm = false;
+          this.messageType = "warning";
+          this.messageText = "User not found.";
         }
       },
+
         async resetPassword() {
             const result = await API.instance.resetPassword(this.username, this.password);
             if (result === "success") {
@@ -72,8 +83,16 @@ export default {
                 this.messageText = "Could not reset password."
             }
         },
-        resetText() {
-          this.username = "";
+        async checkPassword() {
+          if (this.password === this.passwordCheck) {
+            // passwords match
+            return true;
+        } else {
+            // passwords do not match
+            this.messageType = "warning";
+            this.messageText = "The passwords you entered do not match. Please try again.";
+            return false;
+        }
         }
     },
 };
@@ -93,7 +112,7 @@ export default {
                 v-model="username" :mandatory="true" />
               </div>
               <div class="next-button">
-                <CustomButtonComponent titleText="Submit User" text="Next" effect="plain" @click="generateSecurityQuestion" :resetText="resetText"/>
+                <CustomButtonComponent titleText="Submit User" text="Next" effect="plain" @click="generateSecurityQuestion"/>
               </div>
             </div>
 
@@ -110,14 +129,13 @@ export default {
             </div>
             
             <div v-if="showResetPasswordForm">
-                <InputFieldComponent id="new-password" inputType="password" labelText="New Password:" max-length="200" placeholder="New Password"
-                    v-model="password" :mandatory="true" />
-                <InputFieldComponent id="new-password" inputType="password" labelText="Re-enter New Password:" max-length="200" placeholder="New Password"
-                    v-model="password" :mandatory="true" />
-                <CustomButtonComponent text="Reset Password" @click="resetPassword" />
+              <InputFieldComponent id="newpassword" inputType="password" labelText="New Password:" max-length="200" placeholder="New Password"
+                  v-model="password" :mandatory="true" />
+              <InputFieldComponent id="newPasswordCheck" inputType="password" labelText="Re-enter New Password:" max-length="200" placeholder="New Password"
+                  v-model="passwordCheck" :mandatory="true" />
+              <CustomButtonComponent titleText="reset password" text="Reset Password" effect="plain" @click="resetPassword" :disabled="!checkPassword()" />
             </div>
-
-            
+         
           <div class="login">
             <p>
               <router-link to="login">Login</router-link>

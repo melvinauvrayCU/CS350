@@ -21,6 +21,7 @@ export default {
         password: string,
         securityQuestion: string,
         securityAnswer: string,
+        answerCheck: string,
         passwordCheck: string,
         showSecurityForm: boolean,
         showResetPasswordForm: boolean,
@@ -32,6 +33,7 @@ export default {
             password: "",
             securityQuestion: "",
             securityAnswer: "",
+            answerCheck: "",
             passwordCheck: "",
             showResetPasswordForm: false,
             showSecurityForm: false,
@@ -39,7 +41,6 @@ export default {
             messageType: "success"
         };
     },
-
     methods: {
       async generateSecurityQuestion() {
         const user = await API.instance.findUser(this.username);
@@ -54,17 +55,16 @@ export default {
             this.securityQuestion = "Unable to generate security question.";
           }
       },
-
       async checkSecurityQuestion() {
         const user = await API.instance.findUser(this.username);
         if (user) {
           const securityQuestion = user.securityQuestions.find(q => q.question === this.securityQuestion);
-          if (securityQuestion && securityQuestion.answer === this.securityAnswer) {
+          if (securityQuestion && securityQuestion.answer === this.answerCheck) {
                 this.showResetPasswordForm = true;
           } else {
             this.showResetPasswordForm = false;
             this.messageType = "warning";
-            this.messageText = "Sorry, that is not the correct answer to the security question.";
+            this.messageText = "Sorry, that is not the correct answer to the security question. Try again.";
           }
        } else {
           this.showResetPasswordForm = false;
@@ -73,27 +73,27 @@ export default {
         }
       },
 
-        async resetPassword() {
-            const result = await API.instance.resetPassword(this.username, this.password);
-            if (result === "success") {
-                this.messageType = "success";
-                this.messageText = "Your password has been reset."
-            } else {
-                this.messageType = "warning";
-                this.messageText = "Could not reset password."
-            }
-        },
-        async checkPassword() {
-          if (this.password === this.passwordCheck) {
-            // passwords match
-            return true;
-        } else {
-            // passwords do not match
+      async resetPassword() {
+        const passwordsMatch = this.password === this.passwordCheck;
+        if (passwordsMatch) {
+          const result = await API.instance.resetPassword(this.username, this.password);
+          if (result === "success") {
+            this.messageType = "success";
+            this.messageText = "Your password has been reset."
+            await API.instance.login(this.username, this.password);
+            setTimeout(() => {
+              this.$router.push({ name: 'Login' });
+            }, 5000); 
+          
+          } else {
             this.messageType = "warning";
-            this.messageText = "The passwords you entered do not match. Please try again.";
-            return false;
-        }
-        }
+            this.messageText = "Could not reset password."
+          }
+        } else {
+          this.messageType = "warning";
+          this.messageText = "The passwords you entered do not match. Please try again.";
+      }
+    },
     },
 };
 
@@ -120,7 +120,7 @@ export default {
               <div v-if="showSecurityForm">
                 <div class="secuirty-question">
                   <InputFieldComponent id="securityQuestion" inputType="text" :labelText="`${securityQuestion}`" max-length="200" placeholder="Answer"
-                    v-model="securityAnswer" :mandatory="true" />
+                    v-model="answerCheck" :mandatory="true" />
                 </div>
                 <div class="submit-button">
                   <CustomButtonComponent titleText="Submit Answer" text="Submit" effect="plain" @click="checkSecurityQuestion" />
@@ -129,11 +129,16 @@ export default {
             </div>
             
             <div v-if="showResetPasswordForm">
-              <InputFieldComponent id="newpassword" inputType="password" labelText="New Password:" max-length="200" placeholder="New Password"
+              <div class="new-password">
+                <InputFieldComponent id="newpassword" inputType="password" labelText="New Password:" max-length="200" placeholder="New Password"
                   v-model="password" :mandatory="true" />
-              <InputFieldComponent id="newPasswordCheck" inputType="password" labelText="Re-enter New Password:" max-length="200" placeholder="New Password"
+                <InputFieldComponent id="newPasswordCheck" inputType="password" labelText="Re-enter New Password:" max-length="200" placeholder="New Password"
                   v-model="passwordCheck" :mandatory="true" />
-              <CustomButtonComponent titleText="reset password" text="Reset Password" effect="plain" @click="resetPassword" :disabled="!checkPassword()" />
+              </div>
+              <div class="reset-button">
+                <CustomButtonComponent titleText="reset password" text="Reset Password" effect="plain" @click="resetPassword" />
+              </div>
+              
             </div>
          
           <div class="login">
@@ -186,6 +191,34 @@ section {
   backdrop-filter: blur(15px);
   display: flex;
   justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.username-input {
+  margin-left: -175px;
+  margin-right: -175px;
+}
+
+.next-button {
+  display: center;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.submit-button {
+  display: center;
+  align-items: center;
+  margin-left: 150px;
+}
+
+.new-password {
+  margin-left: -150px;
+  margin-right: -150px;
+}
+
+.reset-button {
+  display: center;
   align-items: center;
   margin-top: 30px;
 }

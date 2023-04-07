@@ -616,6 +616,39 @@ export class API {
 		return this.utensilList;
 	}
 
+		/**
+	 * Security Questions / Answers
+	 */
+
+	checkQuestion(username: string, question: string, answer: string): Boolean {
+		const user = this.userList.find(user => user.username === username);
+		
+		if (!user){
+			throw new Error(`User '${username}' not found`);
+		}	
+		const securityQuestion = user.securityQuestions.find(q => q.question === question);
+		if (!securityQuestion) {
+			throw new Error(`Security question not found`);
+		}
+		if (securityQuestion.answer === answer) {
+			return true;
+		} else {
+			throw new Error(`Incorrect answer to security question`);
+		}
+	}
+	
+	/**
+	 * Reset password
+	 */
+	resetPassword(username: string, newPassword: string) {
+		const userIndex = this.userList.findIndex(user => user.username === username);
+		if (userIndex > -1) {
+			this.userList[userIndex].password = newPassword;
+			return "success";
+		} else {
+			return "failure";
+		}
+	}
 
 }
 

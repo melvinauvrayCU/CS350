@@ -21,6 +21,7 @@ export default {
     username: string,
     password: string,
     messageText: string,
+    nextPage: boolean,
     messageType: "success" | "warning",
 
   } {
@@ -31,6 +32,7 @@ export default {
       password: "",
       email: "",
       messageText: "",
+      nextPage: false,
       messageType: "success",
     };
   },
@@ -61,7 +63,8 @@ export default {
         this.messageType = "warning";
         this.messageText = "Please fill all the form";
       }
-    }
+    },
+    
 
   },
 };

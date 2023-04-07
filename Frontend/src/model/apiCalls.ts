@@ -331,7 +331,6 @@ export class API {
 			 * And we extract the name of each data, to create our final array
 			 */
 			returnDatas = (response.data.data).map((data: any) => {
-				console.error(data);
 				/** 
 				 * Since we will populate our returning array that is of type Ingredient[],
 				 * We make sure that this temp variable is of type Ingredient, so we don't push weird things into our array.
@@ -343,6 +342,41 @@ export class API {
 			/** If we have an error, we log it */
 			console.error(error);
 		}
+
+		// Now utensils turn
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.get(this._apiUrl + "/utensilcategories", {
+				params: {
+					userId: this.currentUser.id,
+				}
+			});
+			console.error(response);
+			console.error(returnDatas);
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas.push(...(response.data.data).map((data: any) => {
+				/** 
+				 * Since we will populate our returning array that is of type Ingredient[],
+				 * We make sure that this temp variable is of type Ingredient, so we don't push weird things into our array.
+				 */
+				const utensilToReturn: IngredientCat = new IngredientCat(data.id, "U", data.name, data.utensils);
+				console.error(utensilToReturn);
+				return utensilToReturn;
+			}));
+			console.error(returnDatas);
+		} catch (error) {
+			/** If we have an error, we log it */
+			console.error(error);
+		}
+
+
 		/** We return our data */
 		return returnDatas;
 	}
@@ -361,6 +395,34 @@ export class API {
 			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
 			*/
 			const response = await axios.delete(this._apiUrl + "/ingredientcategories/" + id);
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = response.data.success;
+		} catch (error: any) {
+			/** If we have an error, we log it */
+			return JSON.parse(error.request.response).message || JSON.parse(error.request.response).error;
+		}
+		/** We return our data */
+		return returnDatas;
+	}
+
+	/**
+	 * Delete an utensil category
+	 * @param id Id of the utensil category to delete
+	 */
+	async removeUtensilCat(id: number): Promise<string | undefined> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: string | undefined;
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.delete(this._apiUrl + "/utensilcategories/" + id);
 			/**
 			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
 			 * We will loop through the field data that is inside the field data that is in our response
@@ -440,6 +502,39 @@ export class API {
 	}
 
 	/**
+	 * Remove an Utensil from a category
+	 * @param idCategory Id of the category to remove the utensil from
+	 * @param idUtensil Id of the utensil to remove
+	 */
+	async removeUtensil(idCategory: number, idUtensil: number): Promise<string | undefined> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: string | undefined;
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.delete(this._apiUrl + "/utensils/" + idUtensil, {
+				data: {
+					utensilCategory: idCategory
+				}
+			});
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = response.data.success;
+		} catch (error: any) {
+			/** If we have an error, we log it */
+			return JSON.parse(error.request.response).message || JSON.parse(error.request.response).error;
+		}
+		/** We return our data */
+		return returnDatas;
+	}
+
+	/**
 	 * Create an ingredient and attach it to a category.
 	 * @param id id of the ingredient category
 	 * @param name Name of the ingredient
@@ -473,12 +568,68 @@ export class API {
 		/** We return our data */
 		return returnDatas;
 	}
+	/**
+	 * Create an utensil and attach it to a category.
+	 * @param id id of the utensil category
+	 * @param name Name of the utensil
+	 */
+	async createUtensil(id: number, name: string): Promise<Ingredient | string | undefined> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: Ingredient | undefined;
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.post(this._apiUrl + "/utensils", {
+				name: name,
+				utensilCategoryId: id
+			});
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = {
+				id: response.data.data.id,
+				name: response.data.data.name
+			};
+		} catch (error: any) {
+			/** If we have an error, we log it */
+			return JSON.parse(error.request.response).message;
+		}
+		/** We return our data */
+		return returnDatas;
+	}
 
 	// ----UtensilCatagory Methods----
 
-	createUtensilCat(name: string, utensils: Array<string>): IngredientCat[] | void {
-		// this.ingredientCatList.push(new IngredientCat("U", name, utensils));
-		// return this.ingredientCatList;
+	async createUtensilCat(name: string): Promise<IngredientCat | string | undefined> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: IngredientCat | undefined;
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.post(this._apiUrl + "/utensilcategories", {
+				name: name,
+				userId: this.currentUser.id
+			});
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = new IngredientCat(response.data.data.id, "U", response.data.data.name, []);
+		} catch (error: any) {
+			/** If we have an error, we log it */
+			return JSON.parse(error.request.response).message;
+		}
+		/** We return our data */
+		return returnDatas;
 	}
 
 	//----Allergy Methods----
@@ -612,8 +763,31 @@ export class API {
 		return this.ingredientList;
 	}
 
-	getUtensilList(): string[] {
-		return this.utensilList;
+	async getUtensilList(): Promise<string[]> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: string[] = [];
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.get(this._apiUrl + "/utensils");
+
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = (response.data.data).map((data: any) => {
+				return data.name;
+			});
+		} catch (error) {
+			/** If we have an error, we log it */
+			console.error(error);
+		}
+		/** We return our data */
+		return returnDatas;
 	}
 
 		/**

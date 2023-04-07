@@ -130,7 +130,7 @@ export default {
   },
   async created() {
     this.fullIngredientList = await API.instance.getIngredientList();
-    this.fullUtensilList = API.instance.getUtensilList();
+    this.fullUtensilList = await API.instance.getUtensilList();
 
     // If the id parameter is not empty, then it means we will edit a recipe, so we get the current recipe from an API call and change the mode
     if (this.id !== "") {

@@ -57,7 +57,21 @@ export default {
       if (returnMessage !== undefined) {
         if (returnMessage === "Ingredient category deleted successfully") {
           this.messageType = "success";
-          this.ingredientcats = this.ingredientcats.filter(item => item.id !== id);
+          this.ingredientcats = this.ingredientcats.filter(item => item.id !== id || item.type === "U");
+        } else {
+          this.messageType = "warning";
+        }
+        this.messageText = returnMessage;
+      }
+    },
+
+    async deleteUtensilCat(id: number) {
+      console.log("Remove Utensil " + id);
+      const returnMessage = await API.instance.removeUtensilCat(id);
+      if (returnMessage !== undefined) {
+        if (returnMessage === "Utensil category deleted successfully") {
+          this.messageType = "success";
+          this.ingredientcats = this.ingredientcats.filter(item => item.id !== id || item.type === "I");
         } else {
           this.messageType = "warning";
         }
@@ -83,17 +97,38 @@ export default {
 
     getIngredientCat(id: number) {
       console.log("Get IngredientCat " + id);
-      const findIngredientCat = this.ingredientcats.find((item) => item.id === id);
+      const findIngredientCat = this.ingredientcats.find((item) => item.id === id && item.type === "I");
+      if (findIngredientCat)
+        this.ingredientcat = findIngredientCat;
+      this.isModalVisible = true;
+    },
+    getUtensilCat(id: number) {
+      console.log("Get IngredientCat " + id);
+      const findIngredientCat = this.ingredientcats.find((item) => item.id === id && item.type === "U");
       if (findIngredientCat)
         this.ingredientcat = findIngredientCat;
       this.isModalVisible = true;
     },
 
     //----Utensil Methods----
-    addUtensilCat() {
+    async addUtensilCat() {
+      // if (this.newUtensilCat !== "") {
+      //   console.log("Add UtensilCat " + this.newUtensilCat);
+      //   // this.ingredientcats = API.instance.createUtensilCat(this.newUtensilCat, []);
+      //   this.newUtensilCat = "";
+      // }
+
+      // New: 
       if (this.newUtensilCat !== "") {
-        console.log("Add UtensilCat " + this.newUtensilCat);
-        // this.ingredientcats = API.instance.createUtensilCat(this.newUtensilCat, []);
+        const newCategory = await API.instance.createUtensilCat(this.newUtensilCat);
+        if (newCategory instanceof IngredientCat) {
+          this.ingredientcats.push(newCategory);
+          this.messageType = "success";
+          this.messageText = "Utensil category created successfully";
+        } else if (newCategory !== undefined) {
+          this.messageType = "warning";
+          this.messageText = newCategory;
+        }
         this.newUtensilCat = "";
       }
     },
@@ -113,9 +148,9 @@ export default {
     async deleteIngredient(ingredientId: number) {
       console.log("Remove Ingredient id " + ingredientId + " from " + this.ingredientcat.name);
       const ingredientCategoryTargetId = this.ingredientcat.id;
-      const returnMessage = await API.instance.removeIngredient(ingredientCategoryTargetId, ingredientId);
+      const returnMessage = (this.ingredientcat.type === "I") ? await API.instance.removeIngredient(ingredientCategoryTargetId, ingredientId) : await API.instance.removeUtensil(ingredientCategoryTargetId, ingredientId);
       if (returnMessage !== undefined) {
-        if (returnMessage === "Ingredient removed from category !") {
+        if (returnMessage === "Ingredient removed from category !" || returnMessage === "Utensil removed from category !") {
           this.messageType = "success";
           this.ingredientcat.ingredients = this.ingredientcat.ingredients.filter(ingr => ingr.id !== ingredientId);
         } else {
@@ -127,12 +162,11 @@ export default {
 
     async addIngredient(name: string) {
       console.log("Add Ingredient " + name + " to " + this.ingredientcat.name);
-      const newIngredient = await API.instance.createIngredient(this.ingredientcat.id, name);
+      const newIngredient = (this.ingredientcat.type === "I") ? await API.instance.createIngredient(this.ingredientcat.id, name) : await API.instance.createUtensil(this.ingredientcat.id, name);
       if (typeof newIngredient === "string") {
         this.messageType = "warning";
         this.messageText = newIngredient;
       } else if (newIngredient !== undefined) {
-        console.error(newIngredient);
         this.ingredientcat.ingredients.push(newIngredient);
       }
     },
@@ -225,7 +259,7 @@ export default {
 
             </div>
           </div>
-          <IngredientCatListComponent @delete-ingredientcat="deleteIngredientCat" @open-ingredientmodal="getIngredientCat"
+          <IngredientCatListComponent @delete-ingredientcat="deleteUtensilCat" @open-ingredientmodal="getUtensilCat"
             :ingredientcats="filterIngredientCats('U')" />
         </div>
       </div>

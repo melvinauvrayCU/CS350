@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Recipe;
+use App\Models\RecipeStep;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\StoreRecipeRequest;
 use App\Http\Requests\V1\UpdateRecipeRequest;
@@ -10,6 +11,8 @@ use App\Http\Resources\V1\RecipeResource;
 use App\Http\Resources\V1\RecipeCollection;
 use Illuminate\Http\Request;
 use App\Filters\V1\RecipeFilter;
+use App\Models\Ingredient;
+use App\Models\Utensil;
 
 /**
  * Class that handles the different requests method for the /recipes/ endpoint
@@ -21,7 +24,7 @@ class RecipeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $id = null)
     {
         $filter = new RecipeFilter();
         $filterItems = $filter->transform($request);
@@ -33,6 +36,7 @@ class RecipeController extends Controller
         if ($includeUser) {
             $recipes = $recipes->with('user');
         }
+
         return new RecipeCollection($recipes->paginate()->appends($request->query()));
     }
 
@@ -44,8 +48,44 @@ class RecipeController extends Controller
      */
     public function store(StoreRecipeRequest $request)
     {
-        return new RecipeResource(Recipe::create($request->all()));
+        $recipeData = $request->only([
+            'title',
+            'description',
+            'number_people',
+            'image_url',
+            'rating',
+            'user_id'
+        ]);
+
+        $recipe = Recipe::create($recipeData);
+
+        $stepsData = $request->input('recipe_steps', []);
+
+        collect($stepsData)->map(function ($stepData) use (&$recipe) {
+            $newstep = new RecipeStep([
+                'description' => $stepData['description'],
+                'prep_time' => $stepData['prep_time'],
+                'cook_time' => $stepData['cook_time']
+            ]);
+
+            $recipe->recipeSteps()->save($newstep);
+
+            collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
+                $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
+                $ingredient->recipeSteps()->syncWithoutDetaching($newstep->id);
+            });
+
+            collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {
+                $utensil = Utensil::firstOrCreate(['name' => $utensilData["name"]]);
+                $utensil->recipeSteps()->syncWithoutDetaching($newstep->id);
+            });
+            return $newstep;
+        });
+
+        return new RecipeResource($recipe);
     }
+
+
 
     /**
      * Display the specified resource.
@@ -78,6 +118,6 @@ class RecipeController extends Controller
      */
     public function destroy(Recipe $recipe)
     {
-        //
+        $recipe->delete();
     }
 }

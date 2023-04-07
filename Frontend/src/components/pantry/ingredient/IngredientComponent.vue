@@ -1,5 +1,6 @@
 <script lang="ts">
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
+import type { Ingredient } from "@/model/recipeModel";
 export default {
     name: "IngredientComponent",
     emits: ["delete-ingredient"],
@@ -8,7 +9,7 @@ export default {
     },
     props: {
         ingredient: {
-            type: String,
+            type: Object as () => Ingredient,
             required: true
         },
     },
@@ -21,14 +22,14 @@ export default {
 <template>
     <div class="IngredientCatComponent">
 
-        <h4 class="text">{{ ingredient }}</h4>
+        <h4 class="text">{{ ingredient.name }}</h4>
 
-        <div >
-            <CustomButton class="button" type="danger" effect="inline" text="" titleText="Delete ingredient" 
-            icon="trash" @clicked="$emit('delete-ingredient', ingredient)" />
+        <div>
+            <CustomButton class="button" type="danger" effect="inline" text="" titleText="Delete ingredient" icon="trash"
+                @clicked="$emit('delete-ingredient', ingredient.id)" />
         </div>
 
-</div>
+    </div>
 </template>
 
 <style scoped>
@@ -57,5 +58,4 @@ export default {
     padding-left: 10px;
     padding-bottom: 5px;
 }
-
 </style>

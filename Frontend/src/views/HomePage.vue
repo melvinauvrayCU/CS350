@@ -3,7 +3,6 @@ import type { Recipe } from "@/model/recipeModel";
 import type { Category } from "@/model/categoryModel";
 import { API } from "../model/apiCalls";
 import CategoryListComponent from "@/components/CategoryListComponent.vue";
-import SearchBarComponent from "@/components/SearchBarComponent.vue";
 import MessageComponent from "@/components/MessageComponent.vue";
 
 export default {
@@ -11,7 +10,6 @@ export default {
   // We using the recipe list component in this page
   components: {
     CategoryListComponent,
-    SearchBarComponent,
     MessageComponent,
   },
   props: {
@@ -51,9 +49,6 @@ export default {
      * @param id id of the recipe you want to delete
      */
     deleteRecipe(id: number) {
-      // Show a success message when the recipe is deleted
-      this.messageText = "Recipe deleted sucessfully";
-      this.messageType = "success";
       this.recipes = API.instance.removeRecipe(id);
     },
     handleSearch(searchText: string) {
@@ -81,9 +76,6 @@ export default {
 
 <template>
   <main>
-    <div>
-      <SearchBarComponent @search="handleSearch" />
-    </div>
     <div>
       <CategoryListComponent :categories="categories" :recipes="recipes" @delete-recipe="deleteRecipe"
         :isUserAuthenticated="isAuthenticated" />

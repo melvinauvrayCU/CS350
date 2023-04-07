@@ -2,12 +2,14 @@
 import { RouterLink } from "vue-router";
 import { API } from "@/model/apiCalls";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
+import SearchBarComponent from "./SearchBarComponent.vue";
 
 export default {
   name: "HeaderMenuComponent",
   components: {
     RouterLink,
-    CustomButton
+    CustomButton,
+    SearchBarComponent,
   },
   methods: {
     clickLogout() {
@@ -20,6 +22,12 @@ export default {
     },
     checkIfLoggedIn() {
       return API.instance.isLoggedIn();
+    },
+    performSearch(searchText: string) {
+      this.$router.push({
+        name: "searchresults",
+        query: { q: searchText }
+      });
     }
   }
 };
@@ -36,11 +44,12 @@ export default {
     <div class="flexFill"></div>
 
     <nav v-if="!$route.meta.hideNavbar">
+      <SearchBarComponent @search="performSearch" />
       <RouterLink to="/">
         <CustomButton type="neutral" :effect="$route.name === 'home' ? 'plain' : 'empty'" text="Home" titleText="Home" />
       </RouterLink>
       <RouterLink v-if="checkIfLoggedIn()" to="/createRecipe">
-        <CustomButton type="neutral" :effect="$route.name === 'createRecipe' ? 'plain' : 'empty'" text="Create Recipe"
+        <CustomButton type="neutral" :effect="$route.name === 'createRecipe' ? 'plain' : 'empty'" text="Create"
           titleText="Create Recipe" />
       </RouterLink>
       <RouterLink v-if="checkIfLoggedIn()" to="/pantry">
@@ -61,7 +70,6 @@ export default {
         <CustomButton type="neutral" :effect="$route.name === 'Signup' ? 'plain' : 'empty'" text="Signup"
           titleText="Signup" />
       </RouterLink>
-
 
     </nav>
   </header>

@@ -19,7 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             IngredientSeeder::class,
-            IngredientCategorySeeder::class
+            UtensilSeeder::class,
+            IngredientCategorySeeder::class,
+            UtensilCategorySeeder::class,
+            RecipeSeeder::class
         ]);
 
         // \App\Models\User::factory()->create([

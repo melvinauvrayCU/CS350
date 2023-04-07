@@ -42,14 +42,7 @@ export default {
     // And a boolean created variable, which will be true when a recipe has been created to display a success message.
     return {
       stepCounter: 1,
-      recipeTempObject: new Recipe("", "", 1, [{
-        stepId: 1,
-        descriptionValue: "",
-        cooktimeValue: "",
-        preptimeValue: "",
-        ingredients: [],
-        utensils: []
-      }], 1, ""),
+      recipeTempObject: new Recipe("", "", 1, [], 1, ""),
       mode: "create",
       messageText: "",
       messageType: "success",
@@ -135,9 +128,8 @@ export default {
     }
 
   },
-  created() {
-
-    this.fullIngredientList = API.instance.getIngredientList();
+  async created() {
+    this.fullIngredientList = await API.instance.getIngredientList();
     this.fullUtensilList = API.instance.getUtensilList();
 
     // If the id parameter is not empty, then it means we will edit a recipe, so we get the current recipe from an API call and change the mode
@@ -147,6 +139,8 @@ export default {
         this.recipeTempObject = recipeObject;
         this.mode = "edit";
       }
+    } else {
+      this.addStep();
     }
   }
 };
@@ -181,7 +175,8 @@ export default {
         <StepCreate v-for="(step, index) in recipeTempObject.steps" :key="step.stepId" :stepObject="step"
           :stepIndex="index + 1" :stepIndexLength="recipeTempObject.steps.length"
           v-model:descriptionModelValue="step.descriptionValue" v-model:cooktimeModelValue="step.cooktimeValue"
-          v-model:preptimeModelValue="step.preptimeValue" @stepDeleted="deleteStep" :ingredientList="fullIngredientList"
+          v-model:preptimeModelValue="step.preptimeValue" v-model:ingredientsModelValue="step.ingredients"
+          v-model:utensilsModelValue="step.utensils" @stepDeleted="deleteStep" :ingredientList="fullIngredientList"
           :utensilList="fullUtensilList" />
       </transition-group>
 

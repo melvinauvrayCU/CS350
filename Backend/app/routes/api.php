@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+//Protected routes
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 // api/v1
@@ -24,4 +29,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('recipes', RecipeController::class);
     Route::apiResource('ingredients', IngredientController::class);
     Route::apiResource('ingredientcategories', IngredientCategoryController::class);
+    Route::apiResource('utensils', UtensilController::class);
+    Route::apiResource('utensilcategories', UtensilCategoryController::class);
+    Route::apiResource('recipesteps', RecipeStepController::class);
+    Route::post('recipesteps/bulk', ['uses' => 'RecipeStepController@bulkStore']);
 });

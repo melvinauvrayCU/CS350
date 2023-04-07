@@ -2,6 +2,9 @@ import { IngredientCat, Conversion } from "./PantryModels";
 import { Category } from "./categoryModel";
 import { Recipe, type Ingredient } from "./recipeModel";
 import { User } from "./userModel";
+import axios from "axios";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css"; // Import NProgress CSS
 
 /**
  * API Class, it will contain all the methods that will interact with the Backend / Datas.
@@ -21,11 +24,48 @@ export class API {
 
 	// Method to retrieve the API instance outside of this class
 	public static get instance(): API {
-		if (!API._instance)
+		function hideProgressBar() {
+			NProgress.done();
+			const element = document.querySelector("header");
+			if (element) {
+				element.style.borderColor = "var(--color-accent)";
+			}
+		}
+		if (!API._instance) {
+			// Add a request interceptor
+			axios.interceptors.request.use(function (config) {
+				// Do something before request is sent
+				NProgress.start();
+				const element = document.querySelector("header");
+				if (element) {
+					element.style.borderColor = "var(--color-background)";
+				}
+				return config;
+			}, function (error) {
+				// Do something with request error
+				console.error(error);
+				hideProgressBar();
+				return Promise.reject(error);
+			});
+
+			// Add a response interceptor
+			axios.interceptors.response.use((response) => {
+				// Do something with response data
+				hideProgressBar();
+				return response;
+			}, function (error) {
+				// Do something with response error
+				console.error(error);
+				hideProgressBar();
+				return Promise.reject(error);
+			});
 			API._instance = new API();
+
+		}
 		return API._instance;
 	}
 	/* ----------- End of Singleton design pattern ------------------------ */
+
 
 
 	/**
@@ -65,12 +105,12 @@ export class API {
 		new Recipe("Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, "", ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"]),
 		new Recipe("Pancakes", "Pancakes but plain", 3, [], 4, "", ["Highest Rated", "Recent"]),
 	];
-	ingredientCatList: IngredientCat[] = [
-		new IngredientCat("I", "Protein", ["Beef", "Chicken"]),
-		new IngredientCat("I", "Dairy", ["Milk", "Cheese"]),
-		new IngredientCat("U", "Silverware", ["Spoon", "Knife"]),
-		new IngredientCat("U", "Electric Appliances", ["Blender", "Food Proccessor"]),
-	];
+	// ingredientCatList: IngredientCat[] = [
+	// 	new IngredientCat("I", "Protein", ["Beef", "Chicken"]),
+	// 	new IngredientCat("I", "Dairy", ["Milk", "Cheese"]),
+	// 	new IngredientCat("U", "Silverware", ["Spoon", "Knife"]),
+	// 	new IngredientCat("U", "Electric Appliances", ["Blender", "Food Proccessor"]),
+	// ];
 	utensilCatList: IngredientCat[] = [
 
 	];
@@ -178,15 +218,6 @@ export class API {
 		new Category("Frequently Cooked", "Frequently Cooked", this.recipeList,),
 	];
 
-	ingredientList: Ingredient[] = [
-		{ name: "Salt", quantity: "", unit: "g" },
-		{ name: "Beef", quantity: "", unit: "g" },
-		{ name: "Pepper", quantity: "", unit: "g" },
-		{ name: "Butter", quantity: "", unit: "g" },
-		{ name: "Cheddar", quantity: "", unit: "g" },
-		{ name: "Bread", quantity: "", unit: "g" },
-		{ name: "Onion", quantity: "", unit: "g" }
-	];
 
 	utensilList: string[] = [
 		"Chef's knife",
@@ -200,6 +231,8 @@ export class API {
 		"Oven mitts",
 		"Colander",
 	];
+
+	private _apiUrl: string = "https://www.api.cs350.melvinauvray.com/api/v1";
 
 	// * ------------------- Start of the API call methods ------------------------
 
@@ -274,47 +307,178 @@ export class API {
 
 	// ----IngredientCatagory Methods----
 
-	getIngredientCats(): IngredientCat[] {
-		return this.ingredientCatList;
+	/**
+	 * Retrieve the list of ingredient categories of the connected user
+	 */
+	async getIngredientCats(): Promise<IngredientCat[]> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: IngredientCat[] = [];
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.get(this._apiUrl + "/ingredientcategories", {
+				params: {
+					userId: this.currentUser.id,
+				}
+			});
+
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = (response.data.data).map((data: any) => {
+				console.error(data);
+				/** 
+				 * Since we will populate our returning array that is of type Ingredient[],
+				 * We make sure that this temp variable is of type Ingredient, so we don't push weird things into our array.
+				 */
+				const ingredientToReturn: IngredientCat = new IngredientCat(data.id, "I", data.name, data.ingredients);
+				return ingredientToReturn;
+			});
+		} catch (error) {
+			/** If we have an error, we log it */
+			console.error(error);
+		}
+		/** We return our data */
+		return returnDatas;
 	}
 
-	removeIngredientCat(id: number): IngredientCat[] {
-		this.ingredientCatList = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
-		return this.ingredientCatList;
+	/**
+	 * Delete an ingredient category
+	 * @param id If of the ingredinet category to delete
+	 */
+	async removeIngredientCat(id: number): Promise<string | undefined> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: string | undefined;
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.delete(this._apiUrl + "/ingredientcategories/" + id);
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = response.data.success;
+		} catch (error: any) {
+			/** If we have an error, we log it */
+			return JSON.parse(error.request.response).message || JSON.parse(error.request.response).error;
+		}
+		/** We return our data */
+		return returnDatas;
 	}
 
-	createIngredientCat(name: string, ingredients: Array<string>): IngredientCat[] {
-		this.ingredientCatList.push(new IngredientCat("I", name, ingredients));
-		return this.ingredientCatList;
+	/**
+	 * Create a new ingredient category
+	 * @param name Name of the category
+	 */
+	async createIngredientCat(name: string): Promise<IngredientCat | string | undefined> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: IngredientCat | undefined;
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.post(this._apiUrl + "/ingredientcategories", {
+				name: name,
+				userId: this.currentUser.id
+			});
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = new IngredientCat(response.data.data.id, "I", response.data.data.name, []);
+		} catch (error: any) {
+			/** If we have an error, we log it */
+			return JSON.parse(error.request.response).message;
+		}
+		/** We return our data */
+		return returnDatas;
 	}
 
-	getIngredientCat(id: number): IngredientCat {
-		return this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
+	/**
+	 * Remove an ingredient from a category
+	 * @param idCategory Id of the category to remove the ingredient from
+	 * @param idIngredient Id of the ingredient to remove
+	 */
+	async removeIngredient(idCategory: number, idIngredient: number): Promise<string | undefined> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: string | undefined;
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.delete(this._apiUrl + "/ingredients/" + idIngredient, {
+				data: {
+					ingredientCategory: idCategory
+				}
+			});
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = response.data.success;
+		} catch (error: any) {
+			/** If we have an error, we log it */
+			return JSON.parse(error.request.response).message || JSON.parse(error.request.response).error;
+		}
+		/** We return our data */
+		return returnDatas;
 	}
 
-	removeIngredient(id: number, name: string): IngredientCat[] {
-		const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
-		const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
-		temp.ingredients = temp.ingredients.filter(ingredient => ingredient !== name);
-		templist.push(temp);
-		this.ingredientCatList = templist;
-		return this.ingredientCatList;
-	}
+	/**
+	 * Create an ingredient and attach it to a category.
+	 * @param id id of the ingredient category
+	 * @param name Name of the ingredient
+	 */
+	async createIngredient(id: number, name: string): Promise<Ingredient | string | undefined> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: Ingredient | undefined;
 
-	createIngredient(id: number, name: string): IngredientCat[] {
-		const templist: IngredientCat[] = this.ingredientCatList.filter(ingredientcat => ingredientcat.id !== id);
-		const temp: IngredientCat = this.ingredientCatList.filter(ingredientcat => ingredientcat.id == id)[0];
-		temp.ingredients.push(name);
-		templist.push(temp);
-		this.ingredientCatList = templist;
-		return this.ingredientCatList;
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.post(this._apiUrl + "/ingredients", {
+				name: name,
+				ingredientCategoryId: id
+			});
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = {
+				id: response.data.data.id,
+				name: response.data.data.name
+			};
+		} catch (error: any) {
+			/** If we have an error, we log it */
+			return JSON.parse(error.request.response).message;
+		}
+		/** We return our data */
+		return returnDatas;
 	}
 
 	// ----UtensilCatagory Methods----
 
-	createUtensilCat(name: string, utensils: Array<string>): IngredientCat[] {
-		this.ingredientCatList.push(new IngredientCat("U", name, utensils));
-		return this.ingredientCatList;
+	createUtensilCat(name: string, utensils: Array<string>): IngredientCat[] | void {
+		// this.ingredientCatList.push(new IngredientCat("U", name, utensils));
+		// return this.ingredientCatList;
 	}
 
 	//----Allergy Methods----
@@ -443,7 +607,7 @@ export class API {
 	findUser(username: string): User | undefined {
 		return this.userList.find(user => user.username === username);
 	}
-	
+
 	getIngredientList(): Ingredient[] {
 		return this.ingredientList;
 	}
@@ -453,40 +617,5 @@ export class API {
 	}
 
 
-	/**
-	 * Security Questions / Answers
-	 */
-
-	checkQuestion(username: string, question: string, answer: string): Boolean {
-		const user = this.userList.find(user => user.username === username);
-		
-		if (!user){
-			throw new Error(`User '${username}' not found`);
-		}
-
-		const securityQuestion = user.securityQuestions.find(q => q.question === question);
-		if (!securityQuestion) {
-			throw new Error(`Security question not found`);
-		}
-
-		if (securityQuestion.answer === answer) {
-			return true;
-		} else {
-			throw new Error(`Incorrect answer to security question`);
-		}
-	}
-
-	/**
-	 * Reset password
-	 */
-	resetPassword(username: string, newPassword: string) {
-		const userIndex = this.userList.findIndex(user => user.username === username);
-		if (userIndex > -1) {
-			this.userList[userIndex].password = newPassword;
-			return "success";
-		} else {
-			return "failure";
-		}
-	}
 }
 

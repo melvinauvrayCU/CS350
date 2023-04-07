@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Model\Recipe;
 
 class RecipeSeeder extends Seeder
 {
@@ -15,5 +16,6 @@ class RecipeSeeder extends Seeder
     public function run()
     {
         //
+        
     }
 }

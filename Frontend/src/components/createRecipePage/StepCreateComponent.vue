@@ -4,7 +4,7 @@ import InputField from "@/components/formComponents/InputFieldComponent.vue";
 import type { Ingredient, Step } from "@/model/recipeModel";
 import type { PropType } from "vue";
 import CustomSelectIngredients from "@/components/formComponents/CustomSelectIngredientsComponent.vue";
-import CustomSelectUtensils from "@/components/formComponents/CustomSelectUtensilsComponent.vue"
+import CustomSelectUtensils from "@/components/formComponents/CustomSelectUtensilsComponent.vue";
 
 export default {
     name: "StepCreate",
@@ -34,11 +34,15 @@ export default {
         descriptionPrivateValue: string
         cooktimePrivateValue: string
         preptimePrivateValue: string
+        ingredientsPrivateValue: Ingredient[]
+        utensilsPrivateValue: string[]
     } {
         return {
             descriptionPrivateValue: "",
             cooktimePrivateValue: "",
             preptimePrivateValue: "",
+            ingredientsPrivateValue: [],
+            utensilsPrivateValue: [],
         };
     },
     components: {
@@ -56,12 +60,20 @@ export default {
         },
         updatePreptime() {
             this.$emit("update:preptimeModelValue", this.preptimePrivateValue);
+        },
+        updateIngredients() {
+            this.$emit("update:ingredientsModelValue", this.ingredientsPrivateValue);
+        },
+        updateUtensils() {
+            this.$emit("update:utensilsModelValue", this.utensilsPrivateValue);
         }
     },
     created() {
         this.descriptionPrivateValue = this.stepObject.descriptionValue;
         this.cooktimePrivateValue = this.stepObject.cooktimeValue;
         this.preptimePrivateValue = this.stepObject.preptimeValue;
+        this.ingredientsPrivateValue = this.stepObject.ingredients;
+        this.utensilsPrivateValue = this.stepObject.utensils;
     }
 };
 </script>
@@ -88,9 +100,11 @@ export default {
                     v-model="preptimePrivateValue" @update:modelValue="updatePreptime" />
             </div>
 
-            <CustomSelectIngredients v-model="stepObject.ingredients" :ingredientList="ingredientList" />
+            <CustomSelectIngredients v-model="ingredientsPrivateValue" @update:modelValue="updateIngredients"
+                :ingredientList="ingredientList" />
 
-            <CustomSelectUtensils v-model="stepObject.utensils" :utensilList="utensilList" />
+            <CustomSelectUtensils v-model="utensilsPrivateValue" @update:modelValue="updateUtensils"
+                :utensilList="utensilList" />
 
         </div>
     </div>

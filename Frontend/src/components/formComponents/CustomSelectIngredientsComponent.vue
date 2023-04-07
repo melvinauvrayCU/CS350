@@ -42,17 +42,17 @@ export default {
             if (tempModelValue.find(ing => ing.name === searchItem.name)) {
                 tempModelValue = tempModelValue.filter(ingr => ingr.name !== searchItem.name);
             } else {
-                tempModelValue.push(searchItem)
+                tempModelValue.push(searchItem);
             }
             this.$emit("update:modelValue", tempModelValue);
             this.closeDropdown();
         },
         enterPressed() {
             if (this.filteredList().length === 0) {
-                const newIngredient: Ingredient = { name: this.searchText, quantity: "", unit: "g" };
+                const newIngredient: Ingredient = { id: this.fullItemsList[this.fullItemsList.length - 1].id + 1, name: this.searchText, quantity: "", unit: "g" };
                 let tempModelValue = this.modelValue;
                 tempModelValue.push(newIngredient);
-                this.fullItemsList.push(newIngredient)
+                this.fullItemsList.push(newIngredient);
                 this.$emit("update:modelValue", tempModelValue);
                 this.searchText = "";
                 this.closeDropdown();
@@ -61,6 +61,15 @@ export default {
     },
     created() {
         this.fullItemsList = this.ingredientList;
+    },
+    watch: {
+        ingredientList: {
+            // the callback will be called immediately after the start of the observation
+            immediate: true,
+            handler(val, oldVal) {
+                this.fullItemsList.push(...this.ingredientList);
+            }
+        }
     },
     components: { InputField }
 };

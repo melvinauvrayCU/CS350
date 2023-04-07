@@ -15,7 +15,6 @@ export default {
     CustomButton,
     BackgroundIcons
   },
-
   data(): {
     username: string,
     password: string,

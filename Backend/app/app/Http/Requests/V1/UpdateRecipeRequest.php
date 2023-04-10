@@ -27,18 +27,40 @@ class UpdateRecipeRequest extends FormRequest
         $method = $this->method();
         if ($method == 'PUT') {
             return [
-                'title' => ['required'],
-                'description' => ['required'],
-                'numberPeople' => ['required'],
-                'rating' => ['required'],
+                'title' => ['required', 'string', 'max:255'],
+                'description' => ['required', 'string'],
+                'number_people' => ['required', 'integer'],
+                'image_url' => ['nullable', 'string', 'url'],
+                'rating' => ['required', 'integer', 'min:1', 'max:5'],
+                'recipe_steps' => ['required', 'array'],
+                'recipe_steps.*.description' => ['required', 'string'],
+                'recipe_steps.*.cook_time' => ['required', 'string'],
+                'recipe_steps.*.prep_time' => ['required', 'string'],
+                'recipe_steps.*.ingredients' => ['nullable', 'array'],
+                'recipe_steps.*.ingredients.*.name' => ['nullable', 'string'],
+                'recipe_steps.*.ingredients.*.measurement' => ['nullable', 'string'],
+                'recipe_steps.*.ingredients.*.quantity' => ['required', 'numeric'],
+                'recipe_steps.*.utensils' => ['nullable', 'array'],
+                'recipe_steps.*.utensils.*.name' => ['nullable', 'string'],
             ];
         } else {
             // Method is PATCH
             return [
-                'title' => ['sometimes', 'required'],
-                'description' => ['sometimes', 'required'],
-                'numberPeople' => ['sometimes', 'required'],
-                'rating' => ['sometimes', 'required'],
+                'title' => ['sometimes', 'required', 'string', 'max:255'],
+                'description' => ['sometimes', 'required', 'string'],
+                'number_people' => ['sometimes', 'required', 'integer'],
+                'image_url' => ['sometimes', 'nullable', 'string', 'url'],
+                'rating' => ['sometimes', 'required', 'integer', 'min:1', 'max:5'],
+                'recipe_steps' => ['sometimes', 'required', 'array'],
+                'recipe_steps.*.description' => ['sometimes', 'required', 'string'],
+                'recipe_steps.*.cook_time' => ['sometimes', 'required', 'string'],
+                'recipe_steps.*.prep_time' => ['sometimes', 'required', 'string'],
+                'recipe_steps.*.ingredients' => ['sometimes', 'nullable', 'array'],
+                'recipe_steps.*.ingredients.*.name' => ['sometimes', 'nullable', 'string'],
+                'recipe_steps.*.ingredients.*.measurement' => ['sometimes', 'nullable', 'string'],
+                'recipe_steps.*.ingredients.*.quantity' => ['required', 'numeric'],
+                'recipe_steps.*.utensils' => ['sometimes', 'nullable', 'array'],
+                'recipe_steps.*.utensils.*.name' => ['sometimes', 'nullable', 'string'],
             ];
         }
     }

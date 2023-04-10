@@ -109,7 +109,49 @@ class RecipeController extends Controller
      */
     public function update(UpdateRecipeRequest $request, Recipe $recipe)
     {
-        $recipe->update($request->all());
+        $recipeData = $request->only([
+            'title',
+            'description',
+            'number_people',
+            'image_url',
+            'rating',
+        ]);
+
+        $recipe->update($recipeData);
+
+        $stepsData = $request->input('recipe_steps', []);
+
+        collect($stepsData)->map(function ($stepData) use ($recipe) {
+            $newstep = null;
+            if (isset($stepData['id'])) {
+                $newstep = RecipeStep::find($stepData['id']);
+                $newstep->update([
+                    'description' => $stepData['description'],
+                    'prep_time' => $stepData['prep_time'],
+                    'cook_time' => $stepData['cook_time']
+                ]);
+            } else {
+                $newstep = new RecipeStep([
+                    'description' => $stepData['description'],
+                    'prep_time' => $stepData['prep_time'],
+                    'cook_time' => $stepData['cook_time']
+                ]);
+                $recipe->recipeSteps()->save($newstep);
+            }
+
+            collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
+                $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
+                $quantity = $ingredientData["quantity"];
+                $measurement = $ingredientData["measurement"];
+                $ingredient->recipeSteps()->syncWithoutDetaching([$newstep->id => ['quantity' => $quantity, 'measurement' => $measurement]]);
+            });
+
+            collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {
+                $utensil = Utensil::firstOrCreate(['name' => $utensilData["name"]]);
+                $utensil->recipeSteps()->syncWithoutDetaching($newstep->id);
+            });
+            return $newstep;
+        });
     }
 
     /**

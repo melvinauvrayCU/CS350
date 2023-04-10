@@ -119,37 +119,18 @@ class RecipeController extends Controller
 
         $recipe->update($recipeData);
 
+        $recipe->recipeSteps()->delete(); // remove existing recipe steps
+
         $stepsData = $request->input('recipe_steps', []);
 
         collect($stepsData)->map(function ($stepData) use ($recipe) {
-            $newstep = null;
-            if (isset($stepData['id'])) {
-                $newstep = RecipeStep::find($stepData['id']);
-                if (!$newstep) {
-                    // Recipe step with given ID does not exist, so create a new one
-                    $newstep = new RecipeStep([
-                        'description' => $stepData['description'],
-                        'prep_time' => $stepData['prep_time'],
-                        'cook_time' => $stepData['cook_time']
-                    ]);
-                    $recipe->recipeSteps()->save($newstep);
-                } else {
-                    // Recipe step with given ID already exists, so update it
-                    $newstep->update([
-                        'description' => $stepData['description'],
-                        'prep_time' => $stepData['prep_time'],
-                        'cook_time' => $stepData['cook_time']
-                    ]);
-                    return $newstep;
-                }
-            } else {
-                $newstep = new RecipeStep([
-                    'description' => $stepData['description'],
-                    'prep_time' => $stepData['prep_time'],
-                    'cook_time' => $stepData['cook_time']
-                ]);
-                $recipe->recipeSteps()->save($newstep);
-            }
+            $newstep = new RecipeStep([
+                'description' => $stepData['description'],
+                'prep_time' => $stepData['prep_time'],
+                'cook_time' => $stepData['cook_time']
+            ]);
+
+            $recipe->recipeSteps()->save($newstep); // add new recipe step to recipe
 
             collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
                 $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
@@ -165,6 +146,7 @@ class RecipeController extends Controller
             return $newstep;
         });
     }
+
 
 
 

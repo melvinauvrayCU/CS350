@@ -72,7 +72,9 @@ class RecipeController extends Controller
 
             collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
                 $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
-                $ingredient->recipeSteps()->syncWithoutDetaching($newstep->id);
+                $quantity = $ingredientData["quantity"];
+                $measurement = $ingredientData["measurement"];
+                $ingredient->recipeSteps()->syncWithoutDetaching([$newstep->id => ['quantity' => $quantity, 'measurement' => $measurement]]);
             });
 
             collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {

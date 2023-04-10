@@ -125,11 +125,23 @@ class RecipeController extends Controller
             $newstep = null;
             if (isset($stepData['id'])) {
                 $newstep = RecipeStep::find($stepData['id']);
-                $newstep->update([
-                    'description' => $stepData['description'],
-                    'prep_time' => $stepData['prep_time'],
-                    'cook_time' => $stepData['cook_time']
-                ]);
+                if (!$newstep) {
+                    // Recipe step with given ID does not exist, so create a new one
+                    $newstep = new RecipeStep([
+                        'description' => $stepData['description'],
+                        'prep_time' => $stepData['prep_time'],
+                        'cook_time' => $stepData['cook_time']
+                    ]);
+                    $recipe->recipeSteps()->save($newstep);
+                } else {
+                    // Recipe step with given ID already exists, so update it
+                    $newstep->update([
+                        'description' => $stepData['description'],
+                        'prep_time' => $stepData['prep_time'],
+                        'cook_time' => $stepData['cook_time']
+                    ]);
+                    return $newstep;
+                }
             } else {
                 $newstep = new RecipeStep([
                     'description' => $stepData['description'],
@@ -153,6 +165,8 @@ class RecipeController extends Controller
             return $newstep;
         });
     }
+
+
 
     /**
      * Remove the specified resource from storage.

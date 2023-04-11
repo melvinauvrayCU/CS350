@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('recipe_step_id');
             $table->unsignedBigInteger('ingredient_id');
+            $table->integer('quantity')->default(1);
+            $table->string('measurement', 50)->nullable();
             $table->foreign('recipe_step_id')->references('id')->on('recipe_steps')->onDelete('cascade');
             $table->foreign('ingredient_id')->references('id')->on('ingredients')->onDelete('cascade');
             $table->timestamps();

@@ -21,7 +21,13 @@ export default {
     username: string,
     password: string,
     messageText: string,
-    nextPage: boolean,
+    securityQuestion1: string,
+    securityQuestion2: string,
+    securityQuestion3: string,
+    securityAnswer1: string,
+    securityAnswer2: string,
+    securityAnswer3: string,
+    securityQuestions: string[],
     messageType: "success" | "warning",
 
   } {
@@ -32,8 +38,21 @@ export default {
       password: "",
       email: "",
       messageText: "",
-      nextPage: false,
+      securityQuestion1: "",
+      securityQuestion2: "",
+      securityQuestion3: "",
+      securityAnswer1: "",
+      securityAnswer2: "",
+      securityAnswer3: "",
       messageType: "success",
+      securityQuestions: [
+        "What is the first name of your best friend in high school?",
+        "What is the name of your first pet?",
+        "Where did you go the first time you flew on a plane?",
+        "What was your high school mascot?",
+        "What was the name of your first boyfriend/girlfriend?",
+        "What is your mother's maiden name?",
+      ]
     };
   },
   methods: {
@@ -69,11 +88,6 @@ export default {
   },
 };
 
-
-
-
-
-
 </script>
 
 
@@ -85,16 +99,38 @@ export default {
     <div class="border">
       <div class="CreateSignupPage">
 
-        <InputField id="email" inputType="email" labelText="Email:" max-length="200" placeholder="Email" v-model="email"
+          <InputField id="email" inputType="email" labelText="Email:" max-length="200" placeholder="Email" v-model="email"
           :mandatory="true" />
 
-        <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="username"
+          <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
           v-model="username" :mandatory="true" />
 
-        <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"
+          <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"
           v-model="password" :mandatory="true" />
 
-        <CustomButton titleText="Click to signup" text="Signup" effect="plain" @click="signup" />
+          <InputField id="securityQuestion1" inputType="select" label-text="Select Security Question 1:" 
+          v-model="securityQuestion1" :options="securityQuestions" :mandatory="true" />
+
+          <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+          v-model="securityAnswer1" :mandatory="true" />
+
+          <InputField id="securityQuestion1" inputType="select" label-text="Select Security Question 2:" 
+          v-model="securityQuestion2" :options="securityQuestions" :mandatory="true" />
+
+          <InputField id="securityAnswer2" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+          v-model="securityAnswer2" :mandatory="true" />
+
+          <InputField id="securityQuestion1" inputType="select" label-text="Select Security Question 3:" 
+          v-model="securityQuestion3" :options="securityQuestions" :mandatory="true" />
+
+          <InputField id="securityAnswer3" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+          v-model="securityAnswer3" :mandatory="true" />
+
+
+          <CustomButton titleText="Click to signup" text="Signup" effect="plain" @click="signup" />
+
+
+       
 
 
         <div class="login">

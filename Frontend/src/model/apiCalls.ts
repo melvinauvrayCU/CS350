@@ -759,8 +759,39 @@ export class API {
 		return this.userList.find(user => user.username === username);
 	}
 
-	getIngredientList(): Ingredient[] {
-		return this.ingredientList;
+	/**
+	 * Note that this method is async so we can await it somewhere else to wait for the datas.
+	 */
+	async getIngredientList(): Promise<Ingredient[]> {
+		/** We prepare the returning datas. We make sure to set them to the correct type. */
+		let returnDatas: Ingredient[] = [];
+
+		try {
+			/** 
+			 * We do the API call to the correct endpoint using the correct method and a body if needed 
+			 * We use await to make sure to wait till we have all the datas, that we store in the reponse variable.
+			*/
+			const response = await axios.get(this._apiUrl + "/ingredients");
+
+			/**
+			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
+			 * We will loop through the field data that is inside the field data that is in our response
+			 * And we extract the name of each data, to create our final array
+			 */
+			returnDatas = (response.data.data).map((data: any) => {
+				/** 
+				 * Since we will populate our returning array that is of type Ingredient[],
+				 * We make sure that this temp variable is of type Ingredient, so we don't push weird things into our array.
+				 */
+				const ingredientToReturn: Ingredient = { "id": data.id, "name": data.name };
+				return ingredientToReturn;
+			});
+		} catch (error) {
+			/** If we have an error, we log it */
+			console.error(error);
+		}
+		/** We return our data */
+		return returnDatas;
 	}
 
 	async getUtensilList(): Promise<string[]> {
@@ -796,7 +827,7 @@ export class API {
 
 	checkQuestion(username: string, question: string, answer: string): Boolean {
 		const user = this.userList.find(user => user.username === username);
-		
+	
 		if (!user){
 			throw new Error(`User '${username}' not found`);
 		}	

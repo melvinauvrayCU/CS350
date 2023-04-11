@@ -83,7 +83,7 @@ export default {
             await API.instance.login(this.username, this.password);
             setTimeout(() => {
               this.$router.push({ name: 'Login' });
-            }, 5000); 
+            }, 4000); 
           
           } else {
             this.messageType = "warning";
@@ -196,31 +196,34 @@ section {
 }
 
 .username-input {
-  margin-left: -175px;
-  margin-right: -175px;
+  position: relative;
+  width: 180%;
+  margin-left: -40%;
 }
 
 .next-button {
   display: center;
   align-items: center;
+  margin-left: 20%;
+}
+
+.secuirty-question {
+  width: 550px;
   margin-left: 20px;
+  margin-right: 20px;
 }
 
 .submit-button {
-  display: center;
-  align-items: center;
-  margin-left: 150px;
+  margin-left: 25%;
 }
 
 .new-password {
-  margin-left: -150px;
-  margin-right: -150px;
+  margin-left: -30%;
+  margin-right: -30%;
 }
 
 .reset-button {
-  display: center;
-  align-items: center;
-  margin-top: 30px;
+  margin-left: 15px;
 }
 
 .login {

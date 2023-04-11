@@ -1,7 +1,10 @@
 <script lang="ts">
-import StepView from "@/components/StepViewComponent.vue";
+import StepView from "@/components/view/StepViewComponent.vue";
+import ViewIngredientList from "@/components/view/ViewIngredientListComponent.vue";
+import ViewUtensilList from "@/components/view/ViewUtensilListComponent.vue";
 import { API } from "@/model/apiCalls";
 import type { Recipe } from "@/model/recipeModel";
+import type { Conversion, Unit } from "@/model/PantryModels";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import PageSeparator from "@/components/PageSeparatorComponent.vue";
 import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
@@ -14,9 +17,13 @@ export default {
   },
   data(): {
     recipe: Recipe | undefined;
+    units: Array<Unit>;
+    conversion: Conversion;
   } {
     return {
       recipe: API.instance.getRecipe(parseInt(this.id)),
+      units: API.instance.getUnitOptions(),
+      conversion: API.instance.getConversions(),
     };
   },
   /**We use this method to say that the recipe was cooked and push the user back to the home page */
@@ -33,6 +40,8 @@ export default {
    * separator and background icons for formatting
    */
   components: {
+    ViewUtensilList,
+    ViewIngredientList,
     StepView,
     CustomButton,
     PageSeparator,
@@ -48,7 +57,23 @@ export default {
 
       <PageSeparator title="Description"></PageSeparator>
       <h2 class="subtitle">{{ recipe?.description }}</h2>
-      <p>Cooks for {{ recipe?.numberPeople }} people</p>
+      <div class="pairNoSpace">
+        <p>Cooks for {{ recipe?.numberPeople }} people </p>
+        <p v-if="conversion.people != 0">, Pantry corrects to {{ conversion.people }} people </p>
+      </div>
+
+      <PageSeparator title="Ingredients & Utensils"></PageSeparator>
+      <div class="pair">
+        <p> <ViewIngredientList v-for="step in recipe?.steps" 
+          :key="step.stepId" 
+          :ingredients="step.ingredients" 
+          :conversion="conversion"
+          :units="units"
+          :feeding="recipe?.numberPeople"
+          /> </p>
+        <p> <ViewUtensilList v-for="step in recipe?.steps" :key="step.stepId" :utensils="step.utensils" /> </p>
+        
+      </div>
 
       <PageSeparator title="Recipe Steps"></PageSeparator>
       <transition-group name="list">
@@ -130,6 +155,18 @@ form {
 
 form input {
   margin-bottom: 15px;
+}
+
+.pair {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.pairNoSpace {
+  display: flex;
+  flex-direction: row;
 }
 
 .flexHorizontal div:nth-child(1) {

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { API } from "@/model/apiCalls";
-import { IngredientCat } from "@/model/PantryModels";
+import { IngredientCat, Unit } from "@/model/PantryModels";
 import IngredientCatListComponent from "@/components/pantry/ingredient/IngredientCatListComponent.vue";
 import IngredientModalComponent from "@/components/pantry/ingredient/IngredientModalComponent.vue";
 import AllergyListComponent from "@/components/pantry/AllergyListComponent.vue";
@@ -25,7 +25,7 @@ export default {
 data(): {
   ingredientcats: Array<IngredientCat>,
   allergies: Array<string>,
-  options: Array<string>,
+  options: Array<Unit>,
 
   ingredientcat: IngredientCat,
   isModalVisible: boolean,
@@ -118,10 +118,11 @@ changePeople(people: number) {
   API.instance.changePeopleEating(people);
 },
 
-changeUnit(unit: string) {
-  console.log("Change Unit Conversion to " + unit);
-  this.messageText = "Saved Unit Conversion as " + unit;
-  API.instance.changeUnitConversion(unit);
+changeUnit(type: string, unit: string) {
+  console.log("Change Unit Conversion " + type + " to " + unit);
+  this.messageText = "Change Unit Conversion " + type + " to " + unit;
+  if (type == "W") API.instance.changeUnitWeightConversion(unit);
+  if (type == "V") API.instance.changeUnitVolumeConversion(unit);
 }
 
 },

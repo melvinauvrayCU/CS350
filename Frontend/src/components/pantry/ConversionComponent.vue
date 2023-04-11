@@ -2,14 +2,14 @@
 
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
-
+import type { Unit } from "@/model/PantryModels";
 
 export default {
     name: "ConversionComponent",
     emits: ["change-people","change-unit"],
 props: {
     options: {
-        type: Array<string>,
+        type: Array<Unit>,
         required: true
     }
     },
@@ -19,12 +19,24 @@ props: {
     },
     data(): {
         numPeople: number,
-      unitOption: string,
+        unitWeightOption: string,
+        unitVolumeOption: string,
     } {
       return {
         numPeople: 1,
-        unitOption: "",
+        unitWeightOption: "",
+        unitVolumeOption: "",
       };
+    },
+    methods: {
+      filterOptions(type: string) {
+        const Optionslist: Array<Unit> = this.options.filter(options => options.type == type);
+        var Options: Array<string> = [];
+        for (var i = 0; i < Optionslist.length; i++ ) {
+          Options.push(Optionslist[i].name);
+        }
+        return Options;
+      }
     },
 };
 </script>
@@ -46,11 +58,25 @@ props: {
   <div class="pair">
     <div class="flexHorizontal">
 
-      <InputField id="unitOption" inputType="select" labelText="" placeholder="People Cooking For.." v-model="unitOption" :options="options"
+      <InputField id="unitWeightOption" inputType="select" labelText="" placeholder="" v-model="unitWeightOption" 
+      :options="filterOptions('W')"
       :mandatory="false" />
 
-      <CustomButton type="neutral" effect="empty" text="Save Unit.." titleText="Click to save the conversion unit"
-      @clicked="$emit('change-unit', unitOption)" />
+      <CustomButton type="neutral" effect="empty" text="Save Weight Unit.." titleText="Click to save the weight conversion unit"
+      @clicked="$emit('change-unit', 'W', unitWeightOption)" />
+
+    </div>
+  </div>
+
+  <div class="pair">
+    <div class="flexHorizontal">
+
+      <InputField id="unitVolumeOption" inputType="select" labelText="" placeholder="" v-model="unitVolumeOption" 
+      :options="filterOptions('V')"
+      :mandatory="false" />
+
+      <CustomButton type="neutral" effect="empty" text="Save Volume Unit.." titleText="Click to save the volume conversion unit"
+      @clicked="$emit('change-unit', 'V', unitVolumeOption)" />
 
     </div>
   </div>
@@ -64,6 +90,7 @@ display: flex;
 flex-direction: row;
 justify-content: space-between;
 align-items: baseline;
+font-size: 1.0em;
 }
 
 .flexHorizontal div:nth-child(1) {

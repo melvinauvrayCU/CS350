@@ -21,11 +21,29 @@ export class IngredientCat {
 export class Conversion {
 
 	people: number;
-	unit: string;
+	unitWeight: string;
+	unitVolume: string;
 
-	constructor(people: number, unit: string) {
+	constructor(people: number, unitWeight: string, unitVolume: string) {
 		this.people = people;
-		this.unit = unit;
+		this.unitWeight = unitWeight;
+		this.unitVolume = unitVolume;
+	}
+
+}
+
+export class Unit {
+
+	type: string; //W for weight, V for volume
+	name: string;
+	convertToSt: number; //for mass, grams. for volume, liter
+	convertFromSt: number;
+
+	constructor(type: string, name: string, convertToSt: number, convertFromSt: number) {
+		this.type = type;
+		this.name = name;
+		this.convertToSt = convertToSt;
+		this.convertFromSt = convertFromSt;
 	}
 
 }

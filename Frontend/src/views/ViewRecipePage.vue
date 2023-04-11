@@ -54,7 +54,8 @@ export default {
       <transition-group name="list">
         <StepView v-for="(step, index) in recipe?.steps" :key="step.stepId" :stepObject="step" :stepIndex="index + 1"
           :stepIndexLength="recipe?.steps.length || 0" v-model:descriptionModelValue="step.descriptionValue"
-          v-model:cooktimeModelValue="step.cooktimeValue" v-model:preptimeModelValue="step.preptimeValue" />
+          v-model:cooktimeModelValue="step.cooktimeValue" v-model:preptimeModelValue="step.preptimeValue"
+          @startTimer="(datas) => $emit('startTimer', { ...datas, 'recipeName': recipe?.title, 'recipeId': recipe?.id })" />
       </transition-group>
 
       <CustomButton text="Recipe Completed!" type="neutral" effect="empty" icon="add"

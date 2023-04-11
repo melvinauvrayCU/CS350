@@ -54,11 +54,13 @@ export default {
             clearInterval(this.timerRef);
             this.audio.pause();
             this.$emit("update:modelValue", undefined);
+            document.title = "RecipeBuddy";
         },
         blinkDiv() {
             let count = 0;
             this.isBgRed = true;
             this.blinkingTimerRef = setInterval(() => {
+                document.title = "Time is up - RecipeBuddy";
                 if (count % 2 === 0) {
                     this.isBgRed = false;
                 } else {
@@ -69,6 +71,7 @@ export default {
                     clearInterval(this.blinkingTimerRef);
                     this.audio.pause();
                     this.isBgRed = false;
+                    document.title = "RecipeBuddy";
                 }
             }, 600);
         },
@@ -85,9 +88,7 @@ export default {
             [this.minutes, this.seconds] = time.split(":").map(Number);
             this.isTimerRunning = true;
             this.timerRef = setInterval(() => {
-
                 if (this.seconds === 0 && this.minutes === 0) {
-
                     this.timerStop();
                 } else if (this.seconds === 0) {
                     this.minutes--;
@@ -97,6 +98,11 @@ export default {
                 }
                 this.displaySeconds = this.seconds < 10 ? "0" + this.seconds : this.seconds.toString();
                 this.displayMinutes = this.minutes < 10 ? "0" + this.minutes : this.minutes.toString();
+                if (!document.hasFocus()) {
+                    document.title = `${this.displayMinutes}:${this.displaySeconds}` + (this.modelValue?.cooktime ? ' cook time' : ' preparation time') + " remaining - RecipeBuddy";
+                } else {
+                    document.title = "RecipeBuddy";
+                }
             }, 1000);
         },
         toggleTimer(event: MouseEvent) {
@@ -117,6 +123,11 @@ export default {
                     }
                     this.displaySeconds = this.seconds < 10 ? "0" + this.seconds : this.seconds.toString();
                     this.displayMinutes = this.minutes < 10 ? "0" + this.minutes : this.minutes.toString();
+                    if (!document.hasFocus()) {
+                        document.title = `${this.displayMinutes}:${this.displaySeconds}` + (this.modelValue?.cooktime ? ' cook time' : ' preparation time') + " remaining - RecipeBuddy";
+                    } else {
+                        document.title = "RecipeBuddy";
+                    }
                 }, 1000);
             }
         },

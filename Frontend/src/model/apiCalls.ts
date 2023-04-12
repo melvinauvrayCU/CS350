@@ -97,7 +97,7 @@ export class API {
 			stepId: 2,
 			descriptionValue: "Put steak and onions inside bread",
 			cooktimeValue: "00:00",
-			preptimeValue: "02:00",
+			preptimeValue: "00:02",
 			ingredients: [],
 			utensils: []
 		}], 3, "https://www.photodoiso.fr/inc/image/oiseaux/1790.jpgT.jpg", ["Recommended", "Recent"]),

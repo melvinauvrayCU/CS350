@@ -1,7 +1,20 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
+import { reactive } from "vue";
 import HeaderMenuComponent from "./components/HeaderMenuComponent.vue";
 import FooterComponent from "./components/FooterComponent.vue";
+import TimerComponent, { type timerObject } from "./components/TimerComponent.vue";
+
+interface TimerData {
+  value: timerObject | undefined;
+}
+const datasTimer = reactive<TimerData>({
+  // Initialize the datasTimer object with a "value" property
+  value: undefined,
+});
+function startTimer(datas: any) {
+  datasTimer.value = datas;
+}
 </script>
 
 <template>
@@ -13,9 +26,11 @@ import FooterComponent from "./components/FooterComponent.vue";
 
     <Transition>
       <!-- RouterView element, a native VueJs component which contains the content of each page -->
-      <RouterView />
+      <RouterView @startTimer="startTimer" />
     </Transition>
-
+    <Transition>
+      <TimerComponent v-model="datasTimer.value" />
+    </Transition>
 
     <!-- Footer of the application, present on all pages so we put it in this file -->
     <FooterComponent />

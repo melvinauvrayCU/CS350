@@ -774,7 +774,7 @@ export class API {
 				 * Since we will populate our returning array that is of type Ingredient[],
 				 * We make sure that this temp variable is of type Ingredient, so we don't push weird things into our array.
 				 */
-				const ingredientToReturn: Ingredient = { "name": data.name };
+				const ingredientToReturn: Ingredient = { "name": data.name, "id": data.id};
 				return ingredientToReturn;
 			});
 		} catch (error) {

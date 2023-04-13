@@ -52,13 +52,15 @@ export type Step = {
 }
 
 export class Ingredient {
+	id?: number;
 	name: string;
-	quantity: number;
-	unit: string;
+	quantity?: number;
+	unit?: string;
 
-	constructor(name: string, quantity: number, unit: string) {
-this.name = name;
-this.quantity = quantity;
-this.unit = unit;
+	constructor(name: string, quantity: number, unit: string, id: number = 0) {
+		this.id = id;
+		this.name = name;
+		this.quantity = quantity;
+		this.unit = unit;
 	}
 }

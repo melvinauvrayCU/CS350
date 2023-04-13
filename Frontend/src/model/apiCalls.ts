@@ -189,7 +189,7 @@ export class API {
 		try {
 			// Make an API call to retrieve all recipes
 			const response = await axios.get(this._apiUrl + "/recipes");
-
+			console.error(response)
 			// Extract the recipe data from the response and map it to an array of Recipe objects
 			const recipes = response.data.data.map((recipe: any) => ({
 				id: recipe.id,
@@ -199,7 +199,7 @@ export class API {
 				rating: recipe.rating,
 				imageUrl: recipe.image_url,
 				userId: recipe.user_id,
-				recipeSteps: recipe.recipe_steps.map((step: any) => ({
+				recipeSteps: recipe.recipeSteps.map((step: any) => ({
 					description: step.description,
 					cookTime: step.cook_time,
 					prepTime: step.prep_time,

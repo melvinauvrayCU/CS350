@@ -13,7 +13,12 @@ class UpdateRecipeRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; // TODO: Change this
+        $method = $this->method();
+        if ($method == 'PUT') {
+            return true; // TODO: Change this
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -43,26 +48,27 @@ class UpdateRecipeRequest extends FormRequest
                 'recipe_steps.*.utensils' => ['nullable', 'array'],
                 'recipe_steps.*.utensils.*.name' => ['nullable', 'string'],
             ];
-        } else {
-            // Method is PATCH
-            return [
-                'title' => ['sometimes', 'required', 'string', 'max:255'],
-                'description' => ['sometimes', 'required', 'string'],
-                'number_people' => ['sometimes', 'required', 'integer'],
-                'image_url' => ['sometimes', 'nullable', 'string', 'url'],
-                'rating' => ['sometimes', 'required', 'integer', 'min:1', 'max:5'],
-                'recipe_steps' => ['sometimes', 'required', 'array'],
-                'recipe_steps.*.description' => ['sometimes', 'required', 'string'],
-                'recipe_steps.*.cook_time' => ['sometimes', 'required', 'string'],
-                'recipe_steps.*.prep_time' => ['sometimes', 'required', 'string'],
-                'recipe_steps.*.ingredients' => ['sometimes', 'nullable', 'array'],
-                'recipe_steps.*.ingredients.*.name' => ['sometimes', 'nullable', 'string'],
-                'recipe_steps.*.ingredients.*.measurement' => ['sometimes', 'nullable', 'string'],
-                'recipe_steps.*.ingredients.*.quantity' => ['required', 'numeric'],
-                'recipe_steps.*.utensils' => ['sometimes', 'nullable', 'array'],
-                'recipe_steps.*.utensils.*.name' => ['sometimes', 'nullable', 'string'],
-            ];
         }
+        // else {
+        //     // Method is PATCH
+        //     return [
+        //         'title' => ['sometimes', 'required', 'string', 'max:255'],
+        //         'description' => ['sometimes', 'required', 'string'],
+        //         'number_people' => ['sometimes', 'required', 'integer'],
+        //         'image_url' => ['sometimes', 'nullable', 'string', 'url'],
+        //         'rating' => ['sometimes', 'required', 'integer', 'min:1', 'max:5'],
+        //         'recipe_steps' => ['sometimes', 'required', 'array'],
+        //         'recipe_steps.*.description' => ['sometimes', 'required', 'string'],
+        //         'recipe_steps.*.cook_time' => ['sometimes', 'required', 'string'],
+        //         'recipe_steps.*.prep_time' => ['sometimes', 'required', 'string'],
+        //         'recipe_steps.*.ingredients' => ['sometimes', 'nullable', 'array'],
+        //         'recipe_steps.*.ingredients.*.name' => ['sometimes', 'nullable', 'string'],
+        //         'recipe_steps.*.ingredients.*.measurement' => ['sometimes', 'nullable', 'string'],
+        //         'recipe_steps.*.ingredients.*.quantity' => ['required', 'numeric'],
+        //         'recipe_steps.*.utensils' => ['sometimes', 'nullable', 'array'],
+        //         'recipe_steps.*.utensils.*.name' => ['sometimes', 'nullable', 'string'],
+        //     ];
+        // }
     }
 
     // Convert camelCase to camel_case format

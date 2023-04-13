@@ -1,6 +1,6 @@
 <script lang="ts">
 import { API } from "@/model/apiCalls";
-import { IngredientCat, Unit } from "@/model/PantryModels";
+import { Conversion, IngredientCat, Unit } from "@/model/PantryModels";
 import IngredientCatListComponent from "@/components/pantry/ingredient/IngredientCatListComponent.vue";
 import IngredientModalComponent from "@/components/pantry/ingredient/IngredientModalComponent.vue";
 import AllergyListComponent from "@/components/pantry/AllergyListComponent.vue";
@@ -31,7 +31,8 @@ data(): {
   isModalVisible: boolean,
   newIngredientCat: string,
   newUtensilCat: string,
-  messageText: string
+  messageText: string,
+  current: Conversion,
 } {
   return {
     ingredientcats: [],
@@ -43,6 +44,7 @@ data(): {
     newIngredientCat: "",
     newUtensilCat: "",
     messageText: "",
+    current: API.instance.getConversions(),
   };
 },
 
@@ -207,6 +209,7 @@ created() {
           @change-people="changePeople"
           @change-unit="changeUnit"
           :options="options"
+          :current="current"
           />
 
         </div>

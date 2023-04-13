@@ -58,6 +58,10 @@ export default {
         },
         changeQuantity() {
             var convertUnitMultiple: number = 1;
+
+            if (this.conversion.people < 1) this.people = this.feeding;
+            else {this.people = this.conversion.people; console.log("people set");}
+
             if (this.unitTo !== "") {
                 this.search = this.ingredient.unit;
                 const ingredientUnitFrom: Unit = this.units.filter(this.getUnit)[0];
@@ -71,9 +75,6 @@ export default {
         }
     },
     created() {
-        if (this.conversion.people === 0) this.people = this.feeding;
-        else this.people = this.conversion.people;
-
         this.correctUnit();
         console.log("correct unit: " + this.unit);
 

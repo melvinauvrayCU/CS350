@@ -2,7 +2,7 @@
 
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
-import type { Unit } from "@/model/PantryModels";
+import { Conversion, type Unit } from "@/model/PantryModels";
 
 export default {
     name: "ConversionComponent",
@@ -11,6 +11,10 @@ props: {
     options: {
         type: Array<Unit>,
         required: true
+    },
+    current: {
+      type: Conversion,
+      required: true
     }
     },
     components: {
@@ -35,10 +39,16 @@ props: {
         for (var i = 0; i < Optionslist.length; i++ ) {
           Options.push(Optionslist[i].name);
         }
+        Options.push("");
         return Options;
       }
     },
-};
+    created() {
+      if (this.current.people !== 0) this.numPeople = this.current.people;
+      this.unitVolumeOption = this.current.unitVolume;
+      this.unitWeightOption = this.current.unitWeight;
+    }
+    };
 </script>
 
 <template>
@@ -46,7 +56,7 @@ props: {
   <div class="pair">
     <div class="flexHorizontal">
 
-      <InputField id="numPeople" inputType="number" labelText="" min="1" max="50" placeholder="People Cooking For.." v-model="numPeople"
+      <InputField id="numPeople" inputType="number" labelText="" min="0" max="50" placeholder="People Cooking For.." v-model="numPeople"
       :mandatory="false" />
 
       <CustomButton type="neutral" effect="empty" text="Save Number.." titleText="Click to save the people cooking for"

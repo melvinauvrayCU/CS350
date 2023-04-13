@@ -1,6 +1,6 @@
-import { IngredientCat, Conversion } from "./PantryModels";
+import { IngredientCat, Conversion, Unit } from "./PantryModels";
 import { Category } from "./categoryModel";
-import { Recipe, type Ingredient } from "./recipeModel";
+import { Recipe, Ingredient } from "./recipeModel";
 import { User } from "./userModel";
 import axios from "axios";
 import NProgress from "nprogress";
@@ -82,24 +82,25 @@ export class API {
 			descriptionValue: "Cook the steak",
 			cooktimeValue: "12:00",
 			preptimeValue: "02:00",
-			ingredients: [],
-			utensils: []
+			ingredients: [new Ingredient("steak", 2, "Lbs")],
+			utensils: ["oven"]
 		},
 		{
 			stepId: 1,
 			descriptionValue: "Cook the onions",
 			cooktimeValue: "16:00",
 			preptimeValue: "02:00",
-			ingredients: [],
-			utensils: []
+			ingredients: [new Ingredient("onion", 1, "C"),
+			new Ingredient("butter", 1, "Tbsp")],
+			utensils: ["pan"]
 		},
 		{
 			stepId: 2,
 			descriptionValue: "Put steak and onions inside bread",
 			cooktimeValue: "00:00",
-			preptimeValue: "02:00",
-			ingredients: [],
-			utensils: []
+			preptimeValue: "00:02",
+			ingredients: [new Ingredient("bread slice", 4, "")],
+			utensils: ["plate"]
 		}], 3, "https://www.photodoiso.fr/inc/image/oiseaux/1790.jpgT.jpg", ["Recommended", "Recent"]),
 		new Recipe("French Burger", "A burger, but french", 1, [], 4, "", ["Highest Rated", "Frequently Cooked"]),
 		new Recipe("Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, "", ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"]),
@@ -117,11 +118,21 @@ export class API {
 	alergies: string[] = [
 		"Milk",
 	];
-	unitOptions: string[] = [
-		"Cups",
-		"Gallons",
+	unitOptions: Unit[] = [
+		new Unit("W","Lbs", 453.592, 0.00220462),
+		new Unit("W","Oz", 28.3495, 0.035274),
+		new Unit("V","Tbsp",0.0147868,67.628),
+		new Unit("V","Tsp",0.00492892,202.884),
+		new Unit("V","C",0.236588,4.22675),
+		new Unit("V","G",3.78541,0.264172),
+		new Unit("W","kg",1000,0.001),
+		new Unit("W","g",1,1),
+		new Unit("W","mg",0.001,1000),
+		new Unit("V","l",1,1),
+		new Unit("V","ml",0.001,1000),
+
 	];
-	conversion: Conversion = new Conversion(1, "");
+	conversion: Conversion = new Conversion(0, "", "");
 
 	/*
 	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
@@ -624,7 +635,7 @@ export class API {
 
 	//----Conversion Methods----
 
-	getUnitOptions(): string[] {
+	getUnitOptions(): Unit[] {
 		return this.unitOptions;
 	}
 
@@ -632,8 +643,16 @@ export class API {
 		this.conversion.people = people;
 	}
 
-	changeUnitConversion(unit: string): void {
-		this.conversion.unit = unit;
+	changeUnitWeightConversion(unitWeight: string): void {
+		this.conversion.unitWeight = unitWeight;
+	}
+
+	changeUnitVolumeConversion(unitVolume: string): void {
+		this.conversion.unitVolume = unitVolume;
+	}
+
+	getConversions(): Conversion {
+		return this.conversion;
 	}
 
 	/**
@@ -755,7 +774,7 @@ export class API {
 				 * Since we will populate our returning array that is of type Ingredient[],
 				 * We make sure that this temp variable is of type Ingredient, so we don't push weird things into our array.
 				 */
-				const ingredientToReturn: Ingredient = { "id": data.id, "name": data.name };
+				const ingredientToReturn: Ingredient = { "name": data.name };
 				return ingredientToReturn;
 			});
 		} catch (error) {

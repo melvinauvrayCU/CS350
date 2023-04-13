@@ -26,7 +26,8 @@ export default {
         router.push({ name: "home" });
       }
 
-    }
+    },
+
 
   },
   /**We use the StepView to view the steps the custmo button for the recipe completed button and the page 

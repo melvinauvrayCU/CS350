@@ -134,7 +134,7 @@ export default {
 
     // If the id parameter is not empty, then it means we will edit a recipe, so we get the current recipe from an API call and change the mode
     if (this.id !== "") {
-      const recipeObject = API.instance.getRecipe(parseInt(this.id));
+      const recipeObject = await API.instance.getRecipe(parseInt(this.id));
       if (recipeObject !== undefined) {
         this.recipeTempObject = recipeObject;
         this.mode = "edit";
@@ -144,6 +144,7 @@ export default {
     }
   }
 };
+
 
 </script>
 <template>

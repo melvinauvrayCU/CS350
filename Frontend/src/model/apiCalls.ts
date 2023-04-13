@@ -174,9 +174,41 @@ export class API {
 	/**
 	 * Return the full list of recipes.
 	 */
-	getRecipes(): Recipe[] {
-		return this.recipeList;
+	async getRecipes(): Promise<Recipe[]> {
+		try {
+			// Make an API call to retrieve all recipes
+			const response = await axios.get(this._apiUrl + "/recipes");
+
+			// Extract the recipe data from the response and map it to an array of Recipe objects
+			const recipes = response.data.data.map((recipe: any) => ({
+				id: recipe.id,
+				title: recipe.title,
+				description: recipe.description,
+				numberPeople: recipe.number_people,
+				rating: recipe.rating,
+				imageUrl: recipe.image_url,
+				userId: recipe.user_id,
+				recipeSteps: recipe.recipe_steps.map((step: any) => ({
+					description: step.description,
+					cookTime: step.cook_time,
+					prepTime: step.prep_time,
+					ingredients: step.ingredients?.map((ingredient: any) => ({
+						name: ingredient.name
+					})),
+					utensils: step.utensils?.map((utensil: any) => ({
+						name: utensil.name
+					}))
+				}))
+			}));
+
+			return recipes;
+		} catch (error: any) {
+			console.error(error);
+			return [];
+		}
 	}
+
+
 
 	/**
 	 * Return the full list of categories
@@ -185,12 +217,20 @@ export class API {
 		return this.categoryList;
 	}
 
-	getRecipe(id: number): Recipe | undefined {
-		const recipeObj = this.recipeList.find((recipe) => recipe.id === id);
-		if (recipeObj === undefined)
+	async getRecipe(id: number): Promise<Recipe | undefined> {
+		try {
+			const recipes = await this.getRecipes();
+			const recipeObj = recipes.find((recipe) => recipe.id === id);
+			if (recipeObj === undefined) {
+				return undefined;
+			}
+			return recipeObj;
+		} catch (error: any) {
+			console.error(error);
 			return undefined;
-		return JSON.parse(JSON.stringify(recipeObj));
+		}
 	}
+
 
 	/**
 	 * Remove a recipe with the specified id in paramter and returns the new full list of recipes. 

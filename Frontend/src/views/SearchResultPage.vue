@@ -23,8 +23,8 @@ export default {
             searchQuery: "",
         };
     },
-    created() {
-        this.recipes = API.instance.getRecipes();
+    async created() {
+        this.recipes = await API.instance.getRecipes();
         this.isUserAuthenticated = API.instance.isLoggedIn();
         this.searchQuery = this.$route.query.q as string;
         this.updateMatchingRecipes();
@@ -67,8 +67,8 @@ export default {
 <template>
     <div class="contentContainer">
         <PageTitleComponent :text="`Search Results for '${$route.query.q}'`" />
-        <SearchResultsComponent :recipes="matchingRecipes" @search="onSearch" 
-            @delete-recipe="deleteRecipe" :isUserAuthenticated="isUserAuthenticated"/>
+        <SearchResultsComponent :recipes="matchingRecipes" @search="onSearch" @delete-recipe="deleteRecipe"
+            :isUserAuthenticated="isUserAuthenticated" />
     </div>
 </template>
 

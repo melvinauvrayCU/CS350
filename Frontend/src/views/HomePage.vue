@@ -59,9 +59,9 @@ export default {
    * This method is called when this page is displayed.
    * We want to load the datas from the API, so we retrieve the list of recipes.
    */
-  created() {
+  async created() {
     this.categories = API.instance.getCategories();
-    this.recipes = API.instance.getRecipes();
+    this.recipes = await API.instance.getRecipes();
     this.isAuthenticated = API.instance.isLoggedIn();
   },
   /**

@@ -49,9 +49,11 @@ export default {
         correctUnit() {
             const ingredientUnit: Array<Unit> = this.units.filter(this.checkUnit); 
             var conversionUnit: string = "";
+
             if ((this.ingredient.unit !== "")) {
                 if (ingredientUnit[0].type === "W" && this.conversion.unitWeight !== "") this.unitTo = conversionUnit = this.conversion.unitWeight;
                 else if (ingredientUnit[0].type === "V" && this.conversion.unitVolume !== "") this.unitTo = conversionUnit = this.conversion.unitVolume;
+                else if (this.ingredient.unit === undefined) conversionUnit = "";
                 else conversionUnit = this.ingredient.unit;
             }
             this.unit = conversionUnit;
@@ -63,7 +65,9 @@ export default {
             else {this.people = this.conversion.people; console.log("people set");}
 
             if (this.unitTo !== "") {
-                this.search = this.ingredient.unit;
+                if (this.ingredient.unit === undefined) {console.log("ingredient.unit undefined"); return 0;}
+                else this.search = this.ingredient.unit;
+
                 const ingredientUnitFrom: Unit = this.units.filter(this.getUnit)[0];
                 
                 this.search = this.unitTo;
@@ -71,7 +75,8 @@ export default {
 
                 convertUnitMultiple = ingredientUnitFrom.convertToSt * ingredientUnitTo.convertFromSt;
             }
-            this.quantity = (this.ingredient.quantity * convertUnitMultiple * this.people) / this.feeding;
+            if (this.ingredient.quantity === undefined) {console.log("ingredient.quantity undefined"); this.quantity = NaN; return 0;}
+            else this.quantity = (this.ingredient.quantity * convertUnitMultiple * this.people) / this.feeding;
         }
     },
     created() {

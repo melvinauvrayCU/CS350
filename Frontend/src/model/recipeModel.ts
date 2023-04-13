@@ -52,7 +52,7 @@ export type Step = {
 }
 
 export class Ingredient {
-	id?: number;
+	id: number;
 	name: string;
 	quantity?: number;
 	unit?: string;

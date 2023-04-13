@@ -51,9 +51,16 @@ export type Step = {
 	utensils: string[]
 }
 
-export type Ingredient = {
+export class Ingredient {
 	id: number,
-	name: string,
-	quantity?: string,
-	unit?: string, // TODO: Change this to a more restrictive type
+	name: string;
+	quantity: number;
+	unit: string;
+
+	constructor(id: number, name: string, quantity: number, unit: string) {
+		this.id = id;
+		this.name = name;
+		this.quantity = quantity;
+		this.unit = unit;
+	}
 }

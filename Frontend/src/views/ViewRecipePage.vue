@@ -65,15 +65,14 @@ export default {
 
       <PageSeparator title="Ingredients & Utensils"></PageSeparator>
       <div class="pair">
-        <p> <ViewIngredientList v-for="step in recipe?.steps" 
-          :key="step.stepId" 
-          :ingredients="step.ingredients" 
-          :conversion="conversion"
-          :units="units"
-          :feeding="recipe?.numberPeople"
-          /> </p>
-        <p> <ViewUtensilList v-for="step in recipe?.steps" :key="step.stepId" :utensils="step.utensils" /> </p>
-        
+        <p>
+          <ViewIngredientList v-for="step in recipe?.steps" :key="step.stepId" :ingredients="step.ingredients"
+            :conversion="conversion" :units="units" :feeding="recipe?.numberPeople" />
+        </p>
+        <p>
+          <ViewUtensilList v-for="step in recipe?.steps" :key="step.stepId" :utensils="step.utensils" />
+        </p>
+
       </div>
 
       <PageSeparator title="Recipe Steps"></PageSeparator>

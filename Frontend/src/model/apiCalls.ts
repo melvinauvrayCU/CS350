@@ -119,17 +119,17 @@ export class API {
 		"Milk",
 	];
 	unitOptions: Unit[] = [
-		new Unit("W","Lbs", 453.592, 0.00220462),
-		new Unit("W","Oz", 28.3495, 0.035274),
-		new Unit("V","Tbsp",0.0147868,67.628),
-		new Unit("V","Tsp",0.00492892,202.884),
-		new Unit("V","C",0.236588,4.22675),
-		new Unit("V","G",3.78541,0.264172),
-		new Unit("W","kg",1000,0.001),
-		new Unit("W","g",1,1),
-		new Unit("W","mg",0.001,1000),
-		new Unit("V","l",1,1),
-		new Unit("V","ml",0.001,1000),
+		new Unit("W", "Lbs", 453.592, 0.00220462),
+		new Unit("W", "Oz", 28.3495, 0.035274),
+		new Unit("V", "Tbsp", 0.0147868, 67.628),
+		new Unit("V", "Tsp", 0.00492892, 202.884),
+		new Unit("V", "C", 0.236588, 4.22675),
+		new Unit("V", "G", 3.78541, 0.264172),
+		new Unit("W", "kg", 1000, 0.001),
+		new Unit("W", "g", 1, 1),
+		new Unit("W", "mg", 0.001, 1000),
+		new Unit("V", "l", 1, 1),
+		new Unit("V", "ml", 0.001, 1000),
 
 	];
 	conversion: Conversion = new Conversion(0, "", "");
@@ -189,7 +189,7 @@ export class API {
 		try {
 			// Make an API call to retrieve all recipes
 			const response = await axios.get(this._apiUrl + "/recipes");
-			console.error(response)
+			console.error(response);
 			// Extract the recipe data from the response and map it to an array of Recipe objects
 			const recipes = response.data.data.map((recipe: any) => ({
 				id: recipe.id,
@@ -228,19 +228,14 @@ export class API {
 		return this.categoryList;
 	}
 
-	async getRecipe(id: number): Promise<Recipe | undefined> {
-		try {
-			const recipes = await this.getRecipes();
-			const recipeObj = recipes.find((recipe) => recipe.id === id);
-			if (recipeObj === undefined) {
-				return undefined;
-			}
-			return recipeObj;
-		} catch (error: any) {
-			console.error(error);
+	getRecipe(id: number): Recipe | undefined {
+		const recipeObj = this.recipeList.find((recipe) => recipe.id === id);
+		if (recipeObj === undefined)
 			return undefined;
-		}
+		return JSON.parse(JSON.stringify(recipeObj));
 	}
+
+
 
 
 	/**
@@ -259,20 +254,78 @@ export class API {
 	 * @param title Title of the recipe
 	 * @param description Description of the recipe.
 	 */
-	createRecipe(recipeObject: Recipe): boolean {
-		this.recipeList.push(recipeObject);
-		recipeObject.tags.forEach((tag) => {
-			const categoryIndex = this.categoryList.findIndex((category) => category.categoryTag === tag);
-			if (categoryIndex > -1) {
-				this.categoryList[categoryIndex].linkedRecipeList.push(recipeObject);
-			} else {
-				const newCategory = new Category(tag, tag, [recipeObject]);
-				this.categoryList.push(newCategory);
-			}
-		});
-		console.log(this.recipeList);
-		return true;
+	async createRecipe(title: string, description: string, numberPeople: number, steps: Step[], rating: number, pictureUrl: string, tags: string[] = [], userId: number): Promise<Recipe | string | undefined> {
+		let returnData: Recipe | undefined;
+
+		try {
+			const response = await axios.post(this._apiUrl + "/recipes", {
+				title: title,
+				description: description,
+				numberPeople: numberPeople,
+				tags: tags,
+				imageUrl: pictureUrl,
+				rating: rating,
+				userId: userId,
+				recipeSteps: steps.map((step) => ({
+					description: step.descriptionValue,
+					prepTime: step.preptimeValue,
+					cookTime: step.cooktimeValue,
+					ingredients: step.ingredients.map((ingredient: any) => ({
+						name: ingredient.name,
+						quantity: ingredient.quantity,
+						measurement: ingredient.unit
+					})),
+					utensils: step.utensils.map((utensil: any) => ({
+						name: utensil.name
+					}))
+				}))
+			});
+
+			returnData = {
+				id: response.data.data.id,
+				title: response.data.data.title,
+				description: response.data.data.description,
+				numberPeople: response.data.data.numberPeople,
+				tags: response.data.data.tags,
+				pictureUrl: response.data.data.pictureUrl,
+				rating: response.data.data.rating,
+				userId: response.data.data.user_id,
+				recipeSteps: response.data.data.recipeSteps.map((step: any) => ({
+					id: step.id,
+					description: step.description,
+					prepTime: step.prepTime,
+					cookTime: step.cookTime,
+					ingredients: step.ingredients.map((ingredient: any) => ({
+						id: ingredient.id,
+						name: ingredient.name,
+						quantity: ingredient.quantity,
+						measurement: ingredient.measurement
+					})),
+					utensils: step.utensils.map((utensil: any) => ({
+						id: utensil.id,
+						name: utensil.name
+					}))
+				}))
+			};
+		} catch (error: any) {
+			return JSON.parse(error.request.response).message;
+		}
+
+		return returnData;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/**
 	 * Edit a recipe
@@ -774,7 +827,7 @@ export class API {
 				 * Since we will populate our returning array that is of type Ingredient[],
 				 * We make sure that this temp variable is of type Ingredient, so we don't push weird things into our array.
 				 */
-				const ingredientToReturn: Ingredient = { "name": data.name, "id": data.id};
+				const ingredientToReturn: Ingredient = { "name": data.name, "id": data.id };
 				return ingredientToReturn;
 			});
 		} catch (error) {

@@ -42,7 +42,7 @@ export default {
     // And a boolean created variable, which will be true when a recipe has been created to display a success message.
     return {
       stepCounter: 1,
-      recipeTempObject: new Recipe("", "", 1, [], 1, ""),
+      recipeTempObject: new Recipe(0, "", "", 1, [], 1, "", [], 1),
       mode: "create",
       messageText: "",
       messageType: "success",
@@ -54,11 +54,11 @@ export default {
     /**
      * Method called when clicking on the create recipe button.
      */
-    createRecipe(): void {
+    async createRecipe() {
 
       if (this.verifyInputs()) {
         // No errors, send datas
-        const result = API.instance.createRecipe(this.recipeTempObject);
+        const result = await API.instance.createRecipe(this.recipeTempObject);
 
         if (result) {
           // We redirect to home page with a success message
@@ -74,10 +74,10 @@ export default {
       }
 
     },
-    editRecipe(): void {
+    async editRecipe() {
       if (this.verifyInputs()) {
         // No errors, send datas
-        const result = API.instance.editRecipe(parseInt(this.id), this.recipeTempObject);
+        const result = await API.instance.editRecipe(this.recipeTempObject);
 
         if (result) {
           // We redirect to home page with a success message

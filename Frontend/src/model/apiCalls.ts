@@ -1,6 +1,7 @@
 import { IngredientCat, Conversion, Unit } from "./PantryModels";
 import { Category } from "./categoryModel";
 import { Recipe, Ingredient } from "./recipeModel";
+import type {Step} from "./recipeModel";
 import { User } from "./userModel";
 import axios from "axios";
 import NProgress from "nprogress";
@@ -77,7 +78,7 @@ export class API {
 	 * But obviously we will not have any persistency of our datas when reloading the website.
 	 */
 	recipeList: Recipe[] = [
-		new Recipe("Americain burger", "The best burger you will ever eat", 2, [{
+		new Recipe(0, "Americain burger", "The best burger you will ever eat", 2, [{
 			stepId: 0,
 			descriptionValue: "Cook the steak",
 			cooktimeValue: "12:00",
@@ -101,10 +102,10 @@ export class API {
 			preptimeValue: "00:02",
 			ingredients: [new Ingredient("bread slice", 4, "")],
 			utensils: ["plate"]
-		}], 3, "https://www.photodoiso.fr/inc/image/oiseaux/1790.jpgT.jpg", ["Recommended", "Recent"]),
-		new Recipe("French Burger", "A burger, but french", 1, [], 4, "", ["Highest Rated", "Frequently Cooked"]),
-		new Recipe("Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, "", ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"]),
-		new Recipe("Pancakes", "Pancakes but plain", 3, [], 4, "", ["Highest Rated", "Recent"]),
+		}], 3, "https://www.photodoiso.fr/inc/image/oiseaux/1790.jpgT.jpg", ["Recommended", "Recent"], 0),
+		new Recipe(0, "French Burger", "A burger, but french", 1, [], 4, "", ["Highest Rated", "Frequently Cooked"],0),
+		new Recipe(0, "Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, "", ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"],0),
+		new Recipe(0,"Pancakes", "Pancakes but plain", 3, [], 4, "", ["Highest Rated", "Recent"],0),
 	];
 	// ingredientCatList: IngredientCat[] = [
 	// 	new IngredientCat("I", "Protein", ["Beef", "Chicken"]),
@@ -254,22 +255,22 @@ export class API {
 	 * @param title Title of the recipe
 	 * @param description Description of the recipe.
 	 */
-	async createRecipe(title: string, description: string, numberPeople: number, steps: Step[], rating: number, pictureUrl: string, tags: string[] = [], userId: number): Promise<Recipe | string | undefined> {
+	async createRecipe(recipe: Recipe): Promise<Recipe | string | undefined> {
 		let returnData: Recipe | undefined;
 
 		try {
 			const response = await axios.post(this._apiUrl + "/recipes", {
-				title: title,
-				description: description,
-				numberPeople: numberPeople,
-				tags: tags,
-				imageUrl: pictureUrl,
-				rating: rating,
-				userId: userId,
-				recipeSteps: steps.map((step) => ({
+				title: recipe.title,
+				description: recipe.description,
+				number_people: recipe.numberPeople,
+				tags: recipe.tags,
+				image_url: "https://www.facebook.com/",
+				rating: recipe.rating,
+				user_id: recipe.userId,
+				recipe_steps: recipe.steps.map((step) => ({
 					description: step.descriptionValue,
-					prepTime: step.preptimeValue,
-					cookTime: step.cooktimeValue,
+					prep_time: step.preptimeValue,
+					cook_time: step.cooktimeValue,
 					ingredients: step.ingredients.map((ingredient: any) => ({
 						name: ingredient.name,
 						quantity: ingredient.quantity,
@@ -280,6 +281,7 @@ export class API {
 					}))
 				}))
 			});
+			console.log(response);
 
 			returnData = {
 				id: response.data.data.id,
@@ -290,7 +292,7 @@ export class API {
 				pictureUrl: response.data.data.pictureUrl,
 				rating: response.data.data.rating,
 				userId: response.data.data.user_id,
-				recipeSteps: response.data.data.recipeSteps.map((step: any) => ({
+				steps: response.data.data.recipeSteps.map((step: any) => ({
 					id: step.id,
 					description: step.description,
 					prepTime: step.prepTime,
@@ -308,7 +310,8 @@ export class API {
 				}))
 			};
 		} catch (error: any) {
-			return JSON.parse(error.request.response).message;
+			console.log(error);
+			
 		}
 
 		return returnData;
@@ -332,17 +335,68 @@ export class API {
 	 * @param recipeId Id of the recipe to be edited
 	 * @param recipeObj New recipe object to replace the old one
 	 */
-	editRecipe(recipeId: number, recipeObj: Recipe): boolean {
-		this.recipeList = this.recipeList.map(recipe => {
-			// We go through all recipes, if the id is the one we're looking for then we return the new obj, else the old obj
-			if (recipe.id === recipeId) {
-				return recipeObj;
-			} else {
-				return recipe;
-			}
-		});
-		return true;
+	async editRecipe(recipe: Recipe): Promise<Recipe | string | undefined> {
+		let returnData: Recipe | undefined;
+
+		try {
+			const response = await axios.put(this._apiUrl + "/recipes/" + recipe.id, {
+				title: recipe.title,
+				description: recipe.description,
+				number_people: recipe.numberPeople,
+				tags: recipe.tags,
+				image_url: "https://www.facebook.com/",
+				rating: recipe.rating,
+				user_id: recipe.userId,
+				recipe_steps: recipe.steps.map((step) => ({
+					description: step.descriptionValue,
+					prep_time: step.preptimeValue,
+					cook_time: step.cooktimeValue,
+					ingredients: step.ingredients.map((ingredient: any) => ({
+						name: ingredient.name,
+						quantity: ingredient.quantity,
+						measurement: ingredient.unit
+					})),
+					utensils: step.utensils.map((utensil: any) => ({
+						name: utensil.name
+					}))
+				}))
+			});
+			console.log(response);
+
+			returnData = {
+				id: response.data.data.id,
+				title: response.data.data.title,
+				description: response.data.data.description,
+				numberPeople: response.data.data.numberPeople,
+				tags: response.data.data.tags,
+				pictureUrl: response.data.data.pictureUrl,
+				rating: response.data.data.rating,
+				userId: response.data.data.user_id,
+				steps: response.data.data.recipeSteps.map((step: any) => ({
+					id: step.id,
+					description: step.description,
+					prepTime: step.prepTime,
+					cookTime: step.cookTime,
+					ingredients: step.ingredients.map((ingredient: any) => ({
+						id: ingredient.id,
+						name: ingredient.name,
+						quantity: ingredient.quantity,
+						measurement: ingredient.measurement
+					})),
+					utensils: step.utensils.map((utensil: any) => ({
+						id: utensil.id,
+						name: utensil.name
+					}))
+				}))
+			};
+		} catch (error: any) {
+			console.log(error);
+			
+		}
+
+		return returnData;
 	}
+
 
 	// ----IngredientCatagory Methods----
 

@@ -21,7 +21,7 @@ export default {
     conversion: Conversion;
   } {
     return {
-      recipe: API.instance.getRecipe(parseInt(this.id)),
+      recipe: undefined,
       units: API.instance.getUnitOptions(),
       conversion: API.instance.getConversions(),
     };
@@ -34,6 +34,9 @@ export default {
       }
 
     },
+    async created(){
+      this.recipe =  await API.instance.getRecipe(parseInt(this.id));
+    }
 
 
   },

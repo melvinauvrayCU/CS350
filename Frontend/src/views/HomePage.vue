@@ -3,6 +3,7 @@ import type { Recipe } from "@/model/recipeModel";
 import type { Category } from "@/model/categoryModel";
 import { API } from "../model/apiCalls";
 import CategoryListComponent from "@/components/CategoryListComponent.vue";
+import RecipeListComponent from "@/components/RecipeListComponent.vue";
 import MessageComponent from "@/components/MessageComponent.vue";
 
 export default {
@@ -11,6 +12,7 @@ export default {
   components: {
     CategoryListComponent,
     MessageComponent,
+    RecipeListComponent,
   },
   props: {
     messageTextParam: {
@@ -76,6 +78,10 @@ export default {
 
 <template>
   <main>
+
+    <RecipeListComponent :recipes="recipes"
+                @delete-recipe="(id) => $emit('delete-recipe', id)" :isUserAuthenticated="true" />
+    
     <div>
       <CategoryListComponent :categories="categories" :recipes="recipes" @delete-recipe="deleteRecipe"
         :isUserAuthenticated="isAuthenticated" />

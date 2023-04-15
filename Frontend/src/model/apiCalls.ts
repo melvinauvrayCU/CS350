@@ -1,7 +1,7 @@
 import { IngredientCat, Conversion, Unit } from "./PantryModels";
 import { Category } from "./categoryModel";
 import { Recipe, Ingredient } from "./recipeModel";
-import type {Step} from "./recipeModel";
+import type { Step } from "./recipeModel";
 import { User } from "./userModel";
 import axios from "axios";
 import NProgress from "nprogress";
@@ -103,9 +103,9 @@ export class API {
 			ingredients: [new Ingredient("bread slice", 4, "")],
 			utensils: ["plate"]
 		}], 3, "https://www.photodoiso.fr/inc/image/oiseaux/1790.jpgT.jpg", ["Recommended", "Recent"], 0),
-		new Recipe(0, "French Burger", "A burger, but french", 1, [], 4, "", ["Highest Rated", "Frequently Cooked"],0),
-		new Recipe(0, "Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, "", ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"],0),
-		new Recipe(0,"Pancakes", "Pancakes but plain", 3, [], 4, "", ["Highest Rated", "Recent"],0),
+		new Recipe(0, "French Burger", "A burger, but french", 1, [], 4, "", ["Highest Rated", "Frequently Cooked"], 0),
+		new Recipe(0, "Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, "", ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"], 0),
+		new Recipe(0, "Pancakes", "Pancakes but plain", 3, [], 4, "", ["Highest Rated", "Recent"], 0),
 	];
 	// ingredientCatList: IngredientCat[] = [
 	// 	new IngredientCat("I", "Protein", ["Beef", "Chicken"]),
@@ -228,13 +228,78 @@ export class API {
 	getCategories(): Category[] {
 		return this.categoryList;
 	}
+	async getRecipe(id: number): Promise<Recipe | null> {
+		try {
+			// Make an API call to retrieve the recipe by its ID
+			const response = await axios.get(this._apiUrl + "/recipes/" + id);
+			console.error(response);
 
-	getRecipe(id: number): Recipe | undefined {
-		const recipeObj = this.recipeList.find((recipe) => recipe.id === id);
-		if (recipeObj === undefined)
-			return undefined;
-		return JSON.parse(JSON.stringify(recipeObj));
+			// Extract the recipe data from the response and map it to a Recipe object
+			const recipe = response.data;
+
+			return {
+				id: recipe.id,
+				title: recipe.title,
+				description: recipe.description,
+				numberPeople: recipe.numberPeople,
+				tags: recipe.tags,
+				pictureUrl: recipe.pictureUrl,
+				rating: recipe.rating,
+				userId: recipe.user_id,
+				steps: recipe.recipeSteps.map((step: any) => ({
+					id: step.id,
+					description: step.description,
+					prepTime: step.prepTime,
+					cookTime: step.cookTime,
+					ingredients: step.ingredients.map((ingredient: any) => ({
+						id: ingredient.id,
+						name: ingredient.name,
+						quantity: ingredient.quantity,
+						measurement: ingredient.measurement
+					})),
+					utensils: step.utensils.map((utensil: any) => ({
+						id: utensil.id,
+						name: utensil.name
+					}))
+				}))
+			};
+		} catch (error: any) {
+			console.log(error);
+			return null;
+		}
 	}
+
+
+	// async getRecipe(id: number): Promise<Recipe | null> {
+	// 	try {
+	// 		const response = await axios.get(`${this._apiUrl}/recipes/${id}`);
+	// 		const recipe = response.data.data;
+	// 		return {
+	// 			id: recipe.id,
+	// 			title: recipe.title,
+	// 			description: recipe.description,
+	// 			numberPeople: recipe.number_people,
+	// 			recipeSteps: recipe.recipeSteps.map((step: any) => ({
+	// 				description: step.description,
+	// 				cookTime: step.cook_time,
+	// 				prepTime: step.prep_time,
+	// 				ingredients: step.ingredients?.map((ingredient: any) => ({
+	// 					name: ingredient.name
+	// 				})),
+	// 				utensils: step.utensils?.map((utensil: any) => ({
+	// 					name: utensil.name
+	// 				}))
+	// 			})),
+	// 			rating: recipe.rating,
+	// 			imageUrl: recipe.image_url,
+	// 			userId: recipe.user_id,
+	// 		};
+	// 	} catch (error: any) {
+	// 		console.error(error);
+	// 		return null;
+	// 	}
+	// }
+
 
 
 
@@ -311,7 +376,7 @@ export class API {
 			};
 		} catch (error: any) {
 			console.log(error);
-			
+
 		}
 
 		return returnData;
@@ -391,7 +456,7 @@ export class API {
 			};
 		} catch (error: any) {
 			console.log(error);
-			
+
 		}
 
 		return returnData;

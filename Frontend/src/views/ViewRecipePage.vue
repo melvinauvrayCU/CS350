@@ -3,7 +3,7 @@ import StepView from "@/components/view/StepViewComponent.vue";
 import ViewIngredientList from "@/components/view/ViewIngredientListComponent.vue";
 import ViewUtensilList from "@/components/view/ViewUtensilListComponent.vue";
 import { API } from "@/model/apiCalls";
-import type { Recipe } from "@/model/recipeModel";
+import { Recipe } from "@/model/recipeModel";
 import type { Conversion, Unit } from "@/model/PantryModels";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import PageSeparator from "@/components/PageSeparatorComponent.vue";
@@ -16,12 +16,12 @@ export default {
     id: { type: String, default: "0" }
   },
   data(): {
-    recipe: Recipe | undefined;
+    recipe: Recipe | null;
     units: Array<Unit>;
     conversion: Conversion;
   } {
     return {
-      recipe: undefined,
+      recipe: null,
       units: API.instance.getUnitOptions(),
       conversion: API.instance.getConversions(),
     };
@@ -32,10 +32,9 @@ export default {
       if (this.recipe) {
         router.push({ name: "home" });
       }
-
     },
-    async created(){
-      this.recipe =  await API.instance.getRecipe(parseInt(this.id));
+    async created() {
+      this.recipe = await API.instance.getRecipe(parseInt(this.id));
     }
 
 

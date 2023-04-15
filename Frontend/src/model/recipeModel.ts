@@ -41,7 +41,7 @@ export class Recipe {
 
 		// Picture
 		this.pictureUrl = pictureUrl;
-		
+
 	}
 }
 

@@ -30,7 +30,7 @@ export default {
   // In the first bracket, we define the types of the variables we will use,
   // And in the second bracket we define the initiale values.
   data(): {
-    recipeTempObject: Recipe,
+    recipeTempObject: Recipe | null,
     stepCounter: number,
     mode: "create" | "edit",
     messageText: string,
@@ -42,7 +42,7 @@ export default {
     // And a boolean created variable, which will be true when a recipe has been created to display a success message.
     return {
       stepCounter: 1,
-      recipeTempObject: new Recipe(0, "", "", 1, [], 1, "", [], 1),
+      recipeTempObject: null,
       mode: "create",
       messageText: "",
       messageType: "success",

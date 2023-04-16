@@ -66,20 +66,21 @@ export default {
       <PageSeparator title="Ingredients & Utensils"></PageSeparator>
       <div class="pair">
         <p>
-          <ViewIngredientList v-for="step in recipe?.steps" :key="step.stepId" :ingredients="step.ingredients"
+          <ViewIngredientList v-for="step in recipe?.recipeSteps" :key="step.stepId" :ingredients="step.ingredients"
             :conversion="conversion" :units="units" :feeding="recipe?.numberPeople" />
         </p>
         <p>
-          <ViewUtensilList v-for="step in recipe?.steps" :key="step.stepId" :utensils="step.utensils" />
+          <ViewUtensilList v-for="step in recipe?.recipeSteps" :key="step.stepId" :utensils="step.utensils" />
         </p>
 
       </div>
 
       <PageSeparator title="Recipe Steps"></PageSeparator>
       <transition-group name="list">
-        <StepView v-for="(step, index) in recipe?.steps" :key="step.stepId" :stepObject="step" :stepIndex="index + 1"
-          :stepIndexLength="recipe?.steps.length || 0" v-model:descriptionModelValue="step.descriptionValue"
-          v-model:cooktimeModelValue="step.cooktimeValue" v-model:preptimeModelValue="step.preptimeValue"
+        <StepView v-for="(step, index) in recipe?.recipeSteps" :key="step.stepId" :stepObject="step"
+          :stepIndex="index + 1" :stepIndexLength="recipe?.recipeSteps.length || 0"
+          v-model:descriptionModelValue="step.descriptionValue" v-model:cooktimeModelValue="step.cooktimeValue"
+          v-model:preptimeModelValue="step.preptimeValue"
           @startTimer="(datas) => $emit('startTimer', { ...datas, 'recipeName': recipe?.title, 'recipeId': recipe?.id })" />
       </transition-group>
 

@@ -190,7 +190,7 @@ export class API {
 		try {
 			// Make an API call to retrieve all recipes
 			const response = await axios.get(this._apiUrl + "/recipes");
-			console.error(response);
+			console.log(response);
 			// Extract the recipe data from the response and map it to an array of Recipe objects
 			const recipes = response.data.data.map((recipe: any) => ({
 				id: recipe.id,
@@ -198,9 +198,9 @@ export class API {
 				description: recipe.description,
 				numberPeople: recipe.number_people,
 				rating: recipe.rating,
-				pictureUrl: recipe.image_url,
+				imageUrl: recipe.image_url,
 				userId: recipe.user_id,
-				steps: recipe.recipeSteps.map((step: any) => ({
+				recipeSteps: recipe.recipeSteps.map((step: any) => ({
 					description: step.description,
 					cookTime: step.cook_time,
 					prepTime: step.prep_time,
@@ -228,8 +228,14 @@ export class API {
 	getCategories(): Category[] {
 		return this.categoryList;
 	}
+
+	/**
+	 * get a specific recipe
+	 * @param id 
+	 * @returns 
+	 */
 	async getRecipe(id: number): Promise<Recipe | null> {
-		console.error("test", id)
+		console.error("test", id);
 		try {
 			// Make an API call to retrieve the recipe by its ID
 			const response = await axios.get(this._apiUrl + "/recipes/" + id);
@@ -237,6 +243,7 @@ export class API {
 
 			// Extract the recipe data from the response and map it to a Recipe object
 			const recipe = response.data.data;
+			console.log(recipe);
 
 			return {
 				id: recipe.id,
@@ -244,57 +251,30 @@ export class API {
 				description: recipe.description,
 				numberPeople: recipe.number_people,
 				rating: recipe.rating,
-				pictureUrl: recipe.image_url,
+				imageUrl: recipe.image_url,
 				userId: recipe.user_id,
-				steps: recipe.recipeSteps.map((step: any) => ({
-					description: step.description,
-					cookTime: step.cook_time,
-					prepTime: step.prep_time,
-					ingredients: step.ingredients?.map((ingredient: any) => ({
-						name: ingredient.name
+				recipeSteps: recipe.recipeSteps.map((recipe_step: any) => ({
+					description: recipe_step.description,
+					cookTime: recipe_step.cook_time,
+					prepTime: recipe_step.prep_time,
+					ingredients: recipe_step.ingredients?.map((ingredient: any) => ({
+						name: ingredient.name,
+						quantity: ingredient.quantity,
+						unit: ingredient.measurement
 					})),
-					utensils: step.utensils?.map((utensil: any) => ({
+					utensils: recipe_step.utensils?.map((utensil: any) => ({
 						name: utensil.name
 					}))
 				})),
 				tags: []
 			};
+
 		} catch (error: any) {
 			console.log(error);
 			return null;
 		}
 	}
 
-
-	// async getRecipe(id: number): Promise<Recipe | null> {
-	// 	try {
-	// 		const response = await axios.get(`${this._apiUrl}/recipes/${id}`);
-	// 		const recipe = response.data.data;
-	// 		return {
-	// 			id: recipe.id,
-	// 			title: recipe.title,
-	// 			description: recipe.description,
-	// 			numberPeople: recipe.number_people,
-	// 			recipeSteps: recipe.recipeSteps.map((step: any) => ({
-	// 				description: step.description,
-	// 				cookTime: step.cook_time,
-	// 				prepTime: step.prep_time,
-	// 				ingredients: step.ingredients?.map((ingredient: any) => ({
-	// 					name: ingredient.name
-	// 				})),
-	// 				utensils: step.utensils?.map((utensil: any) => ({
-	// 					name: utensil.name
-	// 				}))
-	// 			})),
-	// 			rating: recipe.rating,
-	// 			imageUrl: recipe.image_url,
-	// 			userId: recipe.user_id,
-	// 		};
-	// 	} catch (error: any) {
-	// 		console.error(error);
-	// 		return null;
-	// 	}
-	// }
 
 
 
@@ -304,10 +284,19 @@ export class API {
 	 * Remove a recipe with the specified id in paramter and returns the new full list of recipes. 
 	 * @param id The id of the recipe you want to delete
 	 */
-	removeRecipe(id: number): Recipe[] {
-		this.recipeList = this.recipeList.filter(recipe => recipe.id !== id);
-		return this.recipeList;
+	async removeRecipe(id: number): Promise<string | undefined> {
+		let returnDatas: string | undefined;
+		try {
+			const response = await axios.delete(this._apiUrl + "/recipes/" + id);
+			returnDatas = response.data.success;
+
+		} catch (error: any) {
+			return JSON.parse(error.request.response).message || JSON.parse(error.request.response).error;
+		}
+
+		return returnDatas;
 	}
+
 
 
 	/**
@@ -328,16 +317,16 @@ export class API {
 				image_url: "https://www.facebook.com/",
 				rating: recipe.rating,
 				user_id: recipe.userId,
-				recipe_steps: recipe.steps.map((step) => ({
-					description: step.descriptionValue,
-					prep_time: step.preptimeValue,
-					cook_time: step.cooktimeValue,
-					ingredients: step.ingredients.map((ingredient: any) => ({
+				recipe_steps: recipe.recipeSteps.map((recipeStep) => ({
+					description: recipeStep.descriptionValue,
+					prep_time: recipeStep.preptimeValue,
+					cook_time: recipeStep.cooktimeValue,
+					ingredients: recipeStep.ingredients.map((ingredient: any) => ({
 						name: ingredient.name,
 						quantity: ingredient.quantity,
 						measurement: ingredient.unit
 					})),
-					utensils: step.utensils.map((utensil: any) => ({
+					utensils: recipeStep.utensils.map((utensil: any) => ({
 						name: utensil.name
 					}))
 				}))
@@ -350,21 +339,21 @@ export class API {
 				description: response.data.data.description,
 				numberPeople: response.data.data.numberPeople,
 				tags: response.data.data.tags,
-				pictureUrl: response.data.data.pictureUrl,
+				imageUrl: response.data.data.imageUrl,
 				rating: response.data.data.rating,
 				userId: response.data.data.user_id,
-				steps: response.data.data.recipeSteps.map((step: any) => ({
-					id: step.id,
-					description: step.description,
-					prepTime: step.prepTime,
-					cookTime: step.cookTime,
-					ingredients: step.ingredients.map((ingredient: any) => ({
+				recipeSteps: response.data.data.recipeSteps.map((recipeStep: any) => ({
+					id: recipeStep.id,
+					description: recipeStep.description,
+					prepTime: recipeStep.prepTime,
+					cookTime: recipeStep.cookTime,
+					ingredients: recipeStep.ingredients.map((ingredient: any) => ({
 						id: ingredient.id,
 						name: ingredient.name,
 						quantity: ingredient.quantity,
 						measurement: ingredient.measurement
 					})),
-					utensils: step.utensils.map((utensil: any) => ({
+					utensils: recipeStep.utensils.map((utensil: any) => ({
 						id: utensil.id,
 						name: utensil.name
 					}))
@@ -408,16 +397,16 @@ export class API {
 				image_url: "https://www.facebook.com/",
 				rating: recipe.rating,
 				user_id: recipe.userId,
-				recipe_steps: recipe.steps.map((step) => ({
-					description: step.descriptionValue,
-					prep_time: step.preptimeValue,
-					cook_time: step.cooktimeValue,
-					ingredients: step.ingredients.map((ingredient: any) => ({
+				recipe_steps: recipe.recipeSteps.map((recipeSteps) => ({
+					description: recipeSteps.descriptionValue,
+					prep_time: recipeSteps.preptimeValue,
+					cook_time: recipeSteps.cooktimeValue,
+					ingredients: recipeSteps.ingredients.map((ingredient: any) => ({
 						name: ingredient.name,
 						quantity: ingredient.quantity,
 						measurement: ingredient.unit
 					})),
-					utensils: step.utensils.map((utensil: any) => ({
+					utensils: recipeSteps.utensils.map((utensil: any) => ({
 						name: utensil.name
 					}))
 				}))
@@ -430,21 +419,21 @@ export class API {
 				description: response.data.data.description,
 				numberPeople: response.data.data.numberPeople,
 				tags: response.data.data.tags,
-				pictureUrl: response.data.data.pictureUrl,
+				imageUrl: response.data.data.imageUrl,
 				rating: response.data.data.rating,
 				userId: response.data.data.user_id,
-				steps: response.data.data.recipeSteps.map((step: any) => ({
-					id: step.id,
-					description: step.description,
-					prepTime: step.prepTime,
-					cookTime: step.cookTime,
-					ingredients: step.ingredients.map((ingredient: any) => ({
+				recipeSteps: response.data.data.recipeSteps.map((recipeSteps: any) => ({
+					id: recipeSteps.id,
+					description: recipeSteps.description,
+					prepTime: recipeSteps.prepTime,
+					cookTime: recipeSteps.cookTime,
+					ingredients: recipeSteps.ingredients.map((ingredient: any) => ({
 						id: ingredient.id,
 						name: ingredient.name,
 						quantity: ingredient.quantity,
 						measurement: ingredient.measurement
 					})),
-					utensils: step.utensils.map((utensil: any) => ({
+					utensils: recipeSteps.utensils.map((utensil: any) => ({
 						id: utensil.id,
 						name: utensil.name
 					}))

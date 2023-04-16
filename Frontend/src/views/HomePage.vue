@@ -50,9 +50,22 @@ export default {
      * It does the API call to remove a recipe.
      * @param id id of the recipe you want to delete
      */
-    deleteRecipe(id: number) {
-      this.recipes = API.instance.removeRecipe(id);
+    async deleteRecipe(id: number) {
+      console.log("Remove recipe " + id);
+      const returnMessage = await API.instance.removeRecipe(id);
+      if (returnMessage !== undefined) {
+        if (returnMessage === "recipe deleted successfully") {
+          this.messageType = "success";
+          console.log("Recipes before deletion:", this.recipes);
+          this.recipes = this.recipes.filter(item => item.id !== id);
+          console.log("Recipes after deletion:", this.recipes);
+        } else {
+          this.messageType = "warning";
+        }
+        this.messageText = returnMessage;
+      }
     },
+
     handleSearch(searchText: string) {
       console.log("Performing search for:", searchText);
     }
@@ -79,9 +92,9 @@ export default {
 <template>
   <main>
 
-    <RecipeListComponent :recipes="recipes"
-                @delete-recipe="(id) => $emit('delete-recipe', id)" :isUserAuthenticated="true" />
-    
+    <RecipeListComponent :recipes="recipes" @delete-recipe="(id) => $emit('delete-recipe', id)"
+      :isUserAuthenticated="true" />
+
     <div>
       <CategoryListComponent :categories="categories" :recipes="recipes" @delete-recipe="deleteRecipe"
         :isUserAuthenticated="isAuthenticated" />

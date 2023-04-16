@@ -62,10 +62,10 @@ export default {
         } else {
           this.messageType = "warning";
         }
+        console.log("Deleting recipe with ID:", id);
         this.messageText = returnMessage;
       }
     },
-
     handleSearch(searchText: string) {
       console.log("Performing search for:", searchText);
     }

@@ -198,9 +198,9 @@ export class API {
 				description: recipe.description,
 				numberPeople: recipe.number_people,
 				rating: recipe.rating,
-				imageUrl: recipe.image_url,
+				pictureUrl: recipe.image_url,
 				userId: recipe.user_id,
-				recipeSteps: recipe.recipeSteps.map((step: any) => ({
+				steps: recipe.recipeSteps.map((step: any) => ({
 					description: step.description,
 					cookTime: step.cook_time,
 					prepTime: step.prep_time,
@@ -229,39 +229,35 @@ export class API {
 		return this.categoryList;
 	}
 	async getRecipe(id: number): Promise<Recipe | null> {
+		console.error("test", id)
 		try {
 			// Make an API call to retrieve the recipe by its ID
 			const response = await axios.get(this._apiUrl + "/recipes/" + id);
 			console.error(response);
 
 			// Extract the recipe data from the response and map it to a Recipe object
-			const recipe = response.data;
+			const recipe = response.data.data;
 
 			return {
 				id: recipe.id,
 				title: recipe.title,
 				description: recipe.description,
-				numberPeople: recipe.numberPeople,
-				tags: recipe.tags,
-				pictureUrl: recipe.pictureUrl,
+				numberPeople: recipe.number_people,
 				rating: recipe.rating,
+				pictureUrl: recipe.image_url,
 				userId: recipe.user_id,
 				steps: recipe.recipeSteps.map((step: any) => ({
-					id: step.id,
 					description: step.description,
-					prepTime: step.prepTime,
-					cookTime: step.cookTime,
-					ingredients: step.ingredients.map((ingredient: any) => ({
-						id: ingredient.id,
-						name: ingredient.name,
-						quantity: ingredient.quantity,
-						measurement: ingredient.measurement
+					cookTime: step.cook_time,
+					prepTime: step.prep_time,
+					ingredients: step.ingredients?.map((ingredient: any) => ({
+						name: ingredient.name
 					})),
-					utensils: step.utensils.map((utensil: any) => ({
-						id: utensil.id,
+					utensils: step.utensils?.map((utensil: any) => ({
 						name: utensil.name
 					}))
-				}))
+				})),
+				tags: []
 			};
 		} catch (error: any) {
 			console.log(error);

@@ -30,7 +30,7 @@ export default {
   // In the first bracket, we define the types of the variables we will use,
   // And in the second bracket we define the initiale values.
   data(): {
-    recipeTempObject: Recipe | null,
+    recipeTempObject: Recipe,
     stepCounter: number,
     mode: "create" | "edit",
     messageText: string,
@@ -42,7 +42,7 @@ export default {
     // And a boolean created variable, which will be true when a recipe has been created to display a success message.
     return {
       stepCounter: 1,
-      recipeTempObject: null,
+      recipeTempObject: new Recipe(0, "", "", 0, [], 0, "", undefined, 0),
       mode: "create",
       messageText: "",
       messageType: "success",
@@ -135,7 +135,7 @@ export default {
     // If the id parameter is not empty, then it means we will edit a recipe, so we get the current recipe from an API call and change the mode
     if (this.id !== "") {
       const recipeObject = await API.instance.getRecipe(parseInt(this.id));
-      if (recipeObject !== undefined) {
+      if (recipeObject) {
         this.recipeTempObject = recipeObject;
         this.mode = "edit";
       }

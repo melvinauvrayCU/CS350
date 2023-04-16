@@ -3,7 +3,7 @@ import StepView from "@/components/view/StepViewComponent.vue";
 import ViewIngredientList from "@/components/view/ViewIngredientListComponent.vue";
 import ViewUtensilList from "@/components/view/ViewUtensilListComponent.vue";
 import { API } from "@/model/apiCalls";
-import { Recipe } from "@/model/recipeModel";
+import type { Recipe } from "@/model/recipeModel";
 import type { Conversion, Unit } from "@/model/PantryModels";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import PageSeparator from "@/components/PageSeparatorComponent.vue";
@@ -32,12 +32,10 @@ export default {
       if (this.recipe) {
         router.push({ name: "home" });
       }
-    },
-    async created() {
-      this.recipe = await API.instance.getRecipe(parseInt(this.id));
     }
-
-
+  },
+  async created() {
+    this.recipe = await API.instance.getRecipe(parseInt(this.id));
   },
   /**We use the StepView to view the steps the custmo button for the recipe completed button and the page 
    * separator and background icons for formatting

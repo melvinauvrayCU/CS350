@@ -92,8 +92,7 @@ export default {
 <template>
   <main>
 
-    <RecipeListComponent :recipes="recipes" @delete-recipe="(id) => $emit('delete-recipe', id)"
-      :isUserAuthenticated="true" />
+    <RecipeListComponent :recipes="recipes" @delete-recipe="deleteRecipe" :isUserAuthenticated="true" />
 
     <div>
       <CategoryListComponent :categories="categories" :recipes="recipes" @delete-recipe="deleteRecipe"

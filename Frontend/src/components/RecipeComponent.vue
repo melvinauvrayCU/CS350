@@ -30,10 +30,8 @@ export default {
             router.push({ name: "createRecipe", params: { id: this.recipe.id } });
         },
         deleteRecipeSignal(event: MouseEvent) {
-            console.error(event);
             event.stopPropagation();
             this.$emit("delete-recipe", this.recipe.id);
-
         },
 
 

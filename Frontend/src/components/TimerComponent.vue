@@ -22,10 +22,12 @@ export default {
         },
     },
     data(): {
+        hours: number,
         minutes: number,
         seconds: number,
         displaySeconds: string,
         displayMinutes: string,
+        displayHours: string,
         timerRef: number,
         blinkingTimerRef: number,
         isTimerRunning: boolean,
@@ -34,10 +36,12 @@ export default {
         audio: HTMLAudioElement
     } {
         return {
+            hours: 0,
             minutes: 0,
             seconds: 0,
             displaySeconds: "0",
             displayMinutes: "0",
+            displayHours: "0",
             timerRef: 0,
             blinkingTimerRef: 0,
             isTimerRunning: false,
@@ -85,11 +89,15 @@ export default {
         },
         startTimer(time: string): void {
             clearInterval(this.timerRef);
-            [this.minutes, this.seconds] = time.split(":").map(Number);
+            [this.hours, this.minutes, this.seconds] = time.split(":").map(Number);
             this.isTimerRunning = true;
             this.timerRef = setInterval(() => {
-                if (this.seconds === 0 && this.minutes === 0) {
+                if (this.seconds === 0 && this.minutes === 0 && this.hours === 0) {
                     this.timerStop();
+                } else if (this.seconds === 0 && this.minutes === 0) {
+                    this.hours--;
+                    this.minutes = 59;
+                    this.seconds = 59;
                 } else if (this.seconds === 0) {
                     this.minutes--;
                     this.seconds = 59;
@@ -98,8 +106,9 @@ export default {
                 }
                 this.displaySeconds = this.seconds < 10 ? "0" + this.seconds : this.seconds.toString();
                 this.displayMinutes = this.minutes < 10 ? "0" + this.minutes : this.minutes.toString();
+                this.displayHours = this.hours < 10 ? "0" + this.hours : this.hours.toString();
                 if (!document.hasFocus()) {
-                    document.title = `${this.displayMinutes}:${this.displaySeconds}` + (this.modelValue?.cooktime ? ' cook time' : ' preparation time') + " remaining - RecipeBuddy";
+                    document.title = `${this.displayHours}:${this.displayMinutes}:${this.displaySeconds}` + (this.modelValue?.cooktime ? ' cook time' : ' preparation time') + " remaining - RecipeBuddy";
                 } else {
                     document.title = "RecipeBuddy";
                 }
@@ -113,8 +122,12 @@ export default {
             } else {
                 this.isTimerRunning = true;
                 this.timerRef = setInterval(() => {
-                    if (this.seconds === 0 && this.minutes === 0) {
+                    if (this.seconds === 0 && this.minutes === 0 && this.hours === 0) {
                         this.timerStop();
+                    } else if (this.seconds === 0 && this.minutes === 0) {
+                        this.hours--;
+                        this.minutes = 59;
+                        this.seconds = 59;
                     } else if (this.seconds === 0) {
                         this.minutes--;
                         this.seconds = 59;
@@ -123,8 +136,9 @@ export default {
                     }
                     this.displaySeconds = this.seconds < 10 ? "0" + this.seconds : this.seconds.toString();
                     this.displayMinutes = this.minutes < 10 ? "0" + this.minutes : this.minutes.toString();
+                    this.displayHours = this.hours < 10 ? "0" + this.hours : this.hours.toString();
                     if (!document.hasFocus()) {
-                        document.title = `${this.displayMinutes}:${this.displaySeconds}` + (this.modelValue?.cooktime ? ' cook time' : ' preparation time') + " remaining - RecipeBuddy";
+                        document.title = `${this.displayHours}:${this.displayMinutes}:${this.displaySeconds}` + (this.modelValue?.cooktime ? ' cook time' : ' preparation time') + " remaining - RecipeBuddy";
                     } else {
                         document.title = "RecipeBuddy";
                     }
@@ -143,6 +157,8 @@ export default {
                 // We reset values
                 this.minutes = 0;
                 this.seconds = 0;
+                this.hours = 0;
+                this.displayHours = "0";
                 this.displaySeconds = "0";
                 this.displayMinutes = "0";
                 this.isTimerRunning = false;
@@ -152,9 +168,10 @@ export default {
                 clearInterval(this.blinkingTimerRef);
                 clearInterval(this.timerRef);
 
-                [this.minutes, this.seconds] = newVal.time.split(":").map(Number);
+                [this.hours, this.minutes, this.seconds] = newVal.time.split(":").map(Number);
                 this.displaySeconds = this.seconds < 10 ? "0" + this.seconds : this.seconds.toString();
                 this.displayMinutes = this.minutes < 10 ? "0" + this.minutes : this.minutes.toString();
+                this.displayHours = this.hours < 10 ? "0" + this.hours : this.hours.toString();
                 this.isTimerRunning = false;
                 this.isTimerOver = false;
                 this.startTimer(newVal.time);
@@ -171,7 +188,7 @@ export default {
         <h1>{{ modelValue.recipeName }}</h1>
         <h2>Step {{ modelValue.stepIndex }} - {{ modelValue.cooktime ? 'Cook' : 'Preparation' }} time</h2>
         <p :class="{ 'paused': !isTimerRunning, 'over': isTimerOver }">Time remaining: <strong>{{
-            `${displayMinutes}:${displaySeconds}`
+            `${displayHours}:${displayMinutes}:${displaySeconds}`
         }}</strong></p>
         <div class="containerButtons">
             <CustomButton type="neutral" effect="plain" :text="isTimerOver ? 'Close' : 'Stop'"

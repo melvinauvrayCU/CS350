@@ -36,6 +36,7 @@ export default {
   },
   async created() {
     this.recipe = await API.instance.getRecipe(parseInt(this.id));
+    console.error("&&", this.recipe)
   },
   /**We use the StepView to view the steps the custmo button for the recipe completed button and the page 
    * separator and background icons for formatting

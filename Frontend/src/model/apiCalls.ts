@@ -245,30 +245,38 @@ export class API {
 			const recipe = response.data.data;
 			console.log(recipe);
 
-			return {
-				id: recipe.id,
-				title: recipe.title,
-				description: recipe.description,
-				numberPeople: recipe.number_people,
-				rating: recipe.rating,
-				imageUrl: recipe.image_url,
-				userId: recipe.user_id,
-				recipeSteps: recipe.recipeSteps.map((recipe_step: any) => ({
-					description: recipe_step.description,
-					cookTime: recipe_step.cook_time,
-					prepTime: recipe_step.prep_time,
-					ingredients: recipe_step.ingredients?.map((ingredient: any) => ({
-						name: ingredient.name,
-						quantity: ingredient.quantity,
-						unit: ingredient.measurement
-					})),
-					utensils: recipe_step.utensils?.map((utensil: any) => ({
-						name: utensil.name
-					}))
-				})),
-				tags: []
-			};
-
+			return new Recipe(
+				recipe.id,
+				recipe.title,
+				recipe.description,
+				recipe.numberPeople,
+				recipe.recipeSteps.map((step: any) => {
+					const stepTemp: Step = {
+						stepId: step.id,
+						descriptionValue: step.description,
+						cooktimeValue: step.cookTime,
+						preptimeValue: step.prepTime,
+						ingredients: step.ingredients.map((ingredient: any) => {
+							return new Ingredient(
+								ingredient.name,
+								ingredient.quantity,
+								ingredient.measurement,
+								ingredient.id
+							);
+						}),
+						utensils: step.utensils.map((utensil: any) => {
+							return utensil.name;
+						}),
+					};
+					return stepTemp;
+				})
+				,
+				recipe.rating,
+				recipe.imageUrl,
+				[] // tags
+				,
+				recipe.user.id // Add more infos here ?
+			);
 		} catch (error: any) {
 			console.log(error);
 			return null;

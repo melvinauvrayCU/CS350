@@ -14,11 +14,19 @@ class User extends Model
         'name',
         'email',
         'password',
+        'bio',
+        'fname',
+        'lname',
+        'profile_picture',
     ];
 
     public function recipes()
     {
         return $this->hasMany(Recipe::class);
+    }
+
+    public function securityAnswers(){
+        return $this->hasMany(SecurityAnswers::class);
     }
 
     public function ingredientCategories()

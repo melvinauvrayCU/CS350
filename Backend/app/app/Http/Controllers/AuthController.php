@@ -9,26 +9,58 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
+
 class AuthController extends Controller
 {
     public function register (Request $request) {
         $fields =$request->validate([
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed' 
+            'bio' => 'required|string',
+            'fname' => 'required|string',
+            'lname' => 'required|string',
+            'profile_photo' => 'required|image|mimes:jpg,png,bmp',
+            'password' => 'required|string|confirmed', 
+            'password_confirmation' => 'required|same:password'
         ]);
+        $path = public_path();
+        if($request->file('profile_photo')){
+            $user = $request->user();
+            $old_path = public_path().'uploads/profile_images/'.$user->profile_photo;
+            $image_name='profile_image-'.time().'.'.$request->profile_photo->extention();
+            $request->profile_photo->move(public_path('/uploads/profile_images'),$image_name);
+            $user = User::create([
+                'name' => $fields['name'],
+                'email' => $fields['email'],
+                'bio' => $fields['bio'],
+                'fname' => $fields['fname'],
+                'lname' => $fields['lname'],
+                'profile_photo' => $fields['profile_photo'],
+                'password' => bcrypt($fields['password']),
+                
+            ]);
+            $message = 'You made it to the right if statement';
 
-        $user = User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password'])
-        ]);
+        }else{
+
+            $user = User::create([
+                'name' => $fields['name'],
+                'email' => $fields['email'],
+                'bio' => $fields['bio'],
+                'fname' => $fields['fname'],
+                'lname' => $fields['lname'],
+                'profile_photo' => public_path('/uploads/profile_images/default_profile_pic.jpg'),
+                'password' => bcrypt($fields['password'])
+            ]);
+            $message = 'You went to the wrong if statement';
+        }
 
         $token =$user -> createToken('usertoken')-> plainTextToken;
 
         $response = [
             'user' => $user,
-            'token' =>$token
+            'token' =>$token,
+            'message' => $path
         ];
 
         return response($response, 201);

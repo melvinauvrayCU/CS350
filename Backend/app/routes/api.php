@@ -18,13 +18,14 @@ use App\Http\Controllers\Api\V1\UserController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/user',[UserController::class, 'show']);
+Route::get('/user/auth',[AuthController::class, 'check']);
 
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/user/change-password',[UserController::class, 'change_password']);
-    Route::post('/user/edit',[UserController::class, 'edit']);
+    Route::put('/user/edit',[UserController::class, 'edit']);
+    Route::get('/user',[UserController::class, 'show']);
 });
 
 // api/v1

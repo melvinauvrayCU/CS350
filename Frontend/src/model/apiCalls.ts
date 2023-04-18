@@ -127,14 +127,7 @@ export class API {
 	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
 	and if a user is not defined then we need tell the user they need to sign up
 	*/
-	userList: User[] = [
-		new User("Ava.Megyeri", "Password", "megyeram@clarkson.edu"),
-		new User("petesupreme", "password1", "dorovip@clarkson.edu"),
-		new User("a", "a", "a@clarkson.edu"),
-		new User("Melvin Auvray", "melvin", "auvraym@clarkson.edu"),
-
-	];
-	currentUser: User = new User("", "", "");
+	
 
 	/** 
 	 * variable to check if a user is logged in or not 
@@ -168,7 +161,7 @@ export class API {
 	];
 
 	private _apiUrl: string = "https://www.api.cs350.melvinauvray.com/api/v1";
-
+	private _apiUrlshort: string = "https://www.api.cs350.melvinauvray.com/api";
 	// * ------------------- Start of the API call methods ------------------------
 
 	/**
@@ -256,7 +249,7 @@ export class API {
 			*/
 			const response = await axios.get(this._apiUrl + "/ingredientcategories", {
 				params: {
-					userId: this.currentUser.id,
+					userId: this.currentUser?.id,
 				}
 			});
 
@@ -286,7 +279,7 @@ export class API {
 			*/
 			const response = await axios.get(this._apiUrl + "/utensilcategories", {
 				params: {
-					userId: this.currentUser.id,
+					userId: this.currentUser?.id,
 				}
 			});
 			console.error(response);
@@ -387,7 +380,7 @@ export class API {
 			*/
 			const response = await axios.post(this._apiUrl + "/ingredientcategories", {
 				name: name,
-				userId: this.currentUser.id
+				userId: this.currentUser?.id
 			});
 			/**
 			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
@@ -551,7 +544,7 @@ export class API {
 			*/
 			const response = await axios.post(this._apiUrl + "/utensilcategories", {
 				name: name,
-				userId: this.currentUser.id
+				userId: this.currentUser?.id
 			});
 			/**
 			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
@@ -601,17 +594,21 @@ export class API {
 	 * @param username username 
 	 * @param password password 
 	 */
-	login(username: string, password: string): boolean {
-		if (this.userList.find(user => user.password === password && (user.username === username || user.email === username))) {
-			console.warn(`Welcome back ${username}`);
-			const temp = this.userList.find(user => user.username === username || user.email === username);
-			if (temp !== undefined) this.currentUser = temp;
-			this.loggedIn = true;
-			return true;
-		} else {
-			console.warn("Error!");
-			return false;
-		}
+
+
+	async login (email:string, password: string): Promise<boolean> {
+		try{
+		const response = await axios.post(this._apiUrlshort+"/login", {
+			email: email,
+			password: password,
+		});
+		console.log(response);
+		this.currentUser= new User(response.data.user.name, response.data.token, response.data.user.email,response.data.user.id);
+		return true;
+	}catch (error: any){
+		console.log(error);
+		return false;
+	}
 
 	}
 
@@ -623,32 +620,44 @@ export class API {
 	 * @param password password the user creates
 	 * @param email email the user puts it
 	 */
-	signup(email: string, username: string, password: string): boolean {
-		if (this.userList.find(user => user.email === email) || this.userList.find(user => user.username === username)) {
-			console.log("Email or username already taken");
+	currentUser: User| null = null;
+
+	async signup(email: string, username: string, password: string): Promise<boolean> {
+		try{
+		const response = await axios.post(this._apiUrlshort + "/register",{
+			name: username,
+			email: email,
+			password: password,
+			password_confirmation: password,
+		});
+		console.log(response);
+		this.currentUser= new User(response.data.user.name, response.data.token, response.data.user.email,response.data.user.id);
+		return true;
+		}catch(error: any){
 			return false;
-		} else {
-
-			this.userList.push(new User(email, username, password));
-			console.log("User created!");
-			this.loggedIn = true;
-			return true;
 		}
-
-
 	}
 
 	/**
 	 * checks if the user is logged in or not
 	 * 
 	 */
-	isLoggedIn(): boolean {
-		return this.loggedIn;
+	isLoggedIn() {
+		return !(this.currentUser == null);
 	}
 
-	logout(): boolean {
-		this.loggedIn = false;
-		return true;
+	async logout() {
+		try{
+		
+		const response = await axios.post(this._apiUrlshort+"/logout",null,{
+			headers:{Authorization: `Bearer ${this.currentUser?.token}`}
+		});
+		console.log(response);
+		console.log({Authorization: `Bearer ${this.currentUser?.token}`});
+		return response.data;
+		}catch(error: any){
+			throw new Error(error.response.data.message);
+		}
 	}
 
 
@@ -657,36 +666,24 @@ export class API {
 	/**
 	 * Goes through the users attributes and updates the first name, last name, username, and bio
 	 */
-	updateProfile(fname: string, lname: string, username: string, bio: string): boolean {
-		if (this.userList.find(user => user.username === username)) {
-			if (this.currentUser.username === username) {
-				this.currentUser.fname = fname;
-				this.currentUser.lname = lname;
-				this.currentUser.username = username;
-				this.currentUser.bio = bio;
-				return true;
-
-			}
-
-			console.log("username already taken");
-			return false;
+	async updateProfile(user: User): Promise<void>{
+		try{
+		const response = await axios.put(this._apiUrlshort+ "/user/edit",{
+		});
+		return response.data;
+		}catch(error: any){
+			throw new Error(error.response.data.message);
 		}
-
-		this.currentUser.fname = fname;
-		this.currentUser.lname = lname;
-		this.currentUser.username = username;
-		this.currentUser.bio = bio;
-
-
-		return true;
-
 	}
+		
+
+		
 
 	/**
 	 * Returns the current user to easily get their attributes
 	 */
 
-	getUser(): User {
+	getUser() {
 		return this.currentUser;
 
 	}

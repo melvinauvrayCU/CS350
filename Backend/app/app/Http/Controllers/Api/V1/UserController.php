@@ -12,6 +12,7 @@ use App\Filters\V1\UserFilter;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\File;
+use App\Http\Controllers\AuthController;
 
 
 /**
@@ -50,9 +51,17 @@ class UserController extends Controller
      * @param  \App\Models\Recipe  $recipe
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Request $request)
     {
-        return new UserResource($user);
+        $user_id = $request -> input('user_id');
+        $user=User::find($user_id);
+        if(!$user){
+            $response=[
+                'error' => 'User not found'
+            ];
+            return response($response,404);
+        }
+        return response($user);
     }
 
     /**
@@ -61,7 +70,7 @@ class UserController extends Controller
      * @param  \App\Models\Recipe  $recipe
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit(Request $request,$id)
     {
 
         $validator = Validator::make($request->all(),[
@@ -127,35 +136,42 @@ class UserController extends Controller
         //
     }
 
-    public function change_password(Request $request){
-        $validator = Validator::make($request->all(),[
-            'new_password' => 'required',
-            'new_password_confirmation' => 'required| same:new_password',
-            'old_password' => 'required',
-        ]);
-        if($validator->fails()){
-            $response = [
-                'message' => 'Validation failed',
-            ];
-    
-            return response($response, 422);
-        }
+    public function change_Password(Request $request)
+{
+    $user = $request -> user();
 
-        $user=$request -> user();
-        if(Hash::check($request->old_password, $user -> password)){
-            $user->update([
-                'password' => Hash::make($request->new_password)
-            ]);
-            $response = [
-                'message' => 'Password updated successfully',
-            ];
-            return response($response,200);
-        }else{
-            $response =[
-                'message' => 'Old Password does not match'
-            ];
-            return response($response,400);
-        }
+    $validatedData = $request->validate([
+        'security_question_1_id' => 'required',
+        'security_answer_1_id' => 'required',
+        'security_question_2_id' => 'required',
+        'security_answer_2_id' => 'required',
+        'security_question_3_id' => 'required',
+        'security_answer_3_id' => 'required',
+        'new_password' => 'required|min:8',
+    ]);
+
+    if (
+        $user->securityQuestion1->id !== $validatedData['security_question_1_id'] ||
+        $user->securityQuestion2->id !== $validatedData['security_question_2_id'] ||
+        $user->securityQuestion3->id !== $validatedData['security_question_3_id'] ||
+        $user->securityAnswer1->id !== $validatedData['security_answer_1_id'] ||
+        $user->securityAnswer2->id !== $validatedData['security_answer_2_id'] ||
+        $user->securityAnswer3->id !== $validatedData['security_answer_3_id']
+    ) {
+        $response =[
+            'message' => 'Incorrect security questions or answers'
+        ];
+        return response($response,422);
     }
+
+    $user->password = Hash::make($validatedData['new_password']);
+    $user->save();
+
+    $response =[
+        'message' => 'Password changed successfully'
+    ];
+    return response($response,200);
+}
+
 
 }

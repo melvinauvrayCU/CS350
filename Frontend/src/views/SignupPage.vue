@@ -36,11 +36,11 @@ export default {
   },
   methods: {
     //method to signup as a user
-    signup() {
+    async signup() {
       if (this.username !== "" && this.password !== "" && this.email !== "") {
 
         //API call to signup a user
-        var signedUp = API.instance.signup(this.email, this.username, this.password);
+        var signedUp = await API.instance.signup(this.email, this.username, this.password);
 
         //reset forms
         this.username = "";

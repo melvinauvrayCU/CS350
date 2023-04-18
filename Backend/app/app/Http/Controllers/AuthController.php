@@ -19,7 +19,7 @@ class AuthController extends Controller
             'bio' => 'required|string',
             'fname' => 'required|string',
             'lname' => 'required|string',
-            'profile_photo' => 'required|image|mimes:jpg,png,bmp',
+            'profile_photo' => 'nullable|image|mimes:jpg,png,bmp',
             'password' => 'required|string|confirmed', 
             'password_confirmation' => 'required|same:password'
         ]);
@@ -66,6 +66,16 @@ class AuthController extends Controller
         return response($response, 201);
 
     }
+
+    public function check(Request $request)
+    {
+        if ($request->user() && $request->user()->hasToken()) {
+            return response($request->user(),200);
+        } else {
+            return response('User is not logged in',401);
+        }
+    }
+
 
     public function login (Request $request) {
         $fields =$request->validate([

@@ -34,8 +34,8 @@ export default {
 
     methods: {
 
-        getUser() {
-            var user = API.instance.getUser();
+        async getUser() {
+            var user = await API.instance.getUser();
 
             this.username = user.username;
             this.fname = user.fname;

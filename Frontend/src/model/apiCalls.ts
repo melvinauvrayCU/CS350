@@ -324,7 +324,8 @@ export class API {
 				tags: recipe.tags,
 				image_url: "https://www.facebook.com/",
 				rating: recipe.rating,
-				user_id: recipe.userId,
+				// user_id: recipe.userId,
+				user_id: 1,
 				recipe_steps: recipe.recipeSteps.map((recipeStep) => ({
 					description: recipeStep.descriptionValue,
 					prep_time: recipeStep.preptimeValue,
@@ -339,7 +340,7 @@ export class API {
 					}))
 				}))
 			});
-			console.log(response);
+			console.error(response);
 
 			returnData = {
 				id: response.data.data.id,
@@ -367,8 +368,9 @@ export class API {
 					}))
 				}))
 			};
+			console.error(returnData);
 		} catch (error: any) {
-			console.log(error);
+			console.error(error);
 
 		}
 

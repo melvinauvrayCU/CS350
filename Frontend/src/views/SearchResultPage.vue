@@ -3,23 +3,39 @@ import { API } from "@/model/apiCalls";
 import type { Recipe } from "@/model/recipeModel";
 import PageTitleComponent from "@/components/PageTitleComponent.vue";
 import SearchResultsComponent from "@/components/SearchResultsComponent.vue";
+import MessageComponent from "@/components/MessageComponent.vue";
 
 export default {
     name: "SearchResultPage",
     components: {
         PageTitleComponent,
         SearchResultsComponent,
+        MessageComponent,
+    },
+    props: {
+        messageTextParam: {
+            type: String,
+            default: ""
+        },
+        messageTypeParam: {
+            type: String as () => "success" | "warning",
+            default: "success"
+        }
     },
     data(): {
         recipes: Array<Recipe>,
         matchingRecipes: Array<Recipe>,
         isUserAuthenticated: boolean,
+        messageText: string,
+        messageType: "success" | "warning",
         searchQuery: string,
     } {
         return {
             recipes: [],
             matchingRecipes: [],
             isUserAuthenticated: false,
+            messageText: "",
+            messageType: "success",
             searchQuery: "",
         };
     },
@@ -48,10 +64,21 @@ export default {
             this.updateMatchingRecipes();
             this.$router.push({ query: { q: query } });
         },
-        deleteRecipe(id: number) {
-            this.recipes = API.instance.removeRecipe(id);
-            this.updateMatchingRecipes();
-
+        async deleteRecipe(id: number) {
+            console.log("Remove recipe " + id);
+            const returnMessage = await API.instance.removeRecipe(id);
+            if (returnMessage !== undefined) {
+                if (returnMessage === "recipe deleted successfully") {
+                    this.messageType = "success";
+                    console.log("Recipes before deletion:", this.recipes);
+                    this.recipes = this.recipes.filter(item => item.id !== id);
+                    console.log("Recipes after deletion:", this.recipes);
+                } else {
+                    this.messageType = "warning";
+                }
+                console.log("Deleting recipe with ID:", id);
+                this.messageText = returnMessage;
+            }
         }
     },
     watch: {
@@ -70,6 +97,7 @@ export default {
         <SearchResultsComponent :recipes="matchingRecipes" @search="onSearch" @delete-recipe="deleteRecipe"
             :isUserAuthenticated="isUserAuthenticated" />
     </div>
+    <MessageComponent :type="messageType" v-model="messageText" />
 </template>
 
 <style>

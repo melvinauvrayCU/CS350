@@ -65,10 +65,12 @@ export default {
         console.log("Deleting recipe with ID:", id);
         this.messageText = returnMessage;
       }
+      this.recipes = await API.instance.getRecipes();
     },
     handleSearch(searchText: string) {
       console.log("Performing search for:", searchText);
-    }
+    },
+
   },
   /**
    * This method is called when this page is displayed.

@@ -158,6 +158,11 @@ class RecipeController extends Controller
      */
     public function destroy(Recipe $recipe)
     {
-        $recipe->delete();
+        try {
+            $recipe->delete();
+            return response()->json(['success' => 'recipe deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete recipe'], 500);
+        }
     }
 }

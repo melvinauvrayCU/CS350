@@ -9,8 +9,6 @@ export default {
     // This component will include an array of Category since we want to display the full list of categories available
     props: {
         categories: Array<Category>,
-        recipes: Array<Recipe>,
-
         isUserAuthenticated: {
             type: Boolean,
             required: true
@@ -19,14 +17,7 @@ export default {
     components: {
         CategoryComponent,
         RecipeListComponent,
-    },
-    methods: {
-        getRecipesForCategory(category: Category) {
-            return this.recipes?.filter((recipe) =>
-                category.linkedRecipeList.some((linkedRecipe) => linkedRecipe.id === recipe.id)
-            );
-        },
-    },
+    }
 };
 
 </script>
@@ -36,7 +27,7 @@ export default {
         <div v-for="category in categories" :key="category.id">
             <CategoryComponent :category="category" />
 
-            <RecipeListComponent :recipes="getRecipesForCategory(category)"
+            <RecipeListComponent :recipes="category.linkedRecipeList"
                 @delete-recipe="(id) => $emit('delete-recipe', id)" :isUserAuthenticated="isUserAuthenticated" />
         </div>
     </div>

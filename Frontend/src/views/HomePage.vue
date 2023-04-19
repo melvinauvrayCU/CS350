@@ -30,14 +30,12 @@ export default {
   // and the return one is the datas themself. 
   // We don't initialize the recipes yet, we will do so in the created method.
   data(): {
-    recipes: Array<Recipe>,
     categories: Array<Category>,
     messageText: string,
     messageType: "success" | "warning",
     isAuthenticated: boolean,
   } {
     return {
-      recipes: [],
       categories: [],
       messageText: "",
       messageType: "success",
@@ -56,16 +54,15 @@ export default {
       if (returnMessage !== undefined) {
         if (returnMessage === "recipe deleted successfully") {
           this.messageType = "success";
-          console.log("Recipes before deletion:", this.recipes);
-          this.recipes = this.recipes.filter(item => item.id !== id);
-          console.log("Recipes after deletion:", this.recipes);
+
+          this.categories = await API.instance.getCategories();
         } else {
           this.messageType = "warning";
         }
         console.log("Deleting recipe with ID:", id);
         this.messageText = returnMessage;
       }
-      this.recipes = await API.instance.getRecipes();
+      // this.recipes = await API.instance.getRecipes();
     },
     handleSearch(searchText: string) {
       console.log("Performing search for:", searchText);
@@ -77,8 +74,7 @@ export default {
    * We want to load the datas from the API, so we retrieve the list of recipes.
    */
   async created() {
-    this.categories = API.instance.getCategories();
-    this.recipes = await API.instance.getRecipes();
+    this.categories = await API.instance.getCategories();
     this.isAuthenticated = API.instance.isLoggedIn();
   },
   /**
@@ -93,11 +89,8 @@ export default {
 
 <template>
   <main>
-
-    <RecipeListComponent :recipes="recipes" @delete-recipe="deleteRecipe" :isUserAuthenticated="true" />
-
     <div>
-      <CategoryListComponent :categories="categories" :recipes="recipes" @delete-recipe="deleteRecipe"
+      <CategoryListComponent :categories="categories" @delete-recipe="deleteRecipe"
         :isUserAuthenticated="isAuthenticated" />
     </div>
 

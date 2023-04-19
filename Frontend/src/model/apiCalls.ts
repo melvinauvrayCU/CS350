@@ -158,12 +158,12 @@ export class API {
 	 * Its type is an array of Category class, defined in another file.
 	 * Will have a title and an array of recipes associated with category
 	 */
-	categoryList: Category[] = [
-		new Category("Recommended", "Recommended", this.recipeList),
-		new Category("Highest Rated", "Highest Rated", this.recipeList),
-		new Category("Recent", "Recent", this.recipeList),
-		new Category("Frequently Cooked", "Frequently Cooked", this.recipeList,),
-	];
+	// categoryList: Category[] = [
+	// 	new Category("Recommended", "Recommended", this.recipeList),
+	// 	new Category("Highest Rated", "Highest Rated", this.recipeList),
+	// 	new Category("Recent", "Recent", this.recipeList),
+	// 	new Category("Frequently Cooked", "Frequently Cooked", this.recipeList,),
+	// ];
 
 
 	utensilList: string[] = [
@@ -225,8 +225,56 @@ export class API {
 	/**
 	 * Return the full list of categories
 	 */
-	getCategories(): Category[] {
-		return this.categoryList;
+	async getCategories(): Promise<Category[]> {
+		const returnDatas: Category[] = [];
+		try {
+
+			const response = await axios.get(this._apiUrl + "/recipecategories");
+
+			response.data.data.map((cat: any) => {
+				returnDatas.push(new Category(
+					cat.name,
+					cat.recipes.map((recipe: any) => {
+						return new Recipe(
+							recipe.id,
+							recipe.title,
+							recipe.description,
+							recipe.numberPeople,
+							recipe.recipeSteps.map((step: any) => {
+								const stepTemp: Step = {
+									stepId: step.id,
+									descriptionValue: step.description,
+									cooktimeValue: step.cookTime,
+									preptimeValue: step.prepTime,
+									ingredients: step.ingredients.map((ingredient: any) => {
+										return new Ingredient(
+											ingredient.name,
+											ingredient.quantity,
+											ingredient.measurement,
+											ingredient.id
+										);
+									}),
+									utensils: step.utensils.map((utensil: any) => {
+										return utensil.name;
+									}),
+								};
+								return stepTemp;
+							})
+							,
+							recipe.rating,
+							recipe.imageUrl,
+							[] // tags
+							,
+							recipe.user.id // Add more infos here ?
+						);
+					})
+				))
+			});
+
+		} catch (error: any) {
+			console.error(error);
+		}
+		return returnDatas;
 	}
 
 	/**

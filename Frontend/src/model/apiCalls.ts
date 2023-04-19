@@ -317,15 +317,15 @@ export class API {
 		let returnData: Recipe | undefined;
 
 		try {
-			const response = await axios.post(this._apiUrl + "/recipes", {
+			const bodyObject = {
 				title: recipe.title,
 				description: recipe.description,
 				number_people: recipe.numberPeople,
-				tags: recipe.tags,
+				// tags: recipe.tags, // ? The backend doesn't have tags
 				image_url: "https://www.facebook.com/",
 				rating: recipe.rating,
-				// user_id: recipe.userId,
-				user_id: 1,
+				user_id: this.currentUser.id,
+				// user_id: 1,
 				recipe_steps: recipe.recipeSteps.map((recipeStep) => ({
 					description: recipeStep.descriptionValue,
 					prep_time: recipeStep.preptimeValue,
@@ -336,10 +336,12 @@ export class API {
 						measurement: ingredient.unit
 					})),
 					utensils: recipeStep.utensils.map((utensil: any) => ({
-						name: utensil.name
+						name: utensil // ? The usentils array just contains string, so we can just return it instead of putting utensil.name
 					}))
 				}))
-			});
+			};
+			console.error("😀", bodyObject)
+			const response = await axios.post(this._apiUrl + "/recipes", bodyObject);
 			console.error(response);
 
 			returnData = {

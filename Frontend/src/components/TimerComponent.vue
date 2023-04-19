@@ -89,24 +89,38 @@ export default {
         },
         startTimer(time: string): void {
             clearInterval(this.timerRef);
-            [this.hours, this.minutes, this.seconds] = time.split(":").map(Number);
+
+            const timeArray = time.split(":").map(Number);
+
+            if (timeArray.length === 3) {
+                [this.hours, this.minutes, this.seconds] = timeArray;
+            } else if (timeArray.length === 2) {
+                [this.minutes, this.seconds] = timeArray;
+            } else {
+                throw new Error("Invalid time format. Expected hh:mm:ss or mm:ss.");
+            }
+
             this.isTimerRunning = true;
             this.timerRef = setInterval(() => {
                 if (this.seconds === 0 && this.minutes === 0 && this.hours === 0) {
                     this.timerStop();
                 } else if (this.seconds === 0 && this.minutes === 0) {
-                    this.hours--;
-                    this.minutes = 59;
-                    this.seconds = 59;
+                    if (this.hours > 0) {
+                        this.hours--;
+                        this.minutes = 59;
+                        this.seconds = 59;
+                    }
                 } else if (this.seconds === 0) {
                     this.minutes--;
                     this.seconds = 59;
                 } else {
                     this.seconds--;
                 }
+
                 this.displaySeconds = this.seconds < 10 ? "0" + this.seconds : this.seconds.toString();
                 this.displayMinutes = this.minutes < 10 ? "0" + this.minutes : this.minutes.toString();
                 this.displayHours = this.hours < 10 ? "0" + this.hours : this.hours.toString();
+
                 if (!document.hasFocus()) {
                     document.title = `${this.displayHours}:${this.displayMinutes}:${this.displaySeconds}` + (this.modelValue?.cooktime ? ' cook time' : ' preparation time') + " remaining - RecipeBuddy";
                 } else {
@@ -125,18 +139,22 @@ export default {
                     if (this.seconds === 0 && this.minutes === 0 && this.hours === 0) {
                         this.timerStop();
                     } else if (this.seconds === 0 && this.minutes === 0) {
-                        this.hours--;
-                        this.minutes = 59;
-                        this.seconds = 59;
+                        if (this.hours > 0) {
+                            this.hours--;
+                            this.minutes = 59;
+                            this.seconds = 59;
+                        }
                     } else if (this.seconds === 0) {
                         this.minutes--;
                         this.seconds = 59;
                     } else {
                         this.seconds--;
                     }
+
                     this.displaySeconds = this.seconds < 10 ? "0" + this.seconds : this.seconds.toString();
                     this.displayMinutes = this.minutes < 10 ? "0" + this.minutes : this.minutes.toString();
                     this.displayHours = this.hours < 10 ? "0" + this.hours : this.hours.toString();
+
                     if (!document.hasFocus()) {
                         document.title = `${this.displayHours}:${this.displayMinutes}:${this.displaySeconds}` + (this.modelValue?.cooktime ? ' cook time' : ' preparation time') + " remaining - RecipeBuddy";
                     } else {
@@ -168,7 +186,16 @@ export default {
                 clearInterval(this.blinkingTimerRef);
                 clearInterval(this.timerRef);
 
-                [this.hours, this.minutes, this.seconds] = newVal.time.split(":").map(Number);
+                const timeArray = newVal.time.split(":").map(Number);
+
+                if (timeArray.length === 3) {
+                    [this.hours, this.minutes, this.seconds] = timeArray;
+                } else if (timeArray.length === 2) {
+                    [this.minutes, this.seconds] = timeArray;
+                } else {
+                    throw new Error("Invalid time format. Expected hh:mm:ss or mm:ss.");
+                }
+
                 this.displaySeconds = this.seconds < 10 ? "0" + this.seconds : this.seconds.toString();
                 this.displayMinutes = this.minutes < 10 ? "0" + this.minutes : this.minutes.toString();
                 this.displayHours = this.hours < 10 ? "0" + this.hours : this.hours.toString();

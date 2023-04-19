@@ -73,6 +73,7 @@ export default {
                     console.log("Recipes before deletion:", this.recipes);
                     this.recipes = this.recipes.filter(item => item.id !== id);
                     console.log("Recipes after deletion:", this.recipes);
+                    this.updateMatchingRecipes();
                 } else {
                     this.messageType = "warning";
                 }

@@ -297,7 +297,7 @@ export class API {
 		try {
 			const response = await axios.delete(this._apiUrl + "/recipes/" + id);
 			returnDatas = response.data.success;
-
+			console.error(returnDatas, response.data.success, response);
 		} catch (error: any) {
 			return JSON.parse(error.request.response).message || JSON.parse(error.request.response).error;
 		}
@@ -313,9 +313,7 @@ export class API {
 	 * @param title Title of the recipe
 	 * @param description Description of the recipe.
 	 */
-	async createRecipe(recipe: Recipe): Promise<Recipe | string | undefined> {
-		let returnData: Recipe | undefined;
-
+	async createRecipe(recipe: Recipe): Promise<boolean> {
 		try {
 			const bodyObject = {
 				title: recipe.title,
@@ -324,8 +322,7 @@ export class API {
 				// tags: recipe.tags, // ? The backend doesn't have tags
 				image_url: "https://www.facebook.com/",
 				rating: recipe.rating,
-				user_id: this.currentUser.id,
-				// user_id: 1,
+				user_id: this.currentUser.id, // ? We want the id of the current user logged in
 				recipe_steps: recipe.recipeSteps.map((recipeStep) => ({
 					description: recipeStep.descriptionValue,
 					prep_time: recipeStep.preptimeValue,
@@ -341,74 +338,29 @@ export class API {
 				}))
 			};
 			console.error("😀", bodyObject)
-			const response = await axios.post(this._apiUrl + "/recipes", bodyObject);
-			console.error(response);
-
-			returnData = {
-				id: response.data.data.id,
-				title: response.data.data.title,
-				description: response.data.data.description,
-				numberPeople: response.data.data.numberPeople,
-				tags: response.data.data.tags,
-				imageUrl: response.data.data.imageUrl,
-				rating: response.data.data.rating,
-				userId: response.data.data.user_id,
-				recipeSteps: response.data.data.recipeSteps.map((recipeStep: any) => ({
-					id: recipeStep.id,
-					description: recipeStep.description,
-					prepTime: recipeStep.prepTime,
-					cookTime: recipeStep.cookTime,
-					ingredients: recipeStep.ingredients.map((ingredient: any) => ({
-						id: ingredient.id,
-						name: ingredient.name,
-						quantity: ingredient.quantity,
-						measurement: ingredient.measurement
-					})),
-					utensils: recipeStep.utensils.map((utensil: any) => ({
-						id: utensil.id,
-						name: utensil.name
-					}))
-				}))
-			};
-			console.error(returnData);
+			await axios.post(this._apiUrl + "/recipes", bodyObject);
+			return true;
 		} catch (error: any) {
 			console.error(error);
-
 		}
-
-		return returnData;
+		return false;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	/**
 	 * Edit a recipe
 	 * @param recipeId Id of the recipe to be edited
 	 * @param recipeObj New recipe object to replace the old one
 	 */
-	async editRecipe(recipe: Recipe): Promise<Recipe | string | undefined> {
-		let returnData: Recipe | undefined;
-
+	async editRecipe(recipe: Recipe): Promise<boolean> {
 		try {
-			const response = await axios.put(this._apiUrl + "/recipes/" + recipe.id, {
+			const bodyObject = {
 				title: recipe.title,
 				description: recipe.description,
-				number_people: recipe.numberPeople,
-				tags: recipe.tags,
-				image_url: "https://www.facebook.com/",
+				numberPeople: recipe.numberPeople, // ? For the edit, the backend requirement is camelCase for this field
+				// tags: recipe.tags, // ? No tags in backend
+				image_url: "https://www.facebook.com/", // ! We need to update that in the future
 				rating: recipe.rating,
-				user_id: recipe.userId,
+				user_id: this.currentUser.id, // ? We send the id of the connected user
 				recipe_steps: recipe.recipeSteps.map((recipeSteps) => ({
 					description: recipeSteps.descriptionValue,
 					prep_time: recipeSteps.preptimeValue,
@@ -419,44 +371,17 @@ export class API {
 						measurement: ingredient.unit
 					})),
 					utensils: recipeSteps.utensils.map((utensil: any) => ({
-						name: utensil.name
-					}))
-				}))
-			});
-			console.log(response);
-
-			returnData = {
-				id: response.data.data.id,
-				title: response.data.data.title,
-				description: response.data.data.description,
-				numberPeople: response.data.data.numberPeople,
-				tags: response.data.data.tags,
-				imageUrl: response.data.data.imageUrl,
-				rating: response.data.data.rating,
-				userId: response.data.data.user_id,
-				recipeSteps: response.data.data.recipeSteps.map((recipeSteps: any) => ({
-					id: recipeSteps.id,
-					description: recipeSteps.description,
-					prepTime: recipeSteps.prepTime,
-					cookTime: recipeSteps.cookTime,
-					ingredients: recipeSteps.ingredients.map((ingredient: any) => ({
-						id: ingredient.id,
-						name: ingredient.name,
-						quantity: ingredient.quantity,
-						measurement: ingredient.measurement
-					})),
-					utensils: recipeSteps.utensils.map((utensil: any) => ({
-						id: utensil.id,
-						name: utensil.name
+						name: utensil // ? Utensil is already a string
 					}))
 				}))
 			};
+			console.error("😀", bodyObject)
+			await axios.put(this._apiUrl + "/recipes/" + recipe.id, bodyObject);
+			return true;
 		} catch (error: any) {
 			console.log(error);
-
+			return false;
 		}
-
-		return returnData;
 	}
 
 

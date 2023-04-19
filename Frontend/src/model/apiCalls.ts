@@ -337,7 +337,6 @@ export class API {
 					}))
 				}))
 			};
-			console.error("😀", bodyObject)
 			await axios.post(this._apiUrl + "/recipes", bodyObject);
 			return true;
 		} catch (error: any) {
@@ -375,7 +374,6 @@ export class API {
 					}))
 				}))
 			};
-			console.error("😀", bodyObject)
 			await axios.put(this._apiUrl + "/recipes/" + recipe.id, bodyObject);
 			return true;
 		} catch (error: any) {
@@ -434,8 +432,6 @@ export class API {
 					userId: this.currentUser.id,
 				}
 			});
-			console.error(response);
-			console.error(returnDatas);
 			/**
 			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
 			 * We will loop through the field data that is inside the field data that is in our response
@@ -447,7 +443,6 @@ export class API {
 				 * We make sure that this temp variable is of type Ingredient, so we don't push weird things into our array.
 				 */
 				const utensilToReturn: IngredientCat = new IngredientCat(data.id, "U", data.name, data.utensils);
-				console.error(utensilToReturn);
 				return utensilToReturn;
 			}));
 			console.error(returnDatas);

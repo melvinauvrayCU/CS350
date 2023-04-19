@@ -145,6 +145,8 @@ class RecipeController extends Controller
             });
             return $newstep;
         });
+
+        return new RecipeResource($recipe);
     }
 
 

@@ -23,7 +23,7 @@ class RecipeResource extends JsonResource
             'numberPeople' => $this->number_people,
             'rating' => $this->rating,
             'imageUrl' => $this->image_url,
-            'recipeSteps' => new RecipeStepCollection($this->recipeSteps),
+            'recipeSteps' => new RecipeStepCollection($this->recipeSteps->sortBy('id')),
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
         ];
@@ -32,7 +32,7 @@ class RecipeResource extends JsonResource
             $data['user'] = new UserResource($this->user);
         }
         if (!$this->collection) {
-            $data['recipeSteps'] = new RecipeStepCollection($this->recipeSteps);
+            $data['recipeSteps'] = new RecipeStepCollection($this->recipeSteps->sortBy('id'));
         }
 
         return $data;

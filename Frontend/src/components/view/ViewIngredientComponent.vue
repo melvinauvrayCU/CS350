@@ -47,10 +47,9 @@ export default {
             return (unit.name == this.search);
         },
         correctUnit() {
-            const ingredientUnit: Array<Unit> = this.units.filter(this.checkUnit); 
+            const ingredientUnit: Array<Unit> = this.units.filter(this.checkUnit);
             var conversionUnit: string = "";
-
-            if ((this.ingredient.unit !== "")) {
+            if ((this.ingredient.unit !== "" && this.ingredient.unit !== null)) {
                 if (ingredientUnit[0].type === "W" && this.conversion.unitWeight !== "") this.unitTo = conversionUnit = this.conversion.unitWeight;
                 else if (ingredientUnit[0].type === "V" && this.conversion.unitVolume !== "") this.unitTo = conversionUnit = this.conversion.unitVolume;
                 else if (this.ingredient.unit === undefined) conversionUnit = "";
@@ -62,20 +61,20 @@ export default {
             var convertUnitMultiple: number = 1;
 
             if (this.conversion.people < 1) this.people = this.feeding;
-            else {this.people = this.conversion.people; console.log("people set");}
+            else { this.people = this.conversion.people; console.log("people set"); }
 
             if (this.unitTo !== "") {
-                if (this.ingredient.unit === undefined) {console.log("ingredient.unit undefined"); return 0;}
+                if (this.ingredient.unit === undefined || this.ingredient.unit === null) { console.log("ingredient.unit undefined"); return 0; }
                 else this.search = this.ingredient.unit;
 
                 const ingredientUnitFrom: Unit = this.units.filter(this.getUnit)[0];
-                
+
                 this.search = this.unitTo;
                 const ingredientUnitTo: Unit = this.units.filter(this.getUnit)[0];
 
                 convertUnitMultiple = ingredientUnitFrom.convertToSt * ingredientUnitTo.convertFromSt;
             }
-            if (this.ingredient.quantity === undefined) {console.log("ingredient.quantity undefined"); this.quantity = NaN; return 0;}
+            if (this.ingredient.quantity === undefined) { console.log("ingredient.quantity undefined"); this.quantity = NaN; return 0; }
             else this.quantity = (this.ingredient.quantity * convertUnitMultiple * this.people) / this.feeding;
         }
     },
@@ -90,27 +89,26 @@ export default {
 </script>
 
 <template>
-<div class="ViewIngredientComponent">
+    <div class="ViewIngredientComponent">
 
-    <p>●</p>
+        <p>●</p>
 
-    <p>{{ ingredient.name }}</p>
+        <p>{{ ingredient.name }}</p>
 
-    <p>{{ (Math.round(quantity * 100) / 100) }}</p>
+        <p>{{ (Math.round(quantity * 100) / 100) }}</p>
 
-    <p>{{ unit }}</p>
+        <p>{{ unit }}</p>
 
-</div>
+    </div>
 </template>
 
 <style scoped>
-
 .ViewIngredientComponent {
-display: flex;
-flex-direction: row;
-border-radius: 25px;
-margin: 10px;
-padding: 2px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 25px;
+    margin: 10px;
+    padding: 2px;
 }
 
 p {

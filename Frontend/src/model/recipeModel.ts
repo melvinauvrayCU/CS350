@@ -16,29 +16,32 @@ export class Recipe {
 	title: string;
 	description: string;
 	numberPeople: number;
-	steps: Step[];
+	recipeSteps: Step[];
 	rating: number;
 	tags: string[];
-	pictureUrl: string;
+	imageUrl: string;
+	userId: number;
 
-	constructor(title: string, description: string, numberPeople: number, steps: Step[], rating: number, pictureUrl: string, tags: string[] = []) {
+	constructor(id: number, title: string, description: string, numberPeople: number, recipeSteps: Step[], rating: number, imageUrl: string, tags: string[] = [], userId: number) {
 		// We set the id automatically with the static field, so it is auto incrementing.
-		this.id = Recipe.idCounter;
-		Recipe.idCounter++;
-
+		// this.id = Recipe.idCounter;
+		// Recipe.idCounter++;
+		this.id = id;
+		this.userId = userId;
 		this.rating = rating;
 
 		// We create the recipe from the properties passed in parameters.
 		this.title = title;
 		this.description = description;
 		this.numberPeople = numberPeople;
-		this.steps = steps;
+		this.recipeSteps = recipeSteps;
 		this.rating = rating;
 		// Default tags for now will be recommended and recent for when a recipe is created
 		this.tags = tags.length ? tags : ["Recommended", "Recent"];
 
 		// Picture
-		this.pictureUrl = pictureUrl;
+		this.imageUrl = imageUrl;
+
 	}
 }
 
@@ -50,6 +53,8 @@ export type Step = {
 	ingredients: Ingredient[],
 	utensils: string[]
 }
+
+
 
 export class Ingredient {
 	id: number;

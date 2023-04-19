@@ -16,12 +16,12 @@ export default {
     id: { type: String, default: "0" }
   },
   data(): {
-    recipe: Recipe | undefined;
+    recipe: Recipe | null;
     units: Array<Unit>;
     conversion: Conversion;
   } {
     return {
-      recipe: API.instance.getRecipe(parseInt(this.id)),
+      recipe: null,
       units: API.instance.getUnitOptions(),
       conversion: API.instance.getConversions(),
     };
@@ -32,9 +32,11 @@ export default {
       if (this.recipe) {
         router.push({ name: "home" });
       }
-
     }
-
+  },
+  async created() {
+    this.recipe = await API.instance.getRecipe(parseInt(this.id));
+    console.error("&&", this.recipe)
   },
   /**We use the StepView to view the steps the custmo button for the recipe completed button and the page 
    * separator and background icons for formatting
@@ -64,22 +66,22 @@ export default {
 
       <PageSeparator title="Ingredients & Utensils"></PageSeparator>
       <div class="pair">
-        <p> <ViewIngredientList v-for="step in recipe?.steps" 
-          :key="step.stepId" 
-          :ingredients="step.ingredients" 
-          :conversion="conversion"
-          :units="units"
-          :feeding="recipe?.numberPeople"
-          /> </p>
-        <p> <ViewUtensilList v-for="step in recipe?.steps" :key="step.stepId" :utensils="step.utensils" /> </p>
-        
+        <p>
+          <ViewIngredientList v-for="step in recipe?.recipeSteps" :key="step.stepId" :ingredients="step.ingredients"
+            :conversion="conversion" :units="units" :feeding="recipe?.numberPeople" />
+        </p>
+        <p>
+          <ViewUtensilList v-for="step in recipe?.recipeSteps" :key="step.stepId" :utensils="step.utensils" />
+        </p>
+
       </div>
 
       <PageSeparator title="Recipe Steps"></PageSeparator>
       <transition-group name="list">
-        <StepView v-for="(step, index) in recipe?.steps" :key="step.stepId" :stepObject="step" :stepIndex="index + 1"
-          :stepIndexLength="recipe?.steps.length || 0" v-model:descriptionModelValue="step.descriptionValue"
-          v-model:cooktimeModelValue="step.cooktimeValue" v-model:preptimeModelValue="step.preptimeValue"
+        <StepView v-for="(step, index) in recipe?.recipeSteps" :key="step.stepId" :stepObject="step"
+          :stepIndex="index + 1" :stepIndexLength="recipe?.recipeSteps.length || 0"
+          v-model:descriptionModelValue="step.descriptionValue" v-model:cooktimeModelValue="step.cooktimeValue"
+          v-model:preptimeModelValue="step.preptimeValue"
           @startTimer="(datas) => $emit('startTimer', { ...datas, 'recipeName': recipe?.title, 'recipeId': recipe?.id })" />
       </transition-group>
 

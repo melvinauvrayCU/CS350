@@ -19,7 +19,7 @@ export default {
     },
     data() {
         return {
-            searchText: '',
+            searchText: "",
         };
     },
     computed: {
@@ -27,7 +27,7 @@ export default {
             if (this.searchText.length === 0) {
                 return this.recipes;
             }
-            const searchTerms = this.searchText.toLowerCase().split(' ');
+            const searchTerms = this.searchText.toLowerCase().split(" ");
                 return this.recipes.filter((recipe) => {
                     return searchTerms.some(term => {
                     const nameMatch = recipe.title.toLowerCase().includes(term);

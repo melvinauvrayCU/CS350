@@ -93,11 +93,11 @@ export default {
                 @update:modelValue="updateDescription" />
 
             <div class="flexHorizontal">
-                <InputField :id="'cooktime' + stepObject.stepId" labelText="Cook time:" inputType="time"
+                <InputField :mandatory="true" :id="'cooktime' + stepObject.stepId" labelText="Cook time:" inputType="time"
                     v-model="cooktimePrivateValue" @update:modelValue="updateCooktime" />
 
-                <InputField :id="'preptime' + stepObject.stepId" labelText="Preparation time:" inputType="time"
-                    v-model="preptimePrivateValue" @update:modelValue="updatePreptime" />
+                <InputField :mandatory="true" :id="'preptime' + stepObject.stepId" labelText="Preparation time:"
+                    inputType="time" v-model="preptimePrivateValue" @update:modelValue="updatePreptime" />
             </div>
 
             <CustomSelectIngredients v-model="ingredientsPrivateValue" @update:modelValue="updateIngredients"

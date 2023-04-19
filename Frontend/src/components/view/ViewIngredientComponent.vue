@@ -49,7 +49,7 @@ export default {
         correctUnit() {
             const ingredientUnit: Array<Unit> = this.units.filter(this.checkUnit);
             var conversionUnit: string = "";
-            if ((this.ingredient.unit !== "" && this.ingredient.unit !== null)) {
+            if ((this.ingredient.unit !== "" && this.ingredient.unit !== null && ingredientUnit.length !== 0)) {
                 if (ingredientUnit[0].type === "W" && this.conversion.unitWeight !== "") this.unitTo = conversionUnit = this.conversion.unitWeight;
                 else if (ingredientUnit[0].type === "V" && this.conversion.unitVolume !== "") this.unitTo = conversionUnit = this.conversion.unitVolume;
                 else if (this.ingredient.unit === undefined) conversionUnit = "";

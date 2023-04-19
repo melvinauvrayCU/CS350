@@ -42,7 +42,7 @@ export default {
     // And a boolean created variable, which will be true when a recipe has been created to display a success message.
     return {
       stepCounter: 1,
-      recipeTempObject: new Recipe(0, "", "", 0, [], 0, "", undefined, 0),
+      recipeTempObject: new Recipe(0, "", "", 0, [], 1, "", undefined, 0),
       mode: "create",
       messageText: "",
       messageType: "success",
@@ -190,7 +190,7 @@ export default {
       <PageSeparator title="⭐ Initial rating" />
 
       <InputField id="recipeRating" labelText="Rate your recipe:" placeholder="Rate your recipe on a scale from 1-10"
-        v-model="recipeTempObject.rating" :mandatory="true" inputType="number" min="1" max="10" />
+        v-model="recipeTempObject.rating" :mandatory="true" inputType="number" min="1" max="5" />
 
 
       <CustomButton v-if="mode === 'create'" type="neutral" effect="plain" text="Create the recipe !"

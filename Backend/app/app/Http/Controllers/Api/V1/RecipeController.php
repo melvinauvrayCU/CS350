@@ -14,6 +14,7 @@ use App\Filters\V1\RecipeFilter;
 use App\Models\Ingredient;
 use App\Models\Utensil;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class that handles the different requests method for the /recipes/ endpoint
@@ -138,6 +139,36 @@ class RecipeController extends Controller
             'rating',
         ]);
 
+        if ($request->hasFile('image_url')) {
+
+            // Get the file path of the image to be deleted
+            $imagePath = $recipe->image_url;
+
+            // Delete the image from the server
+            if (!empty($imagePath)) {
+                Storage::delete(public_path('images/banner/' . $imagePath));
+                Storage::delete(public_path('images/mini/' . $imagePath));
+            }
+
+            $image = $request->file('image_url');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+
+            // Use Intervention Image to resize and compress the image
+            $imgSmall = Image::make($image->getRealPath());
+            $imgSmall->resize(500, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })->encode('jpg', 75)->save(public_path('images/mini/' . $filename));
+
+            $imgBanner = Image::make($image->getRealPath());
+            $imgBanner->resize(1200, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })->encode('jpg', 75)->save(public_path('images/banner/' . $filename));
+
+            $recipeData['image_url'] = $filename;
+        }
+
         $recipe->update($recipeData);
 
         $recipe->recipeSteps()->delete(); // remove existing recipe steps
@@ -182,6 +213,14 @@ class RecipeController extends Controller
     public function destroy(Recipe $recipe)
     {
         try {
+            // Get the file path of the image to be deleted
+            $imagePath = $recipe->image_url;
+
+            // Delete the image from the server
+            if (!empty($imagePath)) {
+                Storage::delete(public_path('images/banner/' . $imagePath));
+                Storage::delete(public_path('images/mini/' . $imagePath));
+            }
             $recipe->delete();
             return response()->json(['success' => 'recipe deleted successfully']);
         } catch (\Exception $e) {

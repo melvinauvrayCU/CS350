@@ -35,7 +35,7 @@ class UpdateRecipeRequest extends FormRequest
                 'title' => ['required', 'string', 'max:255'],
                 'description' => ['required', 'string'],
                 'number_people' => ['required', 'integer'],
-                'image_url' => ['nullable', 'string', 'url'],
+                'image_url' => ['nullable', 'image'],
                 'rating' => ['required', 'integer', 'min:1', 'max:5'],
                 'recipe_steps' => ['required', 'array'],
                 'recipe_steps.*.description' => ['required', 'string'],

@@ -61,7 +61,7 @@ export default {
 
 <template>
     <div class="RecipeComponent" @click="viewRecipe">
-        <img :src="recipe.imageUrl" alt="recipeImage" class="recipeImage">
+        <img :src="'https://api.cs350.melvinauvray.com/images/mini/' + recipe.imageUrl" alt="recipeImage" class="recipeImage">
         <div class="gradient gradienttop"></div>
         <div class="gradient gradientright"></div>
         <div class="containerText">

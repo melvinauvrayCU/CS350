@@ -5,11 +5,6 @@
 export class Recipe {
 
 	/**
-	 * Static field to increment the id of the recipe each time we are creating a new one. 
-	 */
-	private static idCounter: number = 0;
-
-	/**
 	 * For now on, each recipe has an id, title and descrption, that are public. 
 	 */
 	id: number;

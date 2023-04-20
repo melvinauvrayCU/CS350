@@ -42,7 +42,7 @@ export default {
     // And a boolean created variable, which will be true when a recipe has been created to display a success message.
     return {
       stepCounter: 1,
-      recipeTempObject: new Recipe(0, "", "", 0, [], 1, "", undefined, 0),
+      recipeTempObject: new Recipe(0, "", "", 1, [], 1, "", undefined, 0),
       mode: "create",
       messageText: "",
       messageType: "success",

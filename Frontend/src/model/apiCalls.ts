@@ -196,10 +196,10 @@ export class API {
 				id: recipe.id,
 				title: recipe.title,
 				description: recipe.description,
-				numberPeople: recipe.number_people,
+				numberPeople: recipe.numberPeople,
 				rating: recipe.rating,
-				imageUrl: recipe.image_url,
-				userId: recipe.user_id,
+				imageUrl: recipe.imageUrl,
+				userId: recipe.user.id,
 				recipeSteps: recipe.recipeSteps.map((step: any) => ({
 					description: step.description,
 					cookTime: step.cook_time,
@@ -363,29 +363,64 @@ export class API {
 	 */
 	async createRecipe(recipe: Recipe): Promise<boolean> {
 		try {
-			const bodyObject = {
-				title: recipe.title,
-				description: recipe.description,
-				number_people: recipe.numberPeople,
-				// tags: recipe.tags, // ? The backend doesn't have tags
-				image_url: "https://www.facebook.com/",
-				rating: recipe.rating,
-				user_id: this.currentUser.id, // ? We want the id of the current user logged in
-				recipe_steps: recipe.recipeSteps.map((recipeStep) => ({
-					description: recipeStep.descriptionValue,
-					prep_time: recipeStep.preptimeValue,
-					cook_time: recipeStep.cooktimeValue,
-					ingredients: recipeStep.ingredients.map((ingredient: any) => ({
-						name: ingredient.name,
-						quantity: ingredient.quantity,
-						measurement: ingredient.unit
-					})),
-					utensils: recipeStep.utensils.map((utensil: any) => ({
-						name: utensil // ? The usentils array just contains string, so we can just return it instead of putting utensil.name
-					}))
-				}))
-			};
-			await axios.post(this._apiUrl + "/recipes", bodyObject);
+			// const bodyObject = {
+			// 	title: recipe.title,
+			// 	description: recipe.description,
+			// 	number_people: recipe.numberPeople,
+			// 	// tags: recipe.tags, // ? The backend doesn't have tags
+			// 	image_url: "https://www.facebook.com/",
+			// 	rating: recipe.rating,
+			// 	user_id: this.currentUser.id, // ? We want the id of the current user logged in
+			// 	recipe_steps: recipe.recipeSteps.map((recipeStep) => ({
+			// 		description: recipeStep.descriptionValue,
+			// 		prep_time: recipeStep.preptimeValue,
+			// 		cook_time: recipeStep.cooktimeValue,
+			// 		ingredients: recipeStep.ingredients.map((ingredient: any) => ({
+			// 			name: ingredient.name,
+			// 			quantity: ingredient.quantity,
+			// 			measurement: ingredient.unit
+			// 		})),
+			// 		utensils: recipeStep.utensils.map((utensil: any) => ({
+			// 			name: utensil // ? The usentils array just contains string, so we can just return it instead of putting utensil.name
+			// 		}))
+			// 	}))
+			// };
+			const formData = new FormData();
+			const responseImg = await fetch(recipe.imageUrl);
+			const imageData = await responseImg.blob();
+			const imageFile = new File([imageData], 'image.jpg', { type: 'image/jpeg' });
+			formData.append('image_url', imageFile);
+			formData.append('title', recipe.title);
+			formData.append('description', recipe.description);
+			formData.append('number_people', recipe.numberPeople.toString());
+			// formData.append('image_url', "https://www.facebook.com/");
+			formData.append('rating', recipe.rating.toString());
+			formData.append('user_id', this.currentUser.id.toString());
+
+			// Add the recipe steps to the FormData object
+			recipe.recipeSteps.forEach((recipeStep, index) => {
+				formData.append(`recipe_steps[${index}][description]`, recipeStep.descriptionValue);
+				formData.append(`recipe_steps[${index}][prep_time]`, recipeStep.preptimeValue);
+				formData.append(`recipe_steps[${index}][cook_time]`, recipeStep.cooktimeValue);
+
+				// Add the ingredients to the FormData object
+				recipeStep.ingredients.forEach((ingredient, i) => {
+					formData.append(`recipe_steps[${index}][ingredients][${i}][name]`, ingredient.name);
+					formData.append(`recipe_steps[${index}][ingredients][${i}][quantity]`, ingredient.quantity?.toString() ?? "");
+					formData.append(`recipe_steps[${index}][ingredients][${i}][measurement]`, ingredient.unit ?? "");
+				});
+
+				// Add the utensils to the FormData object
+				recipeStep.utensils.forEach((utensil, i) => {
+					formData.append(`recipe_steps[${index}][utensils][${i}][name]`, utensil);
+				});
+			});
+			const response = await axios.post(this._apiUrl + "/recipes", formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+			console.error("😀", response);
 			return true;
 		} catch (error: any) {
 			console.error(error);

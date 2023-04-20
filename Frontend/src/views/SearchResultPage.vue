@@ -57,6 +57,7 @@ export default {
                         || (this.searchQuery.toLowerCase().endsWith(" star") && recipe.rating === parseInt(this.searchQuery.toLowerCase().replace(" star", "")));
                     return nameMatch || descriptionMatch || ratingMatch;
                 });
+                console.error("😀😀", this.matchingRecipes, this.recipes);
             }
         },
         onSearch(query: string) {

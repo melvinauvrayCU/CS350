@@ -688,13 +688,17 @@ export class API {
 	 * @param password password the user creates
 	 * @param email email the user puts it
 	 */
-	signup(email: string, username: string, password: string): boolean {
+	signup(email: string, username: string, password: string, securityQuestions: string[], securityAnswers: string[]): boolean {
 		if (this.userList.find(user => user.email === email) || this.userList.find(user => user.username === username)) {
 			console.log("Email or username already taken");
 			return false;
 		} else {
 
-			this.userList.push(new User(email, username, password,[]));
+			this.userList.push(new User(email, username, password,[
+				{question: securityQuestions[0], answer: securityAnswers[0]},
+				{question: securityQuestions[1], answer: securityAnswers[1]}, 
+				{question: securityQuestions[2], answer: securityAnswers[2]}
+			]));
 			console.log("User created!");
 			this.loggedIn = true;
 			return true;
@@ -824,6 +828,10 @@ export class API {
 		/**
 	 * Security Questions / Answers
 	 */
+
+	getSecurityQuestions(){
+		return this.securityQuestions;
+	}
 
 	checkQuestion(username: string, question: string, answer: string): Boolean {
 		const user = this.userList.find(user => user.username === username);

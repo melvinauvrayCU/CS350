@@ -3,8 +3,8 @@ import { API } from "@/model/apiCalls";
 import MessageComponent from "@/components/MessageComponent.vue";
 import PageTitle from "@/components/PageTitleComponent.vue";
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
-import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
+import CustomSelectQuestionsComponent from "@/components/formComponents/CustomSelectQuestionsComponent.vue";
 
 export default {
   name: "CreateSignupPage",
@@ -12,8 +12,8 @@ export default {
     MessageComponent,
     PageTitle,
     InputField,
-    CustomButton,
-    BackgroundIcons
+    BackgroundIcons,
+    CustomSelectQuestionsComponent,
   },
 
   data(): {
@@ -21,12 +21,8 @@ export default {
     username: string,
     password: string,
     messageText: string,
-    securityQuestion1: string,
-    securityQuestion2: string,
-    securityQuestion3: string,
-    securityAnswer1: string,
-    securityAnswer2: string,
-    securityAnswer3: string,
+    selectedQuestions: string[],
+    userSecurityAnswers: string[],
     securityQuestions: string[],
     messageType: "success" | "warning",
 
@@ -38,12 +34,12 @@ export default {
       password: "",
       email: "",
       messageText: "",
-      securityQuestion1: "",
-      securityQuestion2: "",
-      securityQuestion3: "",
-      securityAnswer1: "",
-      securityAnswer2: "",
-      securityAnswer3: "",
+      selectedQuestions: [
+        "",
+        "",
+        "",
+      ],
+      userSecurityAnswers: [],
       messageType: "success",
       securityQuestions: [
         "What is the first name of your best friend in high school?",
@@ -61,7 +57,7 @@ export default {
       if (this.username !== "" && this.password !== "" && this.email !== "") {
 
         //API call to signup a user
-        var signedUp = API.instance.signup(this.email, this.username, this.password);
+        var signedUp = API.instance.signup(this.email, this.username, this.password, this.selectedQuestions, this.userSecurityAnswers);
 
         //reset forms
         this.username = "";
@@ -82,10 +78,17 @@ export default {
         this.messageType = "warning";
         this.messageText = "Please fill all the form";
       }
-    },
-    
-
+      },
   },
+  computed: {
+    // Filters securityQuestions based on which questions have not been selected yet
+      availableSecurityQuestions() {
+        const selectedQuestions = this.selectedQuestions.filter(q => q !== "");
+        const remainingQuestions = this.securityQuestions.filter(q => !selectedQuestions.includes(q));
+        return remainingQuestions.filter(q => !this.selectedQuestions.slice(0, -3).includes(q));
+      }
+
+  }
 };
 
 </script>
@@ -100,38 +103,29 @@ export default {
       <div class="CreateSignupPage">
 
           <InputField id="email" inputType="email" labelText="Email:" max-length="200" placeholder="Email" v-model="email"
-          :mandatory="true" />
+          :mandatory="true"  />
 
           <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
-          v-model="username" :mandatory="true" />
+          v-model="username" :mandatory="true"/>
 
           <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"
           v-model="password" :mandatory="true" />
 
-          <InputField id="securityQuestion1" inputType="select" label-text="Select Security Question 1:" 
-          v-model="securityQuestion1" :options="securityQuestions" :mandatory="true" />
+          <CustomSelectQuestionsComponent :options="availableSecurityQuestions" v-model="selectedQuestions"/>
+
 
           <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
-          v-model="securityAnswer1" :mandatory="true" />
+          v-model="userSecurityAnswers[0]" :mandatory="true" />
 
-          <InputField id="securityQuestion1" inputType="select" label-text="Select Security Question 2:" 
-          v-model="securityQuestion2" :options="securityQuestions" :mandatory="true" />
+          <CustomSelectQuestionsComponent :options="availableSecurityQuestions" v-model="selectedQuestions"/>
 
-          <InputField id="securityAnswer2" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
-          v-model="securityAnswer2" :mandatory="true" />
+          <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+          v-model="userSecurityAnswers[1]" :mandatory="true" />
 
-          <InputField id="securityQuestion1" inputType="select" label-text="Select Security Question 3:" 
-          v-model="securityQuestion3" :options="securityQuestions" :mandatory="true" />
+          <CustomSelectQuestionsComponent :options="availableSecurityQuestions" v-model="selectedQuestions" />
 
-          <InputField id="securityAnswer3" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
-          v-model="securityAnswer3" :mandatory="true" />
-
-
-          <CustomButton titleText="Click to signup" text="Signup" effect="plain" @click="signup" />
-
-
-       
-
+          <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+          v-model="userSecurityAnswers[2]" :mandatory="true" />
 
         <div class="login">
           <p>
@@ -238,5 +232,3 @@ button:hover {
   box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 </style>
-    
-

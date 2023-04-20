@@ -92,17 +92,22 @@ class RecipeController extends Controller
 
             $recipe->recipeSteps()->save($newstep);
 
-            collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
-                $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
-                $quantity = $ingredientData["quantity"];
-                $measurement = $ingredientData["measurement"];
-                $ingredient->recipeSteps()->syncWithoutDetaching([$newstep->id => ['quantity' => $quantity, 'measurement' => $measurement]]);
-            });
+            if (isset($stepData['ingredients'])) {
+                collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
+                    $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
+                    $quantity = $ingredientData["quantity"];
+                    $measurement = $ingredientData["measurement"];
+                    $ingredient->recipeSteps()->syncWithoutDetaching([$newstep->id => ['quantity' => $quantity, 'measurement' => $measurement]]);
+                });
+            }
 
-            collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {
-                $utensil = Utensil::firstOrCreate(['name' => $utensilData["name"]]);
-                $utensil->recipeSteps()->syncWithoutDetaching($newstep->id);
-            });
+            if (isset($stepData['utensils'])) {
+                collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {
+                    $utensil = Utensil::firstOrCreate(['name' => $utensilData["name"]]);
+                    $utensil->recipeSteps()->syncWithoutDetaching($newstep->id);
+                });
+            }
+
             return $newstep;
         });
 
@@ -184,17 +189,21 @@ class RecipeController extends Controller
 
             $recipe->recipeSteps()->save($newstep); // add new recipe step to recipe
 
-            collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
-                $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
-                $quantity = $ingredientData["quantity"];
-                $measurement = $ingredientData["measurement"];
-                $ingredient->recipeSteps()->syncWithoutDetaching([$newstep->id => ['quantity' => $quantity, 'measurement' => $measurement]]);
-            });
+            if (isset($stepData['ingredients'])) {
+                collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
+                    $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
+                    $quantity = $ingredientData["quantity"];
+                    $measurement = $ingredientData["measurement"];
+                    $ingredient->recipeSteps()->syncWithoutDetaching([$newstep->id => ['quantity' => $quantity, 'measurement' => $measurement]]);
+                });
+            }
 
-            collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {
-                $utensil = Utensil::firstOrCreate(['name' => $utensilData["name"]]);
-                $utensil->recipeSteps()->syncWithoutDetaching($newstep->id);
-            });
+            if (isset($stepData['utensils'])) {
+                collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {
+                    $utensil = Utensil::firstOrCreate(['name' => $utensilData["name"]]);
+                    $utensil->recipeSteps()->syncWithoutDetaching($newstep->id);
+                });
+            }
             return $newstep;
         });
 

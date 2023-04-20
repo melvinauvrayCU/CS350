@@ -32,11 +32,11 @@ export default {
   },
 
   methods: {
-    login() {
+    async login() {
       if (this.username !== "" && this.password !== "") {
 
         // We do the API call to login the user
-        const ifLoggedin = API.instance.login(this.username, this.password);
+        const ifLoggedin = await API.instance.login(this.username, this.password);
 
 
         // reset forms

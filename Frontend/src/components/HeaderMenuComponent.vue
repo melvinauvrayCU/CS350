@@ -12,9 +12,9 @@ export default {
     SearchBarComponent,
   },
   methods: {
-    clickLogout() {
+    async clickLogout() {
       // We call the API to logout
-      if (API.instance.logout()) {
+      if (await API.instance.logout()) {
         this.$router.go(0);
         // We force the refresh of the menu component to it recall the checkIfLoggedIn method.
         this.$forceUpdate();

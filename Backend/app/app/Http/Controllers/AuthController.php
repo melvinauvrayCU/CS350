@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use App\Rules\ValidSecurityQuestionRule;
 
 
 class AuthController extends Controller
@@ -19,29 +20,16 @@ class AuthController extends Controller
             'bio' => 'required|string',
             'fname' => 'required|string',
             'lname' => 'required|string',
-            'profile_photo' => 'nullable|image|mimes:jpg,png,bmp',
+            'security_answer_1' => 'required|string',
+            'security_answer_2' => 'required|string',
+            'security_answer_3' => 'required|string',
+            'security_question_1' => 'required|string',
+            'security_question_2' => 'required|string',
+            'security_question_3' => 'required|string',
             'password' => 'required|string|confirmed', 
             'password_confirmation' => 'required|same:password'
         ]);
-        $path = public_path();
-        if($request->file('profile_photo')){
-            $user = $request->user();
-            $old_path = public_path().'uploads/profile_images/'.$user->profile_photo;
-            $image_name='profile_image-'.time().'.'.$request->profile_photo->extention();
-            $request->profile_photo->move(public_path('/uploads/profile_images'),$image_name);
-            $user = User::create([
-                'name' => $fields['name'],
-                'email' => $fields['email'],
-                'bio' => $fields['bio'],
-                'fname' => $fields['fname'],
-                'lname' => $fields['lname'],
-                'profile_photo' => $fields['profile_photo'],
-                'password' => bcrypt($fields['password']),
-                
-            ]);
-            $message = 'You made it to the right if statement';
-
-        }else{
+        
 
             $user = User::create([
                 'name' => $fields['name'],
@@ -49,18 +37,22 @@ class AuthController extends Controller
                 'bio' => $fields['bio'],
                 'fname' => $fields['fname'],
                 'lname' => $fields['lname'],
-                'profile_photo' => public_path('/uploads/profile_images/default_profile_pic.jpg'),
+                'security_answer_1' => $fields['security_answer_1'],
+                'security_answer_2' => $fields['security_answer_2'],
+                'security_answer_3' => $fields['security_answer_3'],
+                'security_question_1' => $fields['security_question_1'],
+                'security_question_2' => $fields['security_question_2'],
+                'security_question_3' => $fields['security_question_3'],
                 'password' => bcrypt($fields['password'])
             ]);
-            $message = 'You went to the wrong if statement';
-        }
+            
+        
 
         $token =$user -> createToken('usertoken')-> plainTextToken;
 
         $response = [
             'user' => $user,
             'token' =>$token,
-            'message' => $path
         ];
 
         return response($response, 201);

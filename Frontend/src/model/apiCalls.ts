@@ -666,6 +666,7 @@ export class API {
 	/**
 	 * Goes through the users attributes and updates the first name, last name, username, and bio
 	 */
+	/** 
 	async updateProfile(user: User): Promise<void>{
 		try{
 		const response = await axios.put(this._apiUrlshort+ "/user/edit",{
@@ -675,7 +676,7 @@ export class API {
 			throw new Error(error.response.data.message);
 		}
 	}
-		
+	*/	
 
 		
 

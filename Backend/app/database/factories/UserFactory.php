@@ -25,17 +25,17 @@ class UserFactory extends Factory
             'bio' => fake()-> sentence(),
             'fname' => fake() -> name(),
             'lname' => fake() -> name(),
-            'profile_photo' => fake() -> image(),
+            'security_answer_1' => fake() -> word(),
+            'security_answer_2' => fake() -> word(),
+            'security_answer_3' => fake() -> word(),
+            'security_question_1' => fake() -> word(),
+            'security_question_2' => fake() -> word(),
+            'security_question_3' => fake() -> word(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ];
-        $securityQuestions = SecurityQuestions::factory()->count(3)->create();
-        foreach ($securityQuestions as $securityQuestion){
-            $attributes['security_question_answers'][] = SecurityAnswers::factory([
-                'security_question_id' => $securityQuestion ->id,
-            ])->make()->toArray();
-        }
+        return $attributes;
 
     }
 

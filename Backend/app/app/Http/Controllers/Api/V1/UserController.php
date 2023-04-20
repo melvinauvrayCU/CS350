@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\AuthController;
+use App\Rules\ValidSecurityQuestionRule;
 
 
 /**
@@ -72,6 +73,7 @@ class UserController extends Controller
      */
     public function edit(Request $request,$id)
     {
+        $user = User::findOrFail($id);
 
         $validator = Validator::make($request->all(),[
             'name' => 'required|string',
@@ -79,7 +81,13 @@ class UserController extends Controller
             'bio' => 'required|string',
             'fname' => 'required|string',
             'lname' => 'required|string',
-            'profile_photo' => 'required|image|mimes:jpg,png,bmp'
+            'security_answer_1' => 'required|string',
+            'security_answer_2' => 'required|string',
+            'security_answer_3' => 'required|string',
+            'security_question_1' => 'required|string',
+            'security_question_2' => 'required|string',
+            'security_question_3' => 'required|string',
+
         ]);
         if($validator->fails()){
             $response = [
@@ -90,31 +98,19 @@ class UserController extends Controller
             return response($response, 422);
         }
 
-        $user = $request->user();
-        if($request->HasFile('profile_photo')){
-            if($user->profile_photo){
-                $old_path = public_path().'uploads/profile_images/'.$user->profile_photo;
-                if(File::exists($old_path)){
-                    File::delete($old_path);
-                }
-                    
-                $image_name='profile_image-'.time().'.'.$request->profile_photo->extention();
-                $request->profile_photo->move(public_path('/uploads/profile_images'),$image_name);
-                
-
-            }else{
-                $image_name=$user->profile_photo;
-            }
-        }
         
-        $profile_photo_url = url($image_name);
             $user->update([
                 'name'=> $request->name,
                 'email' => $request -> email,
                 'bio' => $request -> bio,
                 'fname' => $request -> fname,
                 'lname' => $request -> lname,
-                'profile_photo' => $image_name,
+                'security_answer_1' => $request -> security_answer_1,
+                'security_answer_2' => $request -> security_answer_2,
+                'security_answer_3' => $request -> security_answer_3,
+                'security_question_1' => $request -> security_question_1,
+                'security_question_2' => $request -> security_question_2,
+                'security_question_3' => $request -> security_question_3,
 
             ]);
             $response = [
@@ -136,42 +132,54 @@ class UserController extends Controller
         //
     }
 
-    public function change_Password(Request $request)
-{
-    $user = $request -> user();
+    public function change_Password($id, Request $request)
+    {
+        $user = User::findOrFail($id);       
+        $request->validate([
+            'security_question' => 'required',
+            'security_answer' => 'required',
+            'new_password' => 'required|min:6',
+        ]);
 
-    $validatedData = $request->validate([
-        'security_question_1_id' => 'required',
-        'security_answer_1_id' => 'required',
-        'security_question_2_id' => 'required',
-        'security_answer_2_id' => 'required',
-        'security_question_3_id' => 'required',
-        'security_answer_3_id' => 'required',
-        'new_password' => 'required|min:8',
-    ]);
 
-    if (
-        $user->securityQuestion1->id !== $validatedData['security_question_1_id'] ||
-        $user->securityQuestion2->id !== $validatedData['security_question_2_id'] ||
-        $user->securityQuestion3->id !== $validatedData['security_question_3_id'] ||
-        $user->securityAnswer1->id !== $validatedData['security_answer_1_id'] ||
-        $user->securityAnswer2->id !== $validatedData['security_answer_2_id'] ||
-        $user->securityAnswer3->id !== $validatedData['security_answer_3_id']
-    ) {
-        $response =[
-            'message' => 'Incorrect security questions or answers'
+        // Check if the provided security question is one of the user's security questions
+        $security_questions = [
+            $user->security_question_1,
+            $user->security_question_2,
+            $user->security_question_3,
         ];
-        return response($response,422);
-    }
 
-    $user->password = Hash::make($validatedData['new_password']);
-    $user->save();
+        if (!in_array($request->security_question, $security_questions)) {
+            $response=[
+                'error' => 'Invalid security question'
+            ];
+            return response($response,400);
+        }
 
-    $response =[
-        'message' => 'Password changed successfully'
-    ];
-    return response($response,200);
+        // Check if the provided security answer matches the user's stored security answer
+        $security_question_index = array_search($request->security_question, $security_questions);
+        $security_answer_field = 'security_answer_' . ($security_question_index + 1);
+
+        if ($user->$security_answer_field !== $request->security_answer) {
+            $response=[
+                'error' => 'Security answer does not match'
+            ];
+            return response($response,400);
+        }
+
+        // Update the user's password and save to the database
+        $user->password = bcrypt($request->new_password);
+        $user->save();
+
+        $response=[
+            'message' => 'Password updated successfully'
+        ];
+        return response($response,200);
 }
+
+
+
+
 
 
 }

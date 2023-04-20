@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
             IngredientCategorySeeder::class,
             UtensilCategorySeeder::class,
             RecipeSeeder::class,
-            SecurityAnswerSeeder::class,
             SecurityQuestionsSeeder::class,
         ]);
 

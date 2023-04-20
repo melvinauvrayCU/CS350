@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\SecurityQuestionsController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +21,13 @@ use App\Http\Controllers\Api\V1\UserController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/user/auth',[AuthController::class, 'check']);
+Route::get('/security-questions',[SecurityQuestionsController::class , 'index']);
 
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/user/change-password',[UserController::class, 'change_password']);
-    Route::put('/user/edit',[UserController::class, 'edit']);
+    Route::put('/user/{id}/change-password',[UserController::class, 'change_password']);
+    Route::put('/user/{id}/edit',[UserController::class, 'edit']);
     Route::get('/user',[UserController::class, 'show']);
 });
 

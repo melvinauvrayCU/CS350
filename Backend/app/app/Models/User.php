@@ -17,45 +17,19 @@ class User extends Model
         'bio',
         'fname',
         'lname',
-        'profile_picture',
+        'security_answer_1',
+        'security_answer_2',
+        'security_answer_3',
+        'security_question_1',
+        'security_question_2',
+        'security_question_3',
     ];
 
     public function recipes()
     {
         return $this->hasMany(Recipe::class);
     }
-
-
-    public function securityQuestion1()
-    {
-        return $this->belongsTo(SecurityQuestions::class, 'security_question_1_id');
-    }
-
-    public function securityQuestion2()
-    {
-        return $this->belongsTo(SecurityQuestions::class, 'security_question_2_id');
-    }
-
-    public function securityQuestion3()
-    {
-        return $this->belongsTo(SecurityQuestions::class, 'security_question_3_id');
-    }
-
-    public function securityAnswer1()
-    {
-        return $this->belongsTo(SecurityAnswers::class, 'security_answer_1_id');
-    }
-
-    public function securityAnswer2()
-    {
-        return $this->belongsTo(SecurityAnswers::class, 'security_answer_2_id');
-    }
-
-    public function securityAnswer3()
-    {
-        return $this->belongsTo(SecurityAnswers::class, 'security_answer_3_id');
-    }
-
+      
 
     public function ingredientCategories()
     {

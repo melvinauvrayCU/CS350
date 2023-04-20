@@ -105,7 +105,12 @@ export default {
         if (recipeSteps.descriptionValue === "") {
           noErrors = false;
         }
-
+        if (recipeSteps.preptimeValue === "") {
+          noErrors = false;
+        }
+        if (recipeSteps.cooktimeValue === "") {
+          noErrors = false;
+        }
       });
       return noErrors;
     }

@@ -414,12 +414,10 @@ export class API {
 			const formData = new FormData();
 			const responseImg = await fetch(recipe.imageUrl); // This is probably a terrible way to pass an image through 2 local files
 			const imageData = await responseImg.blob();
-			if (imageData.size !== 0) {
+			if (imageData.type == 'image/jpeg') {
 				const imageFile = new File([imageData], 'image.jpg', { type: 'image/jpeg' });
 				formData.append('image_url', imageFile);
-				console.error(imageData, imageData.size)
 			} else {
-				console.error(imageData, imageData.size);
 				formData.append('image_url', '');
 			}
 

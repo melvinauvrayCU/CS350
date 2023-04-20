@@ -61,7 +61,8 @@ export default {
 
 <template>
     <div class="RecipeComponent" @click="viewRecipe">
-        <img :src="recipe.imageUrl" alt="recipeImage" class="recipeImage">
+        <img :src="'https://api.cs350.melvinauvray.com/images/mini/' + recipe.imageUrl" alt="recipeImage"
+            class="recipeImage">
         <div class="gradient gradienttop"></div>
         <div class="gradient gradientright"></div>
         <div class="containerText">
@@ -191,9 +192,9 @@ h3 {
     position: absolute;
     bottom: 0;
     left: 0;
-    height: 95%;
+    height: 80%;
     object-fit: cover;
-    width: 100%;
+    width: 90%;
 }
 
 .gradient {
@@ -213,7 +214,7 @@ h3 {
     top: 0;
     height: 100%;
     width: 40%;
-    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0));
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 1) 30%, rgba(255, 255, 255, 0));
 }
 </style>
 

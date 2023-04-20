@@ -140,7 +140,7 @@ export default {
 
 .recipe-title {
     font-family: "common";
-    font-weight: 400;
+    font-weight: bold;
     flex-direction: row;
     margin-top: -10px;
     margin-left: -10px;
@@ -192,9 +192,9 @@ h3 {
     position: absolute;
     bottom: 0;
     left: 0;
-    height: 80%;
+    height: 100%;
     object-fit: cover;
-    width: 90%;
+    width: 100%;
 }
 
 .gradient {
@@ -202,19 +202,22 @@ h3 {
 }
 
 .gradienttop {
-    top: 0;
-    left: 0;
+
     width: 100%;
-    height: 70%;
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 0));
+    height: 100%;
+    left: 0;
+    top: 0;
+
+    background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.9) 10%, rgba(238, 130, 238, 0) 55%);
+
 }
 
 .gradientright {
-    right: 0;
+    /* right: 0;
     top: 0;
     height: 100%;
     width: 40%;
-    background-image: linear-gradient(to left, rgba(255, 255, 255, 1) 30%, rgba(255, 255, 255, 0));
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 1) 30%, rgba(255, 255, 255, 0)); */
 }
 </style>
 

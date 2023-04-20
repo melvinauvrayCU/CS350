@@ -23,21 +23,11 @@ class StoreRecipeRequest extends FormRequest
      */
     public function rules()
     {
-        // return [
-        //     'title' => 'required|string',
-        //     'description' => 'required|string',
-        //     'numberPeople' => 'required|integer|min:1',
-        //     'rating' => 'required|integer|min:1|max:5',
-        //     '*.recipe_steps' => 'required|array|min:1',
-        //     'imageUrl' => 'string',
-        //     'userId' => ['required'],
-        // ];
-
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'number_people' => ['required', 'integer'],
-            'image_url' => ['nullable', 'string', 'url'],
+            'image_url' => ['image'],
             'user_id' => ["required", 'exists:users,id'],
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
             'recipe_steps' => ['required', 'array'],
@@ -48,19 +38,6 @@ class StoreRecipeRequest extends FormRequest
             'recipe_steps.*.ingredients.*.name' => ['nullable', 'string'],
             'recipe_steps.*.utensils' => ['nullable', 'array'],
             'recipe_steps.*.utensils.*.name' => ['nullable', 'string'],
-
-
         ];
     }
-
-    // protected function prepareForValidation()
-    // {
-    //     $this->merge([
-    //         // 'number_people' => $this->numberPeople,
-    //         // 'image_url' => $this->imageUrl,
-    //         // 'user_id' => $this->userId,
-    //         'recipe_steps' => $this->recipeSteps
-
-    //     ]);
-    // }
 }

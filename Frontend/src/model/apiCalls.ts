@@ -417,6 +417,10 @@ export class API {
 			if (imageData.size !== 0) {
 				const imageFile = new File([imageData], 'image.jpg', { type: 'image/jpeg' });
 				formData.append('image_url', imageFile);
+				console.error(imageData, imageData.size)
+			} else {
+				console.error(imageData, imageData.size);
+				formData.append('image_url', '');
 			}
 
 			formData.append('title', recipe.title);

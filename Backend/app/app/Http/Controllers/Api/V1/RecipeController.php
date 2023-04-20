@@ -140,7 +140,6 @@ class RecipeController extends Controller
             'title',
             'description',
             'number_people',
-            'image_url',
             'rating',
         ]);
 

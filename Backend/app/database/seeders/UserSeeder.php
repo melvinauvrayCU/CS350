@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
         User::factory()
             ->count(5)
-            ->hasRecipes(2)
+            ->hasRecipes(5)
             ->create();
     }
 }

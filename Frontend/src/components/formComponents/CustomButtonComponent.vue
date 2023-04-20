@@ -19,7 +19,7 @@ export default {
             default: "neutral"
         },
         icon: {
-            type: String as () => "" | "trash" | "add" | "x",
+            type: String as () => "" | "trash" | "add" | "x" | "timer",
             default: "",
         }
     }
@@ -138,7 +138,8 @@ export default {
 
 /** For all icons */
 .plain.trash:before,
-.plain.add:before {
+.plain.add:before,
+.plain.timer:before {
     font-family: FontAwesome;
     font-weight: 100;
     font-size: 15px;
@@ -156,7 +157,8 @@ export default {
 
 /** For all icons */
 .plain.trash:hover,
-.plain.add:hover {
+.plain.add:hover,
+.plain.timer:hover {
     text-indent: -30px;
     padding-right: 45px;
     padding-left: 75px;
@@ -164,7 +166,8 @@ export default {
 
 /** For all icons */
 .plain.trash:hover:before,
-.plain.add:hover:before {
+.plain.add:hover:before,
+.plain.timer:hover:before {
     right: 0;
     text-indent: 0px;
 }
@@ -178,6 +181,10 @@ export default {
 /** Add icon */
 .plain.add:before {
     content: "\2b";
+}
+
+.plain.timer:before {
+    content: "\f017";
 }
 
 /** Danger colors */

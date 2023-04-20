@@ -33,4 +33,5 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], f
     Route::apiResource('utensilcategories', UtensilCategoryController::class);
     Route::apiResource('recipesteps', RecipeStepController::class);
     Route::post('recipesteps/bulk', ['uses' => 'RecipeStepController@bulkStore']);
+    Route::apiResource('recipecategories', RecipeCategoryController::class);
 });

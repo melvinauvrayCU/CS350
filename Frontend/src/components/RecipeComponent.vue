@@ -30,11 +30,11 @@ export default {
             router.push({ name: "createRecipe", params: { id: this.recipe.id } });
         },
         deleteRecipeSignal(event: MouseEvent) {
-            console.error(event)
             event.stopPropagation();
-
             this.$emit("delete-recipe", this.recipe.id);
+            this.isModalVisible = false;
         },
+
 
         viewRecipe() {
             router.push({ name: "viewRecipe", params: { id: this.recipe.id } });
@@ -60,10 +60,11 @@ export default {
 </script>
 
 <template>
-    <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    </head>
     <div class="RecipeComponent" @click="viewRecipe">
+        <img :src="'https://api.cs350.melvinauvray.com/images/mini/' + recipe.imageUrl" alt="recipeImage"
+            class="recipeImage">
+        <div class="gradient gradienttop"></div>
+        <div class="gradient gradientright"></div>
         <div class="containerText">
             <h3 class="recipe-title">{{ recipe.title }}</h3>
             <p class="recipe-descrip">{{ recipe.description }}</p>
@@ -100,14 +101,16 @@ export default {
     border-color: var(--color-accent);
     border-radius: 5px;
     width: 450px;
+    height: 250px;
     display: flex;
     padding: 20px 20px;
     margin-left: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
     cursor: pointer;
     transition: border-color .4s ease, box-shadow .4s ease;
     min-height: 175px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
 }
 
 .RecipeComponent:hover {
@@ -145,18 +148,22 @@ export default {
 }
 
 .recipe-descrip {
-    font-family: "common";
     width: 200px;
     font-family: "common";
     font-weight: 300;
     font-size: 1.0em;
+    height: 20%;
+    text-align: justify;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .delete-button {
     display: flex;
     cursor: pointer;
-    margin-top: -10px;
-    margin-left: 40px;
     margin-bottom: 30px;
 }
 
@@ -179,6 +186,35 @@ h3 {
     font-size: 1.3em;
     margin-bottom: 5px;
     font-weight: 350;
+}
+
+.recipeImage {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 80%;
+    object-fit: cover;
+    width: 90%;
+}
+
+.gradient {
+    position: absolute;
+}
+
+.gradienttop {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 0));
+}
+
+.gradientright {
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 40%;
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 1) 30%, rgba(255, 255, 255, 0));
 }
 </style>
 

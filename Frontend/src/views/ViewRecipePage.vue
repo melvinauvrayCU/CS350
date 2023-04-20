@@ -1,7 +1,10 @@
 <script lang="ts">
-import StepView from "@/components/StepViewComponent.vue";
+import StepView from "@/components/view/StepViewComponent.vue";
+import ViewIngredientList from "@/components/view/ViewIngredientListComponent.vue";
+import ViewUtensilList from "@/components/view/ViewUtensilListComponent.vue";
 import { API } from "@/model/apiCalls";
 import type { Recipe } from "@/model/recipeModel";
+import type { Conversion, Unit } from "@/model/PantryModels";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import PageSeparator from "@/components/PageSeparatorComponent.vue";
 import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
@@ -13,10 +16,14 @@ export default {
     id: { type: String, default: "0" }
   },
   data(): {
-    recipe: Recipe | undefined;
+    recipe: Recipe | null;
+    units: Array<Unit>;
+    conversion: Conversion;
   } {
     return {
-      recipe: API.instance.getRecipe(parseInt(this.id)),
+      recipe: null,
+      units: API.instance.getUnitOptions(),
+      conversion: API.instance.getConversions(),
     };
   },
   /**We use this method to say that the recipe was cooked and push the user back to the home page */
@@ -25,14 +32,18 @@ export default {
       if (this.recipe) {
         router.push({ name: "home" });
       }
-
     }
-
+  },
+  async created() {
+    this.recipe = await API.instance.getRecipe(parseInt(this.id));
+    console.error("&&", this.recipe)
   },
   /**We use the StepView to view the steps the custmo button for the recipe completed button and the page 
    * separator and background icons for formatting
    */
   components: {
+    ViewUtensilList,
+    ViewIngredientList,
     StepView,
     CustomButton,
     PageSeparator,
@@ -46,15 +57,37 @@ export default {
     <div class="contentContainer">
       <h1 class="title">{{ recipe?.title }}</h1>
 
+      <img class="imageBanner" :src="'https://api.cs350.melvinauvray.com/images/banner/' + recipe?.imageUrl" alt="">
+      <!-- <div class="imgBannerParallax"
+              :style="{ backgroundImage: 'url(\'https://api.cs350.melvinauvray.com/images/banner/' + recipe?.imageUrl + '\')' }">
+            </div> -->
+
       <PageSeparator title="Description"></PageSeparator>
       <h2 class="subtitle">{{ recipe?.description }}</h2>
-      <p>Cooks for {{ recipe?.numberPeople }} people</p>
+      <div class="pairNoSpace">
+        <p>Cooks for {{ recipe?.numberPeople }} people </p>
+        <p v-if="conversion.people != 0">, Pantry corrects to {{ conversion.people }} people </p>
+      </div>
+
+      <PageSeparator title="Ingredients & Utensils"></PageSeparator>
+      <div class="pair">
+        <p>
+          <ViewIngredientList v-for="step in recipe?.recipeSteps" :key="step.stepId" :ingredients="step.ingredients"
+            :conversion="conversion" :units="units" :feeding="recipe?.numberPeople" />
+        </p>
+        <p>
+          <ViewUtensilList v-for="step in recipe?.recipeSteps" :key="step.stepId" :utensils="step.utensils" />
+        </p>
+
+      </div>
 
       <PageSeparator title="Recipe Steps"></PageSeparator>
       <transition-group name="list">
-        <StepView v-for="(step, index) in recipe?.steps" :key="step.stepId" :stepObject="step" :stepIndex="index + 1"
-          :stepIndexLength="recipe?.steps.length || 0" v-model:descriptionModelValue="step.descriptionValue"
-          v-model:cooktimeModelValue="step.cooktimeValue" v-model:preptimeModelValue="step.preptimeValue" />
+        <StepView v-for="(step, index) in recipe?.recipeSteps" :key="step.stepId" :stepObject="step"
+          :stepIndex="index + 1" :stepIndexLength="recipe?.recipeSteps.length || 0"
+          v-model:descriptionModelValue="step.descriptionValue" v-model:cooktimeModelValue="step.cooktimeValue"
+          v-model:preptimeModelValue="step.preptimeValue"
+          @startTimer="(datas) => $emit('startTimer', { ...datas, 'recipeName': recipe?.title, 'recipeId': recipe?.id })" />
       </transition-group>
 
       <CustomButton text="Recipe Completed!" type="neutral" effect="empty" icon="add"
@@ -106,6 +139,7 @@ export default {
 .title {
   font-family: "title";
   font-weight: bold;
+  font-size: 2.5em;
 }
 
 .subtitle {
@@ -132,6 +166,18 @@ form input {
   margin-bottom: 15px;
 }
 
+.pair {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.pairNoSpace {
+  display: flex;
+  flex-direction: row;
+}
+
 .flexHorizontal div:nth-child(1) {
   flex: 2;
 }
@@ -155,5 +201,31 @@ form input {
   background-color: var(--color-background-light);
   flex: 1;
   margin-left: 20px;
+}
+
+.imageBanner {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.imgBannerParallax {
+
+  /* Set a specific height */
+  min-height: 300px;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  border-radius: 10px;
+
+  width: 100%;
+
+  margin-top: 20px;
 }
 </style>

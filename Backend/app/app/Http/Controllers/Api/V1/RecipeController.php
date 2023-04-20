@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Filters\V1\RecipeFilter;
 use App\Models\Ingredient;
 use App\Models\Utensil;
+use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class that handles the different requests method for the /recipes/ endpoint
@@ -57,6 +59,26 @@ class RecipeController extends Controller
             'user_id'
         ]);
 
+        if ($request->hasFile('image_url')) {
+            $image = $request->file('image_url');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+
+            // Use Intervention Image to resize and compress the image
+            $imgSmall = Image::make($image->getRealPath());
+            $imgSmall->resize(500, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })->encode('jpg', 75)->save(public_path('images/mini/' . $filename));
+
+            $imgBanner = Image::make($image->getRealPath());
+            $imgBanner->resize(1200, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })->encode('jpg', 75)->save(public_path('images/banner/' . $filename));
+
+            $recipeData['image_url'] = $filename;
+        }
+
         $recipe = Recipe::create($recipeData);
 
         $stepsData = $request->input('recipe_steps', []);
@@ -70,17 +92,22 @@ class RecipeController extends Controller
 
             $recipe->recipeSteps()->save($newstep);
 
-            collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
-                $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
-                $quantity = $ingredientData["quantity"];
-                $measurement = $ingredientData["measurement"];
-                $ingredient->recipeSteps()->syncWithoutDetaching([$newstep->id => ['quantity' => $quantity, 'measurement' => $measurement]]);
-            });
+            if (isset($stepData['ingredients'])) {
+                collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
+                    $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
+                    $quantity = $ingredientData["quantity"];
+                    $measurement = $ingredientData["measurement"];
+                    $ingredient->recipeSteps()->syncWithoutDetaching([$newstep->id => ['quantity' => $quantity, 'measurement' => $measurement]]);
+                });
+            }
 
-            collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {
-                $utensil = Utensil::firstOrCreate(['name' => $utensilData["name"]]);
-                $utensil->recipeSteps()->syncWithoutDetaching($newstep->id);
-            });
+            if (isset($stepData['utensils'])) {
+                collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {
+                    $utensil = Utensil::firstOrCreate(['name' => $utensilData["name"]]);
+                    $utensil->recipeSteps()->syncWithoutDetaching($newstep->id);
+                });
+            }
+
             return $newstep;
         });
 
@@ -109,8 +136,82 @@ class RecipeController extends Controller
      */
     public function update(UpdateRecipeRequest $request, Recipe $recipe)
     {
-        $recipe->update($request->all());
+        $recipeData = $request->only([
+            'title',
+            'description',
+            'number_people',
+            'image_url',
+            'rating',
+        ]);
+
+        if ($request->hasFile('image_url')) {
+
+            // Get the file path of the image to be deleted
+            $imagePath = $recipe->image_url;
+
+            // Delete the image from the server
+            if (!empty($imagePath)) {
+                Storage::delete(public_path('images/banner/' . $imagePath));
+                Storage::delete(public_path('images/mini/' . $imagePath));
+            }
+
+            $image = $request->file('image_url');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+
+            // Use Intervention Image to resize and compress the image
+            $imgSmall = Image::make($image->getRealPath());
+            $imgSmall->resize(500, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })->encode('jpg', 75)->save(public_path('images/mini/' . $filename));
+
+            $imgBanner = Image::make($image->getRealPath());
+            $imgBanner->resize(1200, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })->encode('jpg', 75)->save(public_path('images/banner/' . $filename));
+
+            $recipeData['image_url'] = $filename;
+        }
+
+        $recipe->update($recipeData);
+
+        $recipe->recipeSteps()->delete(); // remove existing recipe steps
+
+        $stepsData = $request->input('recipe_steps', []);
+
+        collect($stepsData)->map(function ($stepData) use ($recipe) {
+            $newstep = new RecipeStep([
+                'description' => $stepData['description'],
+                'prep_time' => $stepData['prep_time'],
+                'cook_time' => $stepData['cook_time']
+            ]);
+
+            $recipe->recipeSteps()->save($newstep); // add new recipe step to recipe
+
+            if (isset($stepData['ingredients'])) {
+                collect($stepData['ingredients'])->map(function ($ingredientData) use ($newstep) {
+                    $ingredient = Ingredient::firstOrCreate(['name' => $ingredientData["name"]]);
+                    $quantity = $ingredientData["quantity"];
+                    $measurement = $ingredientData["measurement"];
+                    $ingredient->recipeSteps()->syncWithoutDetaching([$newstep->id => ['quantity' => $quantity, 'measurement' => $measurement]]);
+                });
+            }
+
+            if (isset($stepData['utensils'])) {
+                collect($stepData['utensils'])->map(function ($utensilData) use ($newstep) {
+                    $utensil = Utensil::firstOrCreate(['name' => $utensilData["name"]]);
+                    $utensil->recipeSteps()->syncWithoutDetaching($newstep->id);
+                });
+            }
+            return $newstep;
+        });
+
+        return new RecipeResource($recipe);
     }
+
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -120,6 +221,19 @@ class RecipeController extends Controller
      */
     public function destroy(Recipe $recipe)
     {
-        $recipe->delete();
+        try {
+            // Get the file path of the image to be deleted
+            $imagePath = $recipe->image_url;
+
+            // Delete the image from the server
+            if (!empty($imagePath)) {
+                Storage::delete(public_path('images/banner/' . $imagePath));
+                Storage::delete(public_path('images/mini/' . $imagePath));
+            }
+            $recipe->delete();
+            return response()->json(['success' => 'recipe deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete recipe'], 500);
+        }
     }
 }

@@ -42,7 +42,7 @@ export default {
     // And a boolean created variable, which will be true when a recipe has been created to display a success message.
     return {
       stepCounter: 1,
-      recipeTempObject: new Recipe("", "", 1, [], 1, ""),
+      recipeTempObject: new Recipe(0, "", "", 1, [], 1, "", undefined, 0),
       mode: "create",
       messageText: "",
       messageType: "success",
@@ -54,11 +54,11 @@ export default {
     /**
      * Method called when clicking on the create recipe button.
      */
-    createRecipe(): void {
+    async createRecipe() {
 
       if (this.verifyInputs()) {
         // No errors, send datas
-        const result = API.instance.createRecipe(this.recipeTempObject);
+        const result = await API.instance.createRecipe(this.recipeTempObject);
 
         if (result) {
           // We redirect to home page with a success message
@@ -74,11 +74,10 @@ export default {
       }
 
     },
-    editRecipe(): void {
+    async editRecipe() {
       if (this.verifyInputs()) {
         // No errors, send datas
-        const result = API.instance.editRecipe(parseInt(this.id), this.recipeTempObject);
-
+        const result = await API.instance.editRecipe(this.recipeTempObject);
         if (result) {
           // We redirect to home page with a success message
           router.push({ name: "home", params: { messageTextParam: "Recipe edited !", messageTypeParam: "success" } });
@@ -99,11 +98,11 @@ export default {
       let noErrors: boolean = true;
       if (this.recipeTempObject.title === ""
         || this.recipeTempObject.description === "" || this.recipeTempObject.description.length > 650
-        || this.recipeTempObject.numberPeople < 1 || this.recipeTempObject.pictureUrl === "")
+        || this.recipeTempObject.numberPeople < 1 || (this.recipeTempObject.imageUrl === "" && this.mode === "create"))
         noErrors = false;
 
-      this.recipeTempObject.steps.forEach(step => {
-        if (step.descriptionValue === "") {
+      this.recipeTempObject.recipeSteps.forEach(recipeSteps => {
+        if (recipeSteps.descriptionValue === "") {
           noErrors = false;
         }
 
@@ -113,7 +112,7 @@ export default {
     ,
     addStep(): void {
       this.stepCounter++;
-      this.recipeTempObject.steps.push({
+      this.recipeTempObject.recipeSteps.push({
         stepId: this.stepCounter,
         descriptionValue: "",
         cooktimeValue: "",
@@ -124,7 +123,7 @@ export default {
     },
 
     deleteStep(stepObjectToDelete: Step): void {
-      this.recipeTempObject.steps = this.recipeTempObject.steps.filter(step => step.stepId !== stepObjectToDelete.stepId);
+      this.recipeTempObject.recipeSteps = this.recipeTempObject.recipeSteps.filter(recipeSteps => recipeSteps.stepId !== stepObjectToDelete.stepId);
     }
 
   },
@@ -134,8 +133,8 @@ export default {
 
     // If the id parameter is not empty, then it means we will edit a recipe, so we get the current recipe from an API call and change the mode
     if (this.id !== "") {
-      const recipeObject = API.instance.getRecipe(parseInt(this.id));
-      if (recipeObject !== undefined) {
+      const recipeObject = await API.instance.getRecipe(parseInt(this.id));
+      if (recipeObject) {
         this.recipeTempObject = recipeObject;
         this.mode = "edit";
       }
@@ -144,6 +143,7 @@ export default {
     }
   }
 };
+
 
 </script>
 <template>
@@ -162,8 +162,8 @@ export default {
           inputType="number" min="1" max="50" :mandatory="true" />
       </div>
 
-      <ImageInputField id="recipePicture" labelText="Recipe picture:" :mandatory="true"
-        v-model="recipeTempObject.pictureUrl" :recipeTitle="mode === 'edit' ? recipeTempObject.title : ''" />
+      <ImageInputField id="recipePicture" labelText="Recipe picture:" :mandatory="mode !== 'edit'"
+        v-model="recipeTempObject.imageUrl" :recipeTitle="mode === 'edit' ? recipeTempObject.title : ''" />
 
       <InputField id="recipeDescription" labelText="Recipe description:"
         placeholder="Tell us some global informations about your recipe..." v-model="recipeTempObject.description"
@@ -172,8 +172,8 @@ export default {
       <PageSeparator title="📜 Give us the steps to complete your recipe" />
 
       <transition-group name="list">
-        <StepCreate v-for="(step, index) in recipeTempObject.steps" :key="step.stepId" :stepObject="step"
-          :stepIndex="index + 1" :stepIndexLength="recipeTempObject.steps.length"
+        <StepCreate v-for="(step, index) in recipeTempObject.recipeSteps" :key="step.stepId" :stepObject="step"
+          :stepIndex="index + 1" :stepIndexLength="recipeTempObject.recipeSteps.length"
           v-model:descriptionModelValue="step.descriptionValue" v-model:cooktimeModelValue="step.cooktimeValue"
           v-model:preptimeModelValue="step.preptimeValue" v-model:ingredientsModelValue="step.ingredients"
           v-model:utensilsModelValue="step.utensils" @stepDeleted="deleteStep" :ingredientList="fullIngredientList"
@@ -189,7 +189,7 @@ export default {
       <PageSeparator title="⭐ Initial rating" />
 
       <InputField id="recipeRating" labelText="Rate your recipe:" placeholder="Rate your recipe on a scale from 1-10"
-        v-model="recipeTempObject.rating" :mandatory="true" inputType="number" min="1" max="10" />
+        v-model="recipeTempObject.rating" :mandatory="true" inputType="number" min="1" max="5" />
 
 
       <CustomButton v-if="mode === 'create'" type="neutral" effect="plain" text="Create the recipe !"

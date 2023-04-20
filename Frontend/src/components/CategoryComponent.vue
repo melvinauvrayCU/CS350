@@ -16,7 +16,7 @@ export default {
 
 <template>
     <div class="category">
-            <h2>{{ category.title }}</h2>
+        <h2>{{ category.title }}</h2>
     </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
 .category {
     margin-left: 20px;
     font-family: common;
-    margin-top: 5px;
+    margin-top: 40px;
 }
 
 h2 {

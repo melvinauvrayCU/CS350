@@ -19,7 +19,7 @@ export default {
     },
     data() {
         return {
-            searchText: '',
+            searchText: "",
         };
     },
     computed: {
@@ -27,17 +27,17 @@ export default {
             if (this.searchText.length === 0) {
                 return this.recipes;
             }
-            const searchTerms = this.searchText.toLowerCase().split(' ');
-                return this.recipes.filter((recipe) => {
-                    return searchTerms.some(term => {
+            const searchTerms = this.searchText.toLowerCase().split(" ");
+            return this.recipes.filter((recipe) => {
+                return searchTerms.some(term => {
                     const nameMatch = recipe.title.toLowerCase().includes(term);
                     const descriptionMatch = recipe.description.toLowerCase().includes(term);
                     const tagMatch = recipe.tags.some(tag => tag.toLowerCase().includes(term));
                     const ratingMatch = (this.searchText.toLowerCase().endsWith(' stars') && recipe.rating === parseInt(this.searchText.toLowerCase().replace(' stars', '')))
-                                    || (this.searchText.toLowerCase().endsWith(' star') && recipe.rating === parseInt(this.searchText.toLowerCase().replace(' star', '')));
+                        || (this.searchText.toLowerCase().endsWith(' star') && recipe.rating === parseInt(this.searchText.toLowerCase().replace(' star', '')));
                     return nameMatch || descriptionMatch || tagMatch || ratingMatch;
+                });
             });
-        });
         },
         queryText(): string {
             return this.$route.query.q as string;
@@ -69,14 +69,18 @@ export default {
             <h3>No matching recipes found.</h3>
         </div>
         <div v-else class="recipe-list-container">
-            <RecipeListComponent 
-            :recipes="filteredRecipes" 
-            :isUserAuthenticated="isUserAuthenticated"
-            @editRecipe="(recipe) => $emit('edit-recipe', recipe)" 
-            @delete-recipe="(id) => $emit('delete-recipe', id)" />
+            <RecipeListComponent :recipes="filteredRecipes" :isUserAuthenticated="isUserAuthenticated"
+                @editRecipe="(recipe) => $emit('edit-recipe', recipe)"
+                @delete-recipe="(id) => $emit('delete-recipe', id)" />
         </div>
     </div>
 </template>
+
+<style>
+.recipe-list-container .recipe-list .RecipeComponent {
+    margin: 20px 0;
+}
+</style>
 
 <style scoped>
 .recipe-list-container .recipe-list {

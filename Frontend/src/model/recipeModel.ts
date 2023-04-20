@@ -5,40 +5,38 @@
 export class Recipe {
 
 	/**
-	 * Static field to increment the id of the recipe each time we are creating a new one. 
-	 */
-	private static idCounter: number = 0;
-
-	/**
 	 * For now on, each recipe has an id, title and descrption, that are public. 
 	 */
 	id: number;
 	title: string;
 	description: string;
 	numberPeople: number;
-	steps: Step[];
+	recipeSteps: Step[];
 	rating: number;
 	tags: string[];
-	pictureUrl: string;
+	imageUrl: string;
+	userId: number;
 
-	constructor(title: string, description: string, numberPeople: number, steps: Step[], rating: number, pictureUrl: string, tags: string[] = []) {
+	constructor(id: number, title: string, description: string, numberPeople: number, recipeSteps: Step[], rating: number, imageUrl: string, tags: string[] = [], userId: number) {
 		// We set the id automatically with the static field, so it is auto incrementing.
-		this.id = Recipe.idCounter;
-		Recipe.idCounter++;
-
+		// this.id = Recipe.idCounter;
+		// Recipe.idCounter++;
+		this.id = id;
+		this.userId = userId;
 		this.rating = rating;
 
 		// We create the recipe from the properties passed in parameters.
 		this.title = title;
 		this.description = description;
 		this.numberPeople = numberPeople;
-		this.steps = steps;
+		this.recipeSteps = recipeSteps;
 		this.rating = rating;
 		// Default tags for now will be recommended and recent for when a recipe is created
 		this.tags = tags.length ? tags : ["Recommended", "Recent"];
 
 		// Picture
-		this.pictureUrl = pictureUrl;
+		this.imageUrl = imageUrl;
+
 	}
 }
 
@@ -51,9 +49,18 @@ export type Step = {
 	utensils: string[]
 }
 
-export type Ingredient = {
-	id: number,
-	name: string,
-	quantity?: string,
-	unit?: string, // TODO: Change this to a more restrictive type
+
+
+export class Ingredient {
+	id: number;
+	name: string;
+	quantity?: number;
+	unit?: string;
+
+	constructor(name: string, quantity: number, unit: string, id: number = 0) {
+		this.id = id;
+		this.name = name;
+		this.quantity = quantity;
+		this.unit = unit;
+	}
 }

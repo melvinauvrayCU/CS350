@@ -78,7 +78,6 @@ export default {
       if (this.verifyInputs()) {
         // No errors, send datas
         const result = await API.instance.editRecipe(this.recipeTempObject);
-
         if (result) {
           // We redirect to home page with a success message
           router.push({ name: "home", params: { messageTextParam: "Recipe edited !", messageTypeParam: "success" } });
@@ -99,7 +98,7 @@ export default {
       let noErrors: boolean = true;
       if (this.recipeTempObject.title === ""
         || this.recipeTempObject.description === "" || this.recipeTempObject.description.length > 650
-        || this.recipeTempObject.numberPeople < 1 || this.recipeTempObject.imageUrl === "")
+        || this.recipeTempObject.numberPeople < 1 || (this.recipeTempObject.imageUrl === "" && this.mode === "create"))
         noErrors = false;
 
       this.recipeTempObject.recipeSteps.forEach(recipeSteps => {
@@ -163,7 +162,7 @@ export default {
           inputType="number" min="1" max="50" :mandatory="true" />
       </div>
 
-      <ImageInputField id="recipePicture" labelText="Recipe picture:" :mandatory="true"
+      <ImageInputField id="recipePicture" labelText="Recipe picture:" :mandatory="mode !== 'edit'"
         v-model="recipeTempObject.imageUrl" :recipeTitle="mode === 'edit' ? recipeTempObject.title : ''" />
 
       <InputField id="recipeDescription" labelText="Recipe description:"

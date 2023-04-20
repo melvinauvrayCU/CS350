@@ -57,6 +57,11 @@ export default {
     <div class="contentContainer">
       <h1 class="title">{{ recipe?.title }}</h1>
 
+      <img class="imageBanner" :src="'https://api.cs350.melvinauvray.com/images/banner/' + recipe?.imageUrl" alt="">
+      <!-- <div class="imgBannerParallax"
+              :style="{ backgroundImage: 'url(\'https://api.cs350.melvinauvray.com/images/banner/' + recipe?.imageUrl + '\')' }">
+            </div> -->
+
       <PageSeparator title="Description"></PageSeparator>
       <h2 class="subtitle">{{ recipe?.description }}</h2>
       <div class="pairNoSpace">
@@ -134,6 +139,7 @@ export default {
 .title {
   font-family: "title";
   font-weight: bold;
+  font-size: 2.5em;
 }
 
 .subtitle {
@@ -195,5 +201,31 @@ form input {
   background-color: var(--color-background-light);
   flex: 1;
   margin-left: 20px;
+}
+
+.imageBanner {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.imgBannerParallax {
+
+  /* Set a specific height */
+  min-height: 300px;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  border-radius: 10px;
+
+  width: 100%;
+
+  margin-top: 20px;
 }
 </style>

@@ -101,12 +101,6 @@ export default {
 
         }
     },
-    created() {
-        this.lengthCounter = 0;
-        if (typeof this.modelValue === "string") {
-            this.lengthCounter = this.modelValue.length;
-        }
-    },
 };
 </script>
 <template>

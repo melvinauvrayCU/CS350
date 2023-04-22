@@ -22,6 +22,7 @@ export default {
     email: string,
     username: string,
     password: string,
+    passwordCheck: string,
     messageText: string,
     selectedQuestions: string[],
     userSecurityAnswers: string[],
@@ -34,6 +35,7 @@ export default {
     return {
       username: "",
       password: "",
+      passwordCheck: "",
       email: "",
       messageText: "",
       selectedQuestions: [],
@@ -52,73 +54,55 @@ export default {
   methods: {
     //method to signup as a user
     signup() {
-      if (this.username !== "" && this.password !== "" && this.email !== "") {
+      if (this.username !== "" && this.password !== "" && this.email !== "" && this.securityQuestions.length === 3 && this.userSecurityAnswers.length === 3) {
+        if (this.password === this.passwordCheck) {
+            //API call to signup a user
+            var signedUp = API.instance.signup(this.email, this.username, this.password, this.selectedQuestions, this.userSecurityAnswers);
 
-        //API call to signup a user
-        var signedUp = API.instance.signup(this.email, this.username, this.password, this.selectedQuestions, this.userSecurityAnswers);
+            //reset forms
+            this.username = "";
+            this.password = "";
+            this.email = "";
 
-        //reset forms
-        this.username = "";
-        this.password = "";
-        this.email = "";
+            if (signedUp === false) {
 
-        if (signedUp === false) {
+            this.messageText = "Username or Email already in use";
+            this.messageType = "warning";
+          } else {
 
-          this.messageText = "Username or Email already in use";
-          this.messageType = "warning";
+            this.$router.push({ name: "home", params: { messageTextParam: "Welcome!", messageTypeParam: "success" } });
+
+          }
         } else {
-
-          this.$router.push({ name: "home", params: { messageTextParam: "Welcome!", messageTypeParam: "success" } });
-
+          this.messageText = "Passwords do not match";
+          this.messageType = "warning";
         }
-
       } else {
         this.messageType = "warning";
         this.messageText = "Please fill all of the form";
       }
       },
-      onQuestionSelected(index: number) {
-        const selectedQuestion = this.selectedQuestions[index];
-        for (let i = 0; i < this.selectedQuestions.length; i++) {
-    if (i !== index) {
-      const otherSelectedQuestion = this.selectedQuestions[i];
-      const otherOptions = this.availableSecurityQuestions.filter(
-        q => q !== selectedQuestion && q !== otherSelectedQuestion
-      );
-      (this as any).$set(this, `availableSecurityQuestions.${i}`, otherOptions);
-    }
-  }
-  // If the same question is selected in other dropdowns, clear it
-  for (let i = 0; i < this.selectedQuestions.length; i++) {
-    if (i !== index && this.selectedQuestions[i] === selectedQuestion) {
-      this.selectedQuestions[i] = "";
-      const otherOptions = this.availableSecurityQuestions.filter(
-        q => q !== selectedQuestion
-      );
-      (this as any).$set(this, `availableSecurityQuestions.${i}`, otherOptions);
-    }
-  }
-}
-
-
-
-      
+      checkPasswords() {
+        if (this.password !== '' && this.password !== this.passwordCheck) {
+          this.messageText = 'Passwords do not match';
+          this.messageType = 'warning';
+        } else {
+          this.messageText = '';
+          this.messageType = 'success';
+        }
+      },
   },
   computed: {
-  availableSecurityQuestions() {
-    let remainingQuestions = [...this.securityQuestions];
-    for (let i = 0; i < this.selectedQuestions.length; i++) {
-      const selectedQuestion = this.selectedQuestions[i];
-      if (selectedQuestion !== "") {
-        remainingQuestions = remainingQuestions.filter(q => q !== selectedQuestion);
+      availableSecurityQuestions() {
+        return this.securityQuestions.filter((question) => {
+        return !this.selectedQuestions.includes(question);});
       }
-    }
-    return remainingQuestions;
   },
-},
-
-
-  
+  watch: {
+    passwordCheck() {
+      this.checkPasswords();
+    },
+  },  
 };
 
 </script>
@@ -136,28 +120,31 @@ export default {
           :mandatory="true" />
 
           <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
-          v-model="username" :mandatory="true"/>
+          v-model="username" :mandatory="true" />
 
           <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"
-          v-model="password" :mandatory="true" />
+          v-model="password" :mandatory="true"/>
+
+          <InputField id="checkPassword" inputType="password" labelText="Re-Enter Password:" max-length="200" placeholder="Password"
+          v-model="passwordCheck" :mandatory="true" />
 
           <CustomSelectQuestionsComponent id="securityQuestion1" labelText="Select Security Question:" :options="availableSecurityQuestions"
-            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" @change="onQuestionSelected(0)"/>
+            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions"/>
 
 
-          <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+          <InputField id="securityAnswer1" inputType="password" labelText="Answer:" max-length="200" placeholder="Answer"
           v-model="userSecurityAnswers[0]" :mandatory="true" />
 
           <CustomSelectQuestionsComponent id="securityQuestion2" labelText="Select Security Question:" :options="availableSecurityQuestions"
-            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" @change="onQuestionSelected(1)"/>
+            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" />
 
-          <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+          <InputField id="securityAnswer1" inputType="password" labelText="Answer:" max-length="200" placeholder="Answer"
           v-model="userSecurityAnswers[1]" :mandatory="true" />
 
           <CustomSelectQuestionsComponent id="securityQuestion3" labelText="Select Security Question:" :options="availableSecurityQuestions"
-            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" @change="onQuestionSelected(2)"/>
+            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" />
 
-          <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+          <InputField id="securityAnswer1" inputType="password" labelText="Answer:" max-length="200" placeholder="Answer"
           v-model="userSecurityAnswers[2]" :mandatory="true" />
 
           <CustomButtonComponent titleText="Submit" text="Submit" effect="plain" @click="signup"/>

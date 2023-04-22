@@ -117,11 +117,13 @@ export default {
             // Changing color of borders if input is empty and mandatory
             if (event.target.value === "" && this.mandatory) {
                 this.classError = "errorBorder";
+                this.$emit("error", "This field is mandatory.");
             } else {
                 this.classError = "";
+                this.$emit("error", "");
             }
         }
-        
+
     },
     created() {
         this.lengthCounter = 0;

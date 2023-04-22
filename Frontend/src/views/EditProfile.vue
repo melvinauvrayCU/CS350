@@ -13,12 +13,12 @@ export default {
     },
 
     data(): {
-        fname: string
-        lname: string
-        username: string
-        email: string
+        fname: string|undefined
+        lname: string|undefined
+        username: string|undefined
+        email: string|undefined
         password: string
-        bio: string
+        bio: string|undefined
         messageText: string
         messageType: "success" | "warning",
 
@@ -42,9 +42,9 @@ export default {
     },
 
     methods: {
-        updateProfile() {
+        async updateProfile() {
             if (this.fname !== "" && this.lname !== "" && this.username !== "") {
-                const temp = API.instance.updateProfile(this.fname, this.lname, this.username, this.bio);
+                const temp = await API.instance.updateProfile();
 
                 if (temp === true) {
                     this.messageType = "success";
@@ -71,13 +71,14 @@ export default {
         getinput() {
             var user = API.instance.getUser();
 
-            this.username = user.username;
-            this.fname = user.fname;
-            this.lname = user.lname;
-            this.bio = user.bio;
+            this.username = user?.username;
+            this.fname = user?.fname;
+            this.lname = user?.lname;
+            this.bio = user?.bio;
 
 
-        }
+        },
+
 
     },
 };
@@ -123,6 +124,7 @@ export default {
                 inputType="textarea" initialHeight="100" maxLength="650" />
 
         </div>
+
 
         <CustomButton titleText="Done" text="Done" effect="plain" @click="updateProfile" />
 

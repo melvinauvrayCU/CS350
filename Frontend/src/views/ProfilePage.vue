@@ -12,15 +12,16 @@ export default {
     },
 
     data(): {
-        fname: string
-        lname: string
-        username: string
-        email: string
+        fname: string|undefined
+        lname: string|undefined
+        username: string|undefined
+        email: string|undefined
         password: string
-        bio: string
+        bio: string|undefined
 
 
-    } {
+    } 
+    {
         return {
             fname: "",
             lname: "",
@@ -28,6 +29,8 @@ export default {
             email: "",
             password: "",
             bio: "",
+
+
 
         };
     },
@@ -37,11 +40,12 @@ export default {
         async getUser() {
             var user = await API.instance.getUser();
 
-            this.username = user.username;
-            this.fname = user.fname;
-            this.lname = user.lname;
-            this.bio = user.bio;
-            this.email = user.email;
+            this.username = user?.username;
+            this.fname = user?.fname;
+            this.lname = user?.lname;
+            this.bio = user?.bio;
+            this.email = user?.email;
+            
         }
 
     },
@@ -83,20 +87,40 @@ export default {
             </div>
 
         </div>
+        <div class="bio">
+            <PageTitle text="Bio:" />
+            <p> {{ bio }}</p>
+        </div>
+
+
+
+        <div class="security_question">
+            <PageTitle text="Securty Question 1:" />
+            <p> {{ security_question_1 }}</p>
+            <PageTitle text="Answer:"/>
+            <p>{{ security_answer_1 }}</p>
+        </div>
+        <div class="security_question">
+            <PageTitle text="Security Question 2:" />
+            <p> {{ security_question_2 }}</p>
+            <PageTitle text="Answer:"/>
+            <p>{{ security_answer_2 }}</p>
+        </div>
+        <div class="security_question">
+            <PageTitle text="Security Question 3:" />
+            <p> {{ security_question_3 }}</p>
+            <PageTitle text="Answer:" />
+            <p>{{ security_answer_3 }}</p>
+        </div>
+
+
+
 
         <div id="button">
             <RouterLink to="/editprofile">
                 <CustomButton type="neutral" effect='plain' text="Edit Profile" titleText="Edit Profile" />
             </RouterLink>
         </div>
-
-
-
-        <div class="bio">
-            <PageTitle text="Bio:" />
-            <p> {{ bio }}</p>
-        </div>
-
 
 
 

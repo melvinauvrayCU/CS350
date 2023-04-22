@@ -13,12 +13,18 @@ export default {
     },
 
     data(): {
-        fname: string
-        lname: string
-        username: string
-        email: string
+        fname: string|undefined
+        lname: string|undefined
+        username: string|undefined
+        email: string|undefined
         password: string
-        bio: string
+        bio: string|undefined
+        security_answer_1:string
+        security_answer_2:string
+        security_answer_3:string
+        security_question_1:string|undefined
+        security_question_2:string|undefined
+        security_question_3:string|undefined
         messageText: string
         messageType: "success" | "warning",
 
@@ -31,6 +37,12 @@ export default {
             email: "",
             password: "",
             bio: "",
+            security_answer_1: "",
+            security_answer_2: "",
+            security_answer_3: "",
+            security_question_1: API.instance.currentUser?.security_question_1,
+            security_question_2: API.instance.currentUser?.security_question_2,
+            security_question_3: API.instance.currentUser?.security_question_3,
             messageText: "",
             messageType: "success"
 
@@ -42,9 +54,9 @@ export default {
     },
 
     methods: {
-        updateProfile() {
+        async updateProfile() {
             if (this.fname !== "" && this.lname !== "" && this.username !== "") {
-                const temp = API.instance.updateProfile(this.fname, this.lname, this.username, this.bio);
+                const temp = await API.instance.updateProfile();
 
                 if (temp === true) {
                     this.messageType = "success";
@@ -71,13 +83,14 @@ export default {
         getinput() {
             var user = API.instance.getUser();
 
-            this.username = user.username;
-            this.fname = user.fname;
-            this.lname = user.lname;
-            this.bio = user.bio;
+            this.username = user?.username;
+            this.fname = user?.fname;
+            this.lname = user?.lname;
+            this.bio = user?.bio;
 
 
-        }
+        },
+
 
     },
 };
@@ -123,6 +136,32 @@ export default {
                 inputType="textarea" initialHeight="100" maxLength="650" />
 
         </div>
+
+        <div class="inputField">
+            <InputField id="security_answer_1" inputType="text" labelText="Security Question 1:" max-length="200" placeholder="my mom"
+                v-model="security_answer_1" :mandatory="true" />
+        </div>
+        <div class="inputField">
+            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
+                v-model="username" :mandatory="true" />
+        </div>
+        <div class="inputField">
+            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
+                v-model="username" :mandatory="true" />
+        </div>
+        <div class="inputField">
+            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
+                v-model="username" :mandatory="true" />
+        </div>
+        <div class="inputField">
+            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
+                v-model="username" :mandatory="true" />
+        </div>
+        <div class="inputField">
+            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
+                v-model="username" :mandatory="true" />
+        </div>
+
 
         <CustomButton titleText="Done" text="Done" effect="plain" @click="updateProfile" />
 

@@ -12,12 +12,18 @@ export default {
     },
 
     data(): {
-        fname: string
-        lname: string
-        username: string
-        email: string
+        fname: string|undefined
+        lname: string|undefined
+        username: string|undefined
+        email: string|undefined
         password: string
-        bio: string
+        bio: string|undefined
+        security_answer_1: string|undefined
+        security_answer_2: string|undefined
+        security_answer_3: string|undefined
+        security_question_1: string|undefined
+        security_question_2: string|undefined
+        security_question_3: string|undefined
 
 
     } {
@@ -28,6 +34,13 @@ export default {
             email: "",
             password: "",
             bio: "",
+            security_answer_1: "",
+            security_answer_2: "",
+            security_answer_3: "",
+            security_question_1: "",
+            security_question_2: "",
+            security_question_3: "",
+
 
         };
     },
@@ -37,11 +50,17 @@ export default {
         async getUser() {
             var user = await API.instance.getUser();
 
-            this.username = user.username;
-            this.fname = user.fname;
-            this.lname = user.lname;
-            this.bio = user.bio;
-            this.email = user.email;
+            this.username = user?.username;
+            this.fname = user?.fname;
+            this.lname = user?.lname;
+            this.bio = user?.bio;
+            this.email = user?.email;
+            this.security_answer_1 = user?.security_answer_1;
+            this.security_answer_2 = user?.security_answer_2;
+            this.security_answer_3 = user?.security_answer_3;
+            this.security_question_1 = user?.security_question_1;
+            this.security_question_2 = user?.security_question_2;
+            this.security_question_3 = user?.security_question_3;
         }
 
     },
@@ -83,20 +102,40 @@ export default {
             </div>
 
         </div>
+        <div class="bio">
+            <PageTitle text="Bio:" />
+            <p> {{ bio }}</p>
+        </div>
+
+
+
+        <div class="security_question">
+            <PageTitle text="Securty Question 1:" />
+            <p> {{ security_question_1 }}</p>
+            <PageTitle text="Answer:"/>
+            <p>{{ security_answer_1 }}</p>
+        </div>
+        <div class="security_question">
+            <PageTitle text="Security Question 2:" />
+            <p> {{ security_question_2 }}</p>
+            <PageTitle text="Answer:"/>
+            <p>{{ security_answer_2 }}</p>
+        </div>
+        <div class="security_question">
+            <PageTitle text="Security Question 3:" />
+            <p> {{ security_question_3 }}</p>
+            <PageTitle text="Answer:" />
+            <p>{{ security_answer_3 }}</p>
+        </div>
+
+
+
 
         <div id="button">
             <RouterLink to="/editprofile">
                 <CustomButton type="neutral" effect='plain' text="Edit Profile" titleText="Edit Profile" />
             </RouterLink>
         </div>
-
-
-
-        <div class="bio">
-            <PageTitle text="Bio:" />
-            <p> {{ bio }}</p>
-        </div>
-
 
 
 

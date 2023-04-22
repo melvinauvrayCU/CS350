@@ -603,7 +603,7 @@ export class API {
 			password: password,
 		});
 		console.log(response);
-		this.currentUser= new User(response.data.user.name, response.data.token, response.data.user.email,response.data.user.id);
+		this.currentUser= response.data.user;
 		return true;
 	}catch (error: any){
 		console.log(error);
@@ -622,16 +622,22 @@ export class API {
 	 */
 	currentUser: User| null = null;
 
-	async signup(email: string, username: string, password: string): Promise<boolean> {
+	async signup(email: string, username: string, password: string,security_answer_1:string,security_answer_2:string,security_answer_3:string,security_question_1:string,security_question_2:string,security_question_3:string): Promise<boolean> {
 		try{
 		const response = await axios.post(this._apiUrlshort + "/register",{
 			name: username,
 			email: email,
 			password: password,
 			password_confirmation: password,
+			security_answer_1: security_answer_1,
+			security_answer_2:security_answer_2,
+			security_answer_3:security_answer_3,
+			security_question_1:security_question_1,
+			security_question_2:security_question_2,
+			security_question_3:security_question_3
 		});
 		console.log(response);
-		this.currentUser= new User(response.data.user.name, response.data.token, response.data.user.email,response.data.user.id);
+		this.currentUser= new User(response.data.user.name, response.data.token, response.data.user.email,response.data.user.id,response.data.user.password,response.data.user.security_answer_1,response.data.user.security_answer_2,response.data.user.security_answer_3,response.data.user.security_question_1,response.data.user.security_question_2,response.data.user.security_question_3);
 		return true;
 		}catch(error: any){
 			return false;
@@ -666,17 +672,53 @@ export class API {
 	/**
 	 * Goes through the users attributes and updates the first name, last name, username, and bio
 	 */
-	/** 
-	async updateProfile(user: User): Promise<void>{
+	
+	async updateProfile(): Promise<boolean>{
 		try{
-		const response = await axios.put(this._apiUrlshort+ "/user/edit",{
-		});
-		return response.data;
+			const user_id = this.currentUser?.id;
+			const response = await axios.put(`{this._apiUrlshort}+ "/user/${user_id}/edit`,this.currentUser,{
+				headers:{
+					Authorization: `Bearer ${this.currentUser?.token}`}
+				});
+				console.log(this.currentUser);
+				console.log(response.data);
+		return true;
+		}catch(error: any){
+			throw new Error(error.response.data.message);
+			return false;
+		}
+	}
+
+	async changePassword( newPassword: string, securityQuestion: string, securityAnswer: string): Promise<void> {
+		const user_id = this.currentUser?.id;
+		const token= this.currentUser?.token;
+		try {
+			const response = await axios.put(`${this._apiUrlshort}/user/${user_id}/change_password`, {
+				newPassword,
+				securityQuestion,
+				securityAnswer,
+			}, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			});
+			console.log(this.currentUser?.password);
+			return response.data;
+		} catch (error: any) {
+			throw new Error(error.response.data.message);
+		}
+	}
+
+	async getSecurityQuestions(): Promise<void>{
+		try{
+			const response = await axios.get(`${this._apiUrlshort}/security-questions`);
+			return response.data;
 		}catch(error: any){
 			throw new Error(error.response.data.message);
 		}
 	}
-	*/	
+	
+		
 
 		
 

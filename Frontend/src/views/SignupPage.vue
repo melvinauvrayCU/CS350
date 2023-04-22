@@ -22,6 +22,13 @@ export default {
     password: string,
     messageText: string,
     messageType: "success" | "warning",
+    security_answer_1:string,
+    security_answer_2:string,
+    security_answer_3:string,
+    security_question_1:string,
+    security_question_2:string,
+    security_question_3:string,
+    questions:[]|void,
 
   } {
     // We are setting the title and description datas that will be linked to the form.
@@ -32,20 +39,33 @@ export default {
       email: "",
       messageText: "",
       messageType: "success",
+      security_answer_1:"",
+      security_answer_2:"",
+      security_answer_3:"",
+      security_question_1:"",
+      security_question_2:"",
+      security_question_3:"",
+      questions:[],
     };
+  },
+  async mounted(){
+    await this.getQuestions()
   },
   methods: {
     //method to signup as a user
     async signup() {
-      if (this.username !== "" && this.password !== "" && this.email !== "") {
+      if (this.username !== "" && this.password !== "" && this.email !== "" && this.security_answer_1 !=="" && this.security_answer_2 !== "" && this.security_answer_3 !=="") {
 
         //API call to signup a user
-        var signedUp = await API.instance.signup(this.email, this.username, this.password);
+        var signedUp = await API.instance.signup(this.email, this.username, this.password,this.security_answer_1,this.security_answer_2,this.security_answer_3,this.security_question_1,this.security_question_2,this.security_question_3);
 
         //reset forms
         this.username = "";
         this.password = "";
         this.email = "";
+        this.security_answer_1="";
+        this.security_answer_2="";
+        this.security_answer_3="";
 
         if (signedUp === false) {
 
@@ -61,8 +81,10 @@ export default {
         this.messageType = "warning";
         this.messageText = "Please fill all the form";
       }
+    },
+    async getQuestions(){
+      this.questions = await API.instance.getSecurityQuestions();
     }
-
   },
 };
 
@@ -90,6 +112,36 @@ export default {
 
         <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"
           v-model="password" :mandatory="true" />
+
+          <div>
+            <label>Select your first security question:</label>
+            <select v-model="security_question_1">
+              <option v-for="(question, index) in questions" :key="index" :value="question">{{ question }}</option>
+            </select>
+
+            <label for="answer">Your answer:</label>
+            <input type="text" id="answer" v-model="security_answer_1" :mandatory="true" />
+          </div>
+
+          <div>
+            <label>Select your second security question:</label>
+            <select v-model="security_question_2">
+              <option v-for="(question, index) in questions" :key="index" :value="question">{{ question }}</option>
+            </select>
+
+            <label for="answer">Your answer:</label>
+            <input type="text" id="answer" v-model="security_answer_2" :mandatory="true"/>
+          </div>
+
+          <div>
+            <label>Select your third security question:</label>
+            <select v-model="security_question_3">
+              <option v-for="(question, index) in questions" :key="index" :value="question">{{ question }}</option>
+            </select>
+
+            <label for="answer">Your answer:</label>
+            <input type="text" id="answer" v-model="security_answer_3" :mandatory="true" />
+          </div>
 
         <CustomButton titleText="Click to signup" text="Signup" effect="plain" @click="signup" />
 

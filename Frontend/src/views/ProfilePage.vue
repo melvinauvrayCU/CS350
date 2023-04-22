@@ -1,5 +1,6 @@
 <script lang = "ts">
 import { API } from "@/model/apiCalls";
+import User from "@/model/userModel";
 
 import PageTitle from "@/components/PageTitleComponent.vue";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
@@ -26,7 +27,8 @@ export default {
         security_question_3: string|undefined
 
 
-    } {
+    } 
+    {
         return {
             fname: "",
             lname: "",

@@ -137,31 +137,6 @@ export default {
 
         </div>
 
-        <div class="inputField">
-            <InputField id="security_answer_1" inputType="text" labelText="Security Question 1:" max-length="200" placeholder="my mom"
-                v-model="security_answer_1" :mandatory="true" />
-        </div>
-        <div class="inputField">
-            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
-                v-model="username" :mandatory="true" />
-        </div>
-        <div class="inputField">
-            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
-                v-model="username" :mandatory="true" />
-        </div>
-        <div class="inputField">
-            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
-                v-model="username" :mandatory="true" />
-        </div>
-        <div class="inputField">
-            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
-                v-model="username" :mandatory="true" />
-        </div>
-        <div class="inputField">
-            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
-                v-model="username" :mandatory="true" />
-        </div>
-
 
         <CustomButton titleText="Done" text="Done" effect="plain" @click="updateProfile" />
 

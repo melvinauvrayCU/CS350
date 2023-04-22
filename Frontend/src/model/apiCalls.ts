@@ -2,7 +2,7 @@ import { IngredientCat, Conversion, Unit } from "./PantryModels";
 import { Category } from "./categoryModel";
 import { Recipe, Ingredient } from "./recipeModel";
 import type { Step } from "./recipeModel";
-import { User } from "./userModel";
+import type { User } from "./userModel";
 import axios from "axios";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css"; // Import NProgress CSS

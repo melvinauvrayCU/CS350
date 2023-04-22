@@ -33,15 +33,15 @@ export default {
     },
 
     methods: {
-
-        async getUser() {
-            var user = await API.instance.getUser();
-
-            this.username = user.username;
-            this.fname = user.fname;
-            this.lname = user.lname;
-            this.bio = user.bio;
-            this.email = user.email;
+        getUser() {
+            var user = API.instance.getUser();
+            if (user) {
+                this.username = user.username;
+                // this.fname = user.fname;
+                // this.lname = user.lname;
+                // this.bio = user.bio;
+                this.email = user.email;
+            }
         }
 
     },
@@ -67,13 +67,13 @@ export default {
 
         <div class="gets">
             <div class="gets">
-                
+
                 <PageTitle :text=fname />
                 <PageTitle :text=lname />
             </div>
 
             <div class="gets">
-                
+
                 <h3>@{{ username }}</h3>
             </div>
 

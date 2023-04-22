@@ -139,7 +139,7 @@ export class API {
 	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
 	and if a user is not defined then we need tell the user they need to sign up
 	*/
-	
+
 
 	/** 
 	 * variable to check if a user is logged in or not 
@@ -365,7 +365,8 @@ export class API {
 			formData.append('description', recipe.description);
 			formData.append('number_people', recipe.numberPeople.toString());
 			formData.append('rating', recipe.rating.toString());
-			formData.append('user_id', this.currentUser.id.toString());
+			if (this.currentUser)
+				formData.append('user_id', this.currentUser.id.toString());
 
 			// Add the recipe steps to the FormData object
 			recipe.recipeSteps.forEach((recipeStep, index) => {
@@ -418,7 +419,8 @@ export class API {
 			formData.append('description', recipe.description);
 			formData.append('number_people', recipe.numberPeople.toString());
 			formData.append('rating', recipe.rating.toString());
-			formData.append('user_id', this.currentUser.id.toString());
+			if (this.currentUser)
+				formData.append('user_id', this.currentUser.id.toString());
 
 			// Add the recipe steps to the FormData object
 			recipe.recipeSteps.forEach((recipeStep, index) => {
@@ -821,19 +823,19 @@ export class API {
 	 */
 
 
-	async login (email:string, password: string): Promise<boolean> {
-		try{
-		const response = await axios.post(this._apiUrlshort+"/login", {
-			email: email,
-			password: password,
-		});
-		console.log(response);
-		this.currentUser= new User(response.data.user.name, response.data.token, response.data.user.email,response.data.user.id);
-		return true;
-	}catch (error: any){
-		console.log(error);
-		return false;
-	}
+	async login(email: string, password: string): Promise<boolean> {
+		try {
+			const response = await axios.post(this._apiUrlshort + "/login", {
+				email: email,
+				password: password,
+			});
+			console.log(response);
+			this.currentUser = new User(response.data.user.name, response.data.token, response.data.user.email, response.data.user.id);
+			return true;
+		} catch (error: any) {
+			console.log(error);
+			return false;
+		}
 
 	}
 
@@ -845,20 +847,20 @@ export class API {
 	 * @param password password the user creates
 	 * @param email email the user puts it
 	 */
-	currentUser: User| null = null;
+	currentUser: User | null = null;
 
 	async signup(email: string, username: string, password: string): Promise<boolean> {
-		try{
-		const response = await axios.post(this._apiUrlshort + "/register",{
-			name: username,
-			email: email,
-			password: password,
-			password_confirmation: password,
-		});
-		console.log(response);
-		this.currentUser= new User(response.data.user.name, response.data.token, response.data.user.email,response.data.user.id);
-		return true;
-		}catch(error: any){
+		try {
+			const response = await axios.post(this._apiUrlshort + "/register", {
+				name: username,
+				email: email,
+				password: password,
+				password_confirmation: password,
+			});
+			console.log(response);
+			this.currentUser = new User(response.data.user.name, response.data.token, response.data.user.email, response.data.user.id);
+			return true;
+		} catch (error: any) {
 			return false;
 		}
 	}
@@ -872,15 +874,15 @@ export class API {
 	}
 
 	async logout() {
-		try{
-		
-		const response = await axios.post(this._apiUrlshort+"/logout",null,{
-			headers:{Authorization: `Bearer ${this.currentUser?.token}`}
-		});
-		console.log(response);
-		console.log({Authorization: `Bearer ${this.currentUser?.token}`});
-		return response.data;
-		}catch(error: any){
+		try {
+
+			const response = await axios.post(this._apiUrlshort + "/logout", null, {
+				headers: { Authorization: `Bearer ${this.currentUser?.token}` }
+			});
+			console.log(response);
+			console.log({ Authorization: `Bearer ${this.currentUser?.token}` });
+			return response.data;
+		} catch (error: any) {
 			throw new Error(error.response.data.message);
 		}
 	}
@@ -891,19 +893,17 @@ export class API {
 	/**
 	 * Goes through the users attributes and updates the first name, last name, username, and bio
 	 */
-	/** 
-	async updateProfile(user: User): Promise<void>{
-		try{
-		const response = await axios.put(this._apiUrlshort+ "/user/edit",{
-		});
-		return response.data;
-		}catch(error: any){
-			throw new Error(error.response.data.message);
-		}
+	async updateProfile(user: User): Promise<void> {
+		// try{
+		// const response = await axios.put(this._apiUrlshort+ "/user/edit",{
+		// });
+		// return response.data;
+		// }catch(error: any){
+		// 	throw new Error(error.response.data.message);
+		// }
 	}
-	*/	
 
-		
+
 
 	/**
 	 * Returns the current user to easily get their attributes
@@ -911,7 +911,6 @@ export class API {
 
 	getUser() {
 		return this.currentUser;
-
 	}
 
 	/**

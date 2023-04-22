@@ -44,20 +44,20 @@ export default {
     methods: {
         updateProfile() {
             if (this.fname !== "" && this.lname !== "" && this.username !== "") {
-                const temp = API.instance.updateProfile(this.fname, this.lname, this.username, this.bio);
+                // const temp = API.instance.updateProfile(this.fname, this.lname, this.username, this.bio);
 
-                if (temp === true) {
-                    this.messageType = "success";
-                    this.messageText = "Changes saved";
-                    setTimeout(() => {
-                        this.$router.push("/profile");
-                    }, 1000);
+                // if (temp === true) {
+                //     this.messageType = "success";
+                //     this.messageText = "Changes saved";
+                //     setTimeout(() => {
+                //         this.$router.push("/profile");
+                //     }, 1000);
 
 
-                } else {
-                    this.messageType = "warning";
-                    this.messageText = "Username already taken";
-                }
+                // } else {
+                //     this.messageType = "warning";
+                //     this.messageText = "Username already taken";
+                // }
 
             } else {
                 this.messageType = "warning";
@@ -70,13 +70,13 @@ export default {
 
         getinput() {
             var user = API.instance.getUser();
-
-            this.username = user.username;
-            this.fname = user.fname;
-            this.lname = user.lname;
-            this.bio = user.bio;
-
-
+            if (user) {
+                this.username = user.username;
+                // this.fname = user.fname;
+                // this.lname = user.lname;
+                // this.bio = user.bio;
+                this.email = user.email;
+            }
         }
 
     },

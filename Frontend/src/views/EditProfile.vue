@@ -44,20 +44,24 @@ export default {
     methods: {
         async updateProfile() {
             if (this.fname !== "" && this.lname !== "" && this.username !== "") {
+<<<<<<< HEAD
                 const temp = await API.instance.updateProfile();
+=======
+                // const temp = API.instance.updateProfile(this.fname, this.lname, this.username, this.bio);
+>>>>>>> 37fd84528a00adf61da3e1c4c133af179981ecab
 
-                if (temp === true) {
-                    this.messageType = "success";
-                    this.messageText = "Changes saved";
-                    setTimeout(() => {
-                        this.$router.push("/profile");
-                    }, 1000);
+                // if (temp === true) {
+                //     this.messageType = "success";
+                //     this.messageText = "Changes saved";
+                //     setTimeout(() => {
+                //         this.$router.push("/profile");
+                //     }, 1000);
 
 
-                } else {
-                    this.messageType = "warning";
-                    this.messageText = "Username already taken";
-                }
+                // } else {
+                //     this.messageType = "warning";
+                //     this.messageText = "Username already taken";
+                // }
 
             } else {
                 this.messageType = "warning";
@@ -70,6 +74,7 @@ export default {
 
         getinput() {
             var user = API.instance.getUser();
+<<<<<<< HEAD
 
             this.username = user?.username;
             this.fname = user?.fname;
@@ -79,6 +84,16 @@ export default {
 
         },
 
+=======
+            if (user) {
+                this.username = user.username;
+                // this.fname = user.fname;
+                // this.lname = user.lname;
+                // this.bio = user.bio;
+                this.email = user.email;
+            }
+        }
+>>>>>>> 37fd84528a00adf61da3e1c4c133af179981ecab
 
     },
 };

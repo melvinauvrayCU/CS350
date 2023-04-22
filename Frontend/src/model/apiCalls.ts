@@ -139,7 +139,7 @@ export class API {
 	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
 	and if a user is not defined then we need tell the user they need to sign up
 	*/
-	
+
 
 	/** 
 	 * variable to check if a user is logged in or not 
@@ -365,7 +365,8 @@ export class API {
 			formData.append('description', recipe.description);
 			formData.append('number_people', recipe.numberPeople.toString());
 			formData.append('rating', recipe.rating.toString());
-			formData.append('user_id', this.currentUser.id.toString());
+			if (this.currentUser)
+				formData.append('user_id', this.currentUser.id.toString());
 
 			// Add the recipe steps to the FormData object
 			recipe.recipeSteps.forEach((recipeStep, index) => {
@@ -418,7 +419,8 @@ export class API {
 			formData.append('description', recipe.description);
 			formData.append('number_people', recipe.numberPeople.toString());
 			formData.append('rating', recipe.rating.toString());
-			formData.append('user_id', this.currentUser.id.toString());
+			if (this.currentUser)
+				formData.append('user_id', this.currentUser.id.toString());
 
 			// Add the recipe steps to the FormData object
 			recipe.recipeSteps.forEach((recipeStep, index) => {
@@ -845,7 +847,7 @@ export class API {
 	 * @param password password the user creates
 	 * @param email email the user puts it
 	 */
-	currentUser: User| null = null;
+	currentUser: User | null = null;
 
 	async signup(email: string, username: string, password: string,security_answer_1:string,security_answer_2:string,security_answer_3:string,security_question_1:string,security_question_2:string,security_question_3:string): Promise<boolean> {
 		try{
@@ -862,7 +864,7 @@ export class API {
 			security_question_3:security_question_3
 		});
 		console.log(response);
-		this.currentUser= new User(response.data.user.name, response.data.token, response.data.user.email,response.data.user.id,response.data.user.password,response.data.user.security_answer_1,response.data.user.security_answer_2,response.data.user.security_answer_3,response.data.user.security_question_1,response.data.user.security_question_2,response.data.user.security_question_3);
+		this.currentUser= response.data.user;
 		return true;
 		}catch(error: any){
 			return false;
@@ -878,15 +880,15 @@ export class API {
 	}
 
 	async logout() {
-		try{
-		
-		const response = await axios.post(this._apiUrlshort+"/logout",null,{
-			headers:{Authorization: `Bearer ${this.currentUser?.token}`}
-		});
-		console.log(response);
-		console.log({Authorization: `Bearer ${this.currentUser?.token}`});
-		return response.data;
-		}catch(error: any){
+		try {
+
+			const response = await axios.post(this._apiUrlshort + "/logout", null, {
+				headers: { Authorization: `Bearer ${this.currentUser?.token}` }
+			});
+			console.log(response);
+			console.log({ Authorization: `Bearer ${this.currentUser?.token}` });
+			return response.data;
+		} catch (error: any) {
 			throw new Error(error.response.data.message);
 		}
 	}
@@ -945,7 +947,7 @@ export class API {
 	
 		
 
-		
+
 
 	/**
 	 * Returns the current user to easily get their attributes
@@ -953,7 +955,6 @@ export class API {
 
 	getUser() {
 		return this.currentUser;
-
 	}
 
 	/**

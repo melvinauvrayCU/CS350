@@ -113,35 +113,7 @@ export default {
         <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"
           v-model="password" :mandatory="true" />
 
-          <div>
-            <label>Select your first security question:</label>
-            <select v-model="security_question_1">
-              <option v-for="(question, index) in questions" :key="index" :value="question">{{ question }}</option>
-            </select>
 
-            <label for="answer">Your answer:</label>
-            <input type="text" id="answer" v-model="security_answer_1" :mandatory="true" />
-          </div>
-
-          <div>
-            <label>Select your second security question:</label>
-            <select v-model="security_question_2">
-              <option v-for="(question, index) in questions" :key="index" :value="question">{{ question }}</option>
-            </select>
-
-            <label for="answer">Your answer:</label>
-            <input type="text" id="answer" v-model="security_answer_2" :mandatory="true"/>
-          </div>
-
-          <div>
-            <label>Select your third security question:</label>
-            <select v-model="security_question_3">
-              <option v-for="(question, index) in questions" :key="index" :value="question">{{ question }}</option>
-            </select>
-
-            <label for="answer">Your answer:</label>
-            <input type="text" id="answer" v-model="security_answer_3" :mandatory="true" />
-          </div>
 
         <CustomButton titleText="Click to signup" text="Signup" effect="plain" @click="signup" />
 

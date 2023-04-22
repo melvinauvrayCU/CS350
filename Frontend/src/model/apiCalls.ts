@@ -630,8 +630,8 @@ export class API {
 			password: password,
 			password_confirmation: password,
 			security_answer_1: security_answer_1,
-			security_answer_2:security_answer_2,
-			security_answer_3:security_answer_3,
+			security_answer_2: security_answer_2,
+			security_answer_3: security_answer_3,
 			security_question_1:security_question_1,
 			security_question_2:security_question_2,
 			security_question_3:security_question_3

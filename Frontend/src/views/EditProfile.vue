@@ -19,12 +19,6 @@ export default {
         email: string|undefined
         password: string
         bio: string|undefined
-        security_answer_1:string
-        security_answer_2:string
-        security_answer_3:string
-        security_question_1:string|undefined
-        security_question_2:string|undefined
-        security_question_3:string|undefined
         messageText: string
         messageType: "success" | "warning",
 
@@ -37,12 +31,6 @@ export default {
             email: "",
             password: "",
             bio: "",
-            security_answer_1: "",
-            security_answer_2: "",
-            security_answer_3: "",
-            security_question_1: API.instance.currentUser?.security_question_1,
-            security_question_2: API.instance.currentUser?.security_question_2,
-            security_question_3: API.instance.currentUser?.security_question_3,
             messageText: "",
             messageType: "success"
 

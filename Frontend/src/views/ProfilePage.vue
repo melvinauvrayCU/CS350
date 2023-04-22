@@ -1,6 +1,5 @@
 <script lang = "ts">
 import { API } from "@/model/apiCalls";
-import User from "@/model/userModel";
 
 import PageTitle from "@/components/PageTitleComponent.vue";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
@@ -19,12 +18,6 @@ export default {
         email: string|undefined
         password: string
         bio: string|undefined
-        security_answer_1: string|undefined
-        security_answer_2: string|undefined
-        security_answer_3: string|undefined
-        security_question_1: string|undefined
-        security_question_2: string|undefined
-        security_question_3: string|undefined
 
 
     } 
@@ -36,12 +29,7 @@ export default {
             email: "",
             password: "",
             bio: "",
-            security_answer_1: "",
-            security_answer_2: "",
-            security_answer_3: "",
-            security_question_1: "",
-            security_question_2: "",
-            security_question_3: "",
+
 
 
         };
@@ -57,12 +45,7 @@ export default {
             this.lname = user?.lname;
             this.bio = user?.bio;
             this.email = user?.email;
-            this.security_answer_1 = user?.security_answer_1;
-            this.security_answer_2 = user?.security_answer_2;
-            this.security_answer_3 = user?.security_answer_3;
-            this.security_question_1 = user?.security_question_1;
-            this.security_question_2 = user?.security_question_2;
-            this.security_question_3 = user?.security_question_3;
+            
         }
 
     },

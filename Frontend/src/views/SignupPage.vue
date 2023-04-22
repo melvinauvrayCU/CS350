@@ -3,6 +3,7 @@ import { API } from "@/model/apiCalls";
 import MessageComponent from "@/components/MessageComponent.vue";
 import PageTitle from "@/components/PageTitleComponent.vue";
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
+import CustomButtonComponent from "@/components/formComponents/CustomButtonComponent.vue";
 import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
 import CustomSelectQuestionsComponent from "@/components/formComponents/CustomSelectQuestionsComponent.vue";
 
@@ -14,6 +15,7 @@ export default {
     InputField,
     BackgroundIcons,
     CustomSelectQuestionsComponent,
+    CustomButtonComponent,
   },
 
   data(): {
@@ -34,11 +36,7 @@ export default {
       password: "",
       email: "",
       messageText: "",
-      selectedQuestions: [
-        "",
-        "",
-        "",
-      ],
+      selectedQuestions: [],
       userSecurityAnswers: [],
       messageType: "success",
       securityQuestions: [
@@ -76,19 +74,51 @@ export default {
 
       } else {
         this.messageType = "warning";
-        this.messageText = "Please fill all the form";
+        this.messageText = "Please fill all of the form";
       }
       },
+      onQuestionSelected(index: number) {
+        const selectedQuestion = this.selectedQuestions[index];
+        for (let i = 0; i < this.selectedQuestions.length; i++) {
+    if (i !== index) {
+      const otherSelectedQuestion = this.selectedQuestions[i];
+      const otherOptions = this.availableSecurityQuestions.filter(
+        q => q !== selectedQuestion && q !== otherSelectedQuestion
+      );
+      (this as any).$set(this, `availableSecurityQuestions.${i}`, otherOptions);
+    }
+  }
+  // If the same question is selected in other dropdowns, clear it
+  for (let i = 0; i < this.selectedQuestions.length; i++) {
+    if (i !== index && this.selectedQuestions[i] === selectedQuestion) {
+      this.selectedQuestions[i] = "";
+      const otherOptions = this.availableSecurityQuestions.filter(
+        q => q !== selectedQuestion
+      );
+      (this as any).$set(this, `availableSecurityQuestions.${i}`, otherOptions);
+    }
+  }
+}
+
+
+
+      
   },
   computed: {
-    // Filters securityQuestions based on which questions have not been selected yet
-      availableSecurityQuestions() {
-        const selectedQuestions = this.selectedQuestions.filter(q => q !== "");
-        const remainingQuestions = this.securityQuestions.filter(q => !selectedQuestions.includes(q));
-        return remainingQuestions.filter(q => !this.selectedQuestions.slice(0, -3).includes(q));
+  availableSecurityQuestions() {
+    let remainingQuestions = [...this.securityQuestions];
+    for (let i = 0; i < this.selectedQuestions.length; i++) {
+      const selectedQuestion = this.selectedQuestions[i];
+      if (selectedQuestion !== "") {
+        remainingQuestions = remainingQuestions.filter(q => q !== selectedQuestion);
       }
+    }
+    return remainingQuestions;
+  },
+},
 
-  }
+
+  
 };
 
 </script>
@@ -103,7 +133,7 @@ export default {
       <div class="CreateSignupPage">
 
           <InputField id="email" inputType="email" labelText="Email:" max-length="200" placeholder="Email" v-model="email"
-          :mandatory="true"  />
+          :mandatory="true" />
 
           <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
           v-model="username" :mandatory="true"/>
@@ -111,21 +141,26 @@ export default {
           <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"
           v-model="password" :mandatory="true" />
 
-          <CustomSelectQuestionsComponent :options="availableSecurityQuestions" v-model="selectedQuestions"/>
+          <CustomSelectQuestionsComponent id="securityQuestion1" labelText="Select Security Question:" :options="availableSecurityQuestions"
+            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" @change="onQuestionSelected(0)"/>
 
 
           <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
           v-model="userSecurityAnswers[0]" :mandatory="true" />
 
-          <CustomSelectQuestionsComponent :options="availableSecurityQuestions" v-model="selectedQuestions"/>
+          <CustomSelectQuestionsComponent id="securityQuestion2" labelText="Select Security Question:" :options="availableSecurityQuestions"
+            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" @change="onQuestionSelected(1)"/>
 
           <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
           v-model="userSecurityAnswers[1]" :mandatory="true" />
 
-          <CustomSelectQuestionsComponent :options="availableSecurityQuestions" v-model="selectedQuestions" />
+          <CustomSelectQuestionsComponent id="securityQuestion3" labelText="Select Security Question:" :options="availableSecurityQuestions"
+            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" @change="onQuestionSelected(2)"/>
 
           <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
           v-model="userSecurityAnswers[2]" :mandatory="true" />
+
+          <CustomButtonComponent titleText="Submit" text="Submit" effect="plain" @click="signup"/>
 
         <div class="login">
           <p>
@@ -176,34 +211,6 @@ section {
   margin-top: 30px;
 }
 
-.inputbox {
-  position: relative;
-  margin: 30px 0;
-  width: 310px;
-  border-bottom: 2px solid var(--color-text);
-
-}
-
-.inputbox label {
-  position: absolute;
-  top: 50%;
-  left: 5px;
-  transform: translateY(-50%);
-  color: var(--color-text);
-  font-size: 1em;
-  pointer-events: none;
-  transition: .5s;
-}
-
-.inputbox input {
-  width: 100%;
-  height: 50px;
-  border: none;
-  outline: none;
-  font-size: 1em;
-  padding: 0 35px 0 5px;
-  color: black;
-}
 
 .login {
   margin-top: 15px;
@@ -214,7 +221,7 @@ section {
 
 
 
-button {
+.button {
   width: 100%;
   height: 40px;
   border-radius: 40px;
@@ -228,7 +235,7 @@ button {
 
 }
 
-button:hover {
+.button:hover {
   box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 </style>

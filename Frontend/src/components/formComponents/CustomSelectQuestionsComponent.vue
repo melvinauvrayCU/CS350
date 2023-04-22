@@ -3,23 +3,66 @@
 export default {
     name: "CustomSelectQuestions",
     props: {
-        modelValue: {
-            type: Object as () => string[],
+        id: {
+            type: String,
             required: true
         },
+        modelValue: {
+            type: Array,
+            required: true
+        },
+        options: {
+            type: Array,
+            required: true
+        },
+        mandatory: {
+            type: Boolean,
+            default: true,
+        },
+        labelText: {
+            type: String,
+            required: true
+        },
+        selectedQuestions: {
+            type: Array,
+            required: true,
+        },
     },
-    data() {
+    data(): {
+        isDropdownOpen: boolean,
+        securityQuestions: Array<[number,string]>,
+        securityQuestionsOriginal: Array<[number,string]>,
+        userSelectedQuestions: Array<string>,
+        selectedQuestionsIds: number[],
+        classError: string,
+        lengthCounter: number,
+        labelCounterError: string,
+        inline: boolean,
+    } {
         return {
             isDropdownOpen: false,
             securityQuestions: [
-                "What is the first name of your best friend in high school?",
-                "What is the name of your first pet?",
-                "Where did you go the first time you flew on a plane?",
-                "What was your high school mascot?",
-                "What was the name of your first boyfriend/girlfriend?",
-                "What is your mother's maiden name?",
+                [1, "What is the first name of your best friend in high school?"],
+                [2, "What is the name of your first pet?"],
+                [3, "Where did you go the first time you flew on a plane?"],
+                [4, "What was your high school mascot?"],
+                [5, "What was the name of your first boyfriend/girlfriend?"],
+                [6, "What is your mother's maiden name?"],
             ],
-            selectedQuestions: [] as string[],
+            securityQuestionsOriginal: [
+                [1, "What is the first name of your best friend in high school?"],
+                [2, "What is the name of your first pet?"],
+                [3, "Where did you go the first time you flew on a plane?"],
+                [4, "What was your high school mascot?"],
+                [5, "What was the name of your first boyfriend/girlfriend?"],
+                [6, "What is your mother's maiden name?"],
+            ],
+            userSelectedQuestions: [],
+            selectedQuestionsIds: [],
+            classError: "",
+            lengthCounter: 0,
+            labelCounterError: "",
+            inline: false,
         };
     },
     methods: {
@@ -29,44 +72,99 @@ export default {
         closeDropdown() {
             this.isDropdownOpen = false;
         },
-        onSelectItem(item: string) {
-            this.selectedQuestions = [];
-            this.selectedQuestions.push(item);
-            this.$emit('input', this.selectedQuestions);
+        onSelectItem(item: [number, string]) {
+            const selectedQuestion = item[1];
+
+            // Check if the selected question is already in the userSelectedQuestions array
+            const selectedIndex = this.userSelectedQuestions.indexOf(selectedQuestion);
+
+            if (selectedIndex !== -1) {
+                // If the selected question is already selected, remove it from the selectedQuestionsIds and userSelectedQuestions arrays
+                this.selectedQuestionsIds.splice(selectedIndex, 1);
+                this.userSelectedQuestions.splice(selectedIndex, 1);
+
+                // Add the previously selected question back to the securityQuestions array
+                this.securityQuestions.push([this.selectedQuestionsIds[selectedIndex], selectedQuestion]);
+            } else {
+                // If the selected question is not already selected, add it to the selectedQuestionsIds and userSelectedQuestions arrays
+                this.selectedQuestionsIds.push(item[0]);
+                this.userSelectedQuestions.push(selectedQuestion);
+            }
+
+            // Create a copy of the original securityQuestions array
+            const availableQuestions = [...this.securityQuestionsOriginal];
+
+            // Remove the selected question from the availableQuestions array
+            const index = availableQuestions.findIndex((q) => q[1] === selectedQuestion);
+            availableQuestions.splice(index, 1);
+
+            // Update the securityQuestions data property with the new array
+            this.securityQuestions = availableQuestions;
+
+            // Update the modelValue prop and emit an input event
+            this.$emit("update:modelValue", this.selectedQuestionsIds);
+            this.$emit("input", this.selectedQuestionsIds);
+
             this.closeDropdown();
+
+            // Update the selectedQuestions array
+            this.$emit('update:selectedQuestions', this.userSelectedQuestions);
+
         },
+        onInput(event: any) {
+            this.$emit("update:modelValue", event.target.value);
+
+            // Changing color of borders if input is empty and mandatory
+            if (event.target.value === "" && this.mandatory) {
+                this.classError = "errorBorder";
+            } else {
+                this.classError = "";
+            }
+        }
+        
     },
+    created() {
+        this.lengthCounter = 0;
+        if (Array.isArray(this.modelValue)) {
+            this.lengthCounter = this.modelValue.length;
+        }
+    },
+    computed: {
+  availableQuestions() {
+    return this.securityQuestions.filter((question) => {
+      return !this.userSelectedQuestions.includes(question[1]);
+    });
+  }
+},
+
+    
 };
 
 </script>
 
 <template>
     <div class="CustomSelectField" v-click-outside="closeDropdown">
-        <label>Security Questions:</label>
-        <button @click="toggleDropdown" :class="'noSelection' + (isDropdownOpen ? ' dropdownOpen' : '')"
-        >Click to Select a Security Question...</button>
-        <transition name="openTransition">
-            <div v-if="isDropdownOpen" class="dropdownContainer">
-                <div class="dropdownListItems" >
-                        <transition-group name="listItemTransition">
-                            <div class="dropdownItem" v-for="item in securityQuestions" :key="item"
-                                @click="onSelectItem(item)">
-                                {{ item }}
-                            </div>
-                        </transition-group>
-                    </div>
-            </div>
-        </transition>
-        <div class="containerChosenList">
-                    <transition-group name="listItemTransition">
-                        <div class="chosenItem" v-for="item in selectedQuestions" :key="item">
-                            <p @click="onSelectItem(item)">{{ item }}</p>
-                            <hr>
-                        </div>
-                    </transition-group>
-                </div>
+      <label :for="id">{{ labelText }}<span v-if="mandatory && !inline" style="color: red;"> *</span>
+        <Transition>
+          <span style="color: red;" v-if="classError !== '' && !inline"> - This field is mandatory</span>
+        </Transition>
+      </label>
+      <button @click="toggleDropdown" :class="'noSelection' + (isDropdownOpen ? ' dropdownOpen' : '')">
+        {{ userSelectedQuestions.length > 0 ? userSelectedQuestions[userSelectedQuestions.length - 1] : 'Click to Select a Security Question...' }}
+      </button>
+      <transition name="openTransition">
+        <div v-if="isDropdownOpen" class="dropdownContainer">
+          <div class="dropdownListItems">
+            <transition-group name="listItemTransition">
+              <div class="dropdownItem" v-for="question in securityQuestions" :key="question[0]" @click="onSelectItem([question[0], question[1]])">
+                {{ question[1] }}
+              </div>
+            </transition-group>
+          </div>
+        </div>
+      </transition>
     </div>
-</template>
+  </template>
 
 <style>
 .dropdownContainer .InputFieldComponent #searchInput {
@@ -87,7 +185,7 @@ export default {
 <style scoped>
 .CustomSelectField {
     margin: 20px 0;
-    width: 560px;
+    width: 100%;
 }
 
 

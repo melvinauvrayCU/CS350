@@ -12,12 +12,12 @@ export default {
     },
 
     data(): {
-        fname: string|undefined
-        lname: string|undefined
-        username: string|undefined
-        email: string|undefined
+        fname: string
+        lname: string
+        username: string
+        email: string
         password: string
-        bio: string|undefined
+        bio: string
 
 
     } 
@@ -35,29 +35,20 @@ export default {
         };
     },
 
+
     methods: {
-<<<<<<< HEAD
 
         async getUser() {
             var user = await API.instance.getUser();
+            if(user){
 
-            this.username = user?.username;
-            this.fname = user?.fname;
-            this.lname = user?.lname;
-            this.bio = user?.bio;
-            this.email = user?.email;
-            
-=======
-        getUser() {
-            var user = API.instance.getUser();
-            if (user) {
                 this.username = user.username;
-                // this.fname = user.fname;
-                // this.lname = user.lname;
-                // this.bio = user.bio;
+                this.fname = user.fname;
+                this.lname = user.lname;
+                this.bio = user.bio;
                 this.email = user.email;
             }
->>>>>>> 37fd84528a00adf61da3e1c4c133af179981ecab
+            
         }
 
     },
@@ -102,27 +93,6 @@ export default {
         <div class="bio">
             <PageTitle text="Bio:" />
             <p> {{ bio }}</p>
-        </div>
-
-
-
-        <div class="security_question">
-            <PageTitle text="Securty Question 1:" />
-            <p> {{ security_question_1 }}</p>
-            <PageTitle text="Answer:"/>
-            <p>{{ security_answer_1 }}</p>
-        </div>
-        <div class="security_question">
-            <PageTitle text="Security Question 2:" />
-            <p> {{ security_question_2 }}</p>
-            <PageTitle text="Answer:"/>
-            <p>{{ security_answer_2 }}</p>
-        </div>
-        <div class="security_question">
-            <PageTitle text="Security Question 3:" />
-            <p> {{ security_question_3 }}</p>
-            <PageTitle text="Answer:" />
-            <p>{{ security_answer_3 }}</p>
         </div>
 
 

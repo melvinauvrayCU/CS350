@@ -119,7 +119,7 @@ export default {
             <div v-if="!showResetPasswordForm">
               <div v-if="showSecurityForm">
                 <div class="secuirty-question">
-                  <InputFieldComponent id="securityQuestion" inputType="text" :labelText="`${securityQuestion}`" max-length="200" placeholder="Answer"
+                  <InputFieldComponent id="securityQuestion" inputType="password" :labelText="`${securityQuestion}`" max-length="200" placeholder="Answer"
                     v-model="answerCheck" :mandatory="true" />
                 </div>
                 <div class="submit-button">

@@ -132,19 +132,19 @@ export default {
             :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions"/>
 
 
-          <InputField id="securityAnswer1" inputType="password" labelText="Answer:" max-length="200" placeholder="Answer"
+          <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
           v-model="userSecurityAnswers[0]" :mandatory="true" />
 
           <CustomSelectQuestionsComponent id="securityQuestion2" labelText="Select Security Question:" :options="availableSecurityQuestions"
             :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" />
 
-          <InputField id="securityAnswer1" inputType="password" labelText="Answer:" max-length="200" placeholder="Answer"
+          <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
           v-model="userSecurityAnswers[1]" :mandatory="true" />
 
           <CustomSelectQuestionsComponent id="securityQuestion3" labelText="Select Security Question:" :options="availableSecurityQuestions"
             :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" />
 
-          <InputField id="securityAnswer1" inputType="password" labelText="Answer:" max-length="200" placeholder="Answer"
+          <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
           v-model="userSecurityAnswers[2]" :mandatory="true" />
 
           <CustomButtonComponent titleText="Submit" text="Submit" effect="plain" @click="signup"/>

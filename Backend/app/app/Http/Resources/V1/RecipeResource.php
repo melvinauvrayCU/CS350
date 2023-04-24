@@ -28,9 +28,7 @@ class RecipeResource extends JsonResource
             'updatedAt' => $this->updated_at,
         ];
 
-        if ($this->whenLoaded('user')) {
-            $data['user'] = new UserResource($this->user);
-        }
+        $data['user'] = new UserResource($this->user);
         if (!$this->collection) {
             $data['recipeSteps'] = new RecipeStepCollection($this->recipeSteps->sortBy('id'));
         }

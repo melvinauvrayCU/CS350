@@ -1,3 +1,5 @@
+import type { User } from "./userModel";
+
 /**
  * Model of a single Recipe. Contains all the necessary fields.
  * Used in the apiCalls file format the datas retrieved from the backend.
@@ -15,14 +17,14 @@ export class Recipe {
 	rating: number;
 	tags: string[];
 	imageUrl: string;
-	userId: number;
+	user: User;
 
-	constructor(id: number, title: string, description: string, numberPeople: number, recipeSteps: Step[], rating: number, imageUrl: string, tags: string[] = [], userId: number) {
+	constructor(id: number, title: string, description: string, numberPeople: number, recipeSteps: Step[], rating: number, imageUrl: string, tags: string[] = [], user: User) {
 		// We set the id automatically with the static field, so it is auto incrementing.
 		// this.id = Recipe.idCounter;
 		// Recipe.idCounter++;
 		this.id = id;
-		this.userId = userId;
+		this.user = user;
 		this.rating = rating;
 
 		// We create the recipe from the properties passed in parameters.

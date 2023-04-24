@@ -53,11 +53,7 @@ export default {
                 if (temp === true) {
                     this.messageType = "success";
                     this.messageText = "Changes saved";
-                    setTimeout(() => {
-                        this.$router.push("/profile");
-                    }, 1000);
-
-
+                    this.$router.push("/profile");
                 } else {
                     this.messageType = "warning";
                     this.messageText = "Username already taken";
@@ -67,9 +63,6 @@ export default {
                 this.messageType = "warning";
                 this.messageText = "Please fill all the form";
             }
-
-
-
         },
 
         getinput() {

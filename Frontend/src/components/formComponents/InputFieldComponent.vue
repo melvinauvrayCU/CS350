@@ -118,16 +118,16 @@ export default {
             </option>
         </select>
 
-        <input v-else-if="inputType !== 'textarea'" :type="inputType" :value="modelValue" @input="onInput"
-            :placeholder="placeholder"
+        <input autocomplete="off" v-else-if="inputType !== 'textarea'" :type="inputType" :value="modelValue"
+            @input="onInput" :placeholder="placeholder"
             :class="classList + (icon !== '' ? ' ' + icon : '') + (classError ? ' ' + classError : '')" :min="min"
             :max="max" :id="id" />
 
 
         <textarea v-else :id="id" :value="modelValue" @input="onInput" :class="classList + classError"
             :placeholder="placeholder" :style="{
-                minHeight: initialHeight + 'px',
-            }" :maxlength="maxLength"></textarea>
+                    minHeight: initialHeight + 'px',
+                }" :maxlength="maxLength"></textarea>
 
         <div>
             <Transition>

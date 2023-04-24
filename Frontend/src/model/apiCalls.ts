@@ -111,7 +111,7 @@ export class API {
 				numberPeople: recipe.numberPeople,
 				rating: recipe.rating,
 				imageUrl: recipe.imageUrl,
-				userId: recipe.user.id,
+				user: new User(recipe.user.name, "", recipe.user.email, recipe.user.id, recipe.user.fname, recipe.user.lname, recipe.user.bio),
 				recipeSteps: recipe.recipeSteps.map((step: any) => ({
 					description: step.description,
 					cookTime: step.cook_time,
@@ -177,7 +177,7 @@ export class API {
 							recipe.imageUrl,
 							[] // tags
 							,
-							recipe.user.id // Add more infos here ?
+							new User(recipe.user.name, "", recipe.user.email, recipe.user.id, recipe.user.fname, recipe.user.lname, recipe.user.bio),
 						);
 					})
 				))
@@ -235,7 +235,7 @@ export class API {
 				recipe.imageUrl,
 				[] // tags
 				,
-				recipe.user.id // Add more infos here ?
+				new User(recipe.user.name, "", recipe.user.email, recipe.user.id, recipe.user.fname, recipe.user.lname, recipe.user.bio),
 			);
 		} catch (error: any) {
 			console.log(error);
@@ -845,7 +845,7 @@ export class API {
 		bio: string): Promise<boolean> {
 		try {
 			const user_id = this.currentUser?.id;
-			const response = await axios.put(`{this._apiUrlshort}+ "/user/${user_id}/edit`, {
+			const response = await axios.put(this._apiUrlshort + "/user/" + user_id + "/edit", {
 				name: username,
 				bio: bio,
 				fname: fname,
@@ -857,29 +857,45 @@ export class API {
 			});
 			console.log(this.currentUser);
 			console.log(response.data);
-			return true;
+			if (response.data.message == "User updated" && this.currentUser) {
+				this.currentUser.fname = response.data.user.fname;
+				this.currentUser.lname = response.data.user.lname;
+				this.currentUser.bio = response.data.user.bio;
+				this.currentUser.username = response.data.user.name;
+				return true
+			}
+			return false;
 		} catch (error: any) {
 			throw new Error(error.response.data.message);
 			return false;
 		}
 	}
 
-	async changePassword(newPassword: string, securityQuestion: string, securityAnswer: string): Promise<void> {
+	async changePassword(newPassword: string, securityQuestion: string, securityAnswer: string): Promise<string> {
 		const user_id = this.currentUser?.id;
 		const token = this.currentUser?.token;
 		try {
-			const response = await axios.put(`${this._apiUrlshort}/user/${user_id}/change_password`, {
-				newPassword,
-				securityQuestion,
-				securityAnswer,
+			const response = await axios.put(`${this._apiUrlshort}/user/${user_id}/change-password`, {
+				new_password: newPassword,
+				security_question: securityQuestion,
+				security_answer: securityAnswer,
 			}, {
 				headers: {
 					Authorization: `Bearer ${token}`
 				}
 			});
-			return response.data;
+			console.error(`${this._apiUrlshort}/user/${user_id}/change-password`, response)
+			console.error(response.data.error)
+			if (response.data.error !== undefined) {
+				console.error(response.data.error)
+				return response.data.error;
+			} else {
+				console.error(response.data.message)
+
+				return response.data.message;
+			}
 		} catch (error: any) {
-			throw new Error(error.response.data.message);
+			return error.response.data.error || error.response.data.message;
 		}
 	}
 
@@ -963,19 +979,6 @@ export class API {
 		}
 		/** We return our data */
 		return returnDatas;
-	}
-
-	/**
-	 * Reset password
-	 */
-	resetPassword(username: string, newPassword: string) {
-		// const userIndex = this.userList.findIndex(user => user.username === username);
-		// if (userIndex > -1) {
-		// 	this.userList[userIndex].password = newPassword;
-		// 	return "success";
-		// } else {
-		// 	return "failure";
-		// }
 	}
 
 }

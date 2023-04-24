@@ -74,6 +74,9 @@ export default {
             <RouterLink to="/editprofile">
                 <CustomButton type="neutral" effect='plain' text="Edit Profile" titleText="Edit Profile" />
             </RouterLink>
+            <RouterLink to="/forgotPassword">
+                <CustomButton type="neutral" effect='plain' text="Change password" titleText="Change your password" />
+            </RouterLink>
         </div>
 
 
@@ -82,6 +85,21 @@ export default {
 
     </section>
 </template>
+
+<style>
+#button a {
+    width: 20%;
+    padding: 0 10px;
+}
+
+#button a div {
+    width: 100%;
+}
+
+#button div a div {
+    width: 100%;
+}
+</style>
 
 <style scoped>
 section {
@@ -101,7 +119,11 @@ section {
 
 #button {
     padding-top: 15px;
-
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
 #email {

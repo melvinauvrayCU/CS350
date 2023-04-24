@@ -44,9 +44,6 @@ const router = createRouter({
       path: "/forgotPassword",
       name: "forgotPassword",
       component: () => import("../views/ForgotPasswordPage.vue"),
-      meta: {
-        hideNavbar: true,
-      }
     },
     {
       path: "/profile",
@@ -85,6 +82,8 @@ router.beforeEach((to, from, next) => {
   if (to.name === "profilepage" && !isAuthenticated) next({ name: "Login" });
   if (to.name === "pantry" && !isAuthenticated) next({ name: "Login" });
   if (to.name === "profilepage" && !isAuthenticated) next({ name: "Login" });
+  if (to.name === "editprofile" && !isAuthenticated) next({ name: "Login" });
+  if (to.name === "forgotPassword" && !isAuthenticated) next({ name: "Login" });
   else next();
 });
 

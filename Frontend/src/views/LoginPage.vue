@@ -80,12 +80,6 @@ export default {
 
         <CustomButton titleText="Click to login" text="Login" effect="plain" @click="login" />
 
-        <div class="forgot">
-          <p>
-            <router-link to="forgotPassword">Forgot Password?</router-link>
-          </p>
-        </div>
-
         <div class="create">
           <p>
             Don't have an account?
@@ -144,11 +138,25 @@ section {
 }
 
 .create {
-  margin: 20px;
+  margin: 30px 0 0 0;
   color: var(--color-text);
   display: flex;
   justify-content: space-between;
   text-align: left;
   width: 100%;
+  font-family: "common";
+}
+
+.create a {
+  color: var(--color-accent);
+  transition: color .4s ease;
+}
+
+.create a:hover {
+  color: var(--color-accent-light)
+}
+
+.create a:active {
+  color: var(--color-text)
 }
 </style>

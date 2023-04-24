@@ -18,9 +18,9 @@ export default {
     },
     methods: {
         setRating(event: MouseEvent, value: number) {
-            event.stopPropagation();
-            this.currentrating = value;
-            this.$emit("input", value);
+            // event.stopPropagation();
+            // this.currentrating = value;
+            // this.$emit("input", value);
         },
     }
 };

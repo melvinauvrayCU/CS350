@@ -91,6 +91,26 @@ export default {
         :isUserAuthenticated="isAuthenticated" />
     </div>
 
+    <div v-if="categories.length === 0" class="loader"></div>
+
     <MessageComponent :type="messageType" v-model="messageText" />
   </main>
 </template>
+
+<style scoped>
+.loader {
+  border: 12px solid #fff;
+  border-radius: 50%;
+  border-top: 12px solid var(--color-accent);
+  width: 100px;
+  height: 100px;
+  animation: spin 1s linear infinite;
+  margin: 50px auto 200px auto;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>

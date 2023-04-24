@@ -122,7 +122,7 @@ class UserController extends Controller
         $request->validate([
             'security_question' => 'required',
             'security_answer' => 'required',
-            'new_password' => 'required|min:6',
+            'new_password' => 'required',
         ]);
 
 

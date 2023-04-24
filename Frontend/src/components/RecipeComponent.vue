@@ -4,6 +4,8 @@ import RatingComponent from "./RatingComponent.vue";
 import PopupModal from "@/components/PopupModalComponent.vue";
 import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
 import router from "@/router/index";
+import { API } from "@/model/apiCalls";
+import type { User } from "@/model/userModel";
 
 export default {
     name: "RecipeComponent",
@@ -51,10 +53,15 @@ export default {
     },
     data(): {
         isModalVisible: boolean,
+        currentUser: User | null,
     } {
         return {
-            isModalVisible: false
+            isModalVisible: false,
+            currentUser: null,
         };
+    },
+    created() {
+        this.currentUser = API.instance.getUser();
     }
 };
 </script>
@@ -77,12 +84,13 @@ export default {
             <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
             <!-- and we don't forget to attach the id of the recipe we want to delete. -->
             <div class="recipebuttons">
-                <CustomButton v-if="isUserAuthenticated" text="Delete" type="neutral" effect="empty" icon="trash"
-                    titleText="Click to delete the recipe" @click="(event) => showModal(event)" />
+                <CustomButton v-if="isUserAuthenticated && recipe.user.id === currentUser?.id" text="Delete" type="neutral"
+                    effect="plain" icon="trash" titleText="Click to delete the recipe"
+                    @click="(event) => showModal(event)" />
 
 
-                <CustomButton v-if="isUserAuthenticated" text="Edit" type="neutral" effect="empty" icon="add"
-                    titleText="Click to edit the recipe" @click="(event) => editRecipe(event)" />
+                <CustomButton v-if="isUserAuthenticated && recipe.user.id === currentUser?.id" text="Edit" type="neutral"
+                    effect="plain" icon="edit" titleText="Click to edit the recipe" @click="(event) => editRecipe(event)" />
             </div>
         </div>
 

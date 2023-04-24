@@ -90,6 +90,14 @@ export default {
           @startTimer="(datas) => $emit('startTimer', { ...datas, 'recipeName': recipe?.title, 'recipeId': recipe?.id })" />
       </transition-group>
 
+      <PageSeparator title="About the author"></PageSeparator>
+      <div class="lastCat">
+        <p><strong style="font-weight: bold;font-family: 'title';">{{ recipe?.user.fname + ' ' + recipe?.user.lname
+        }}</strong> (@{{
+  recipe?.user.username }})</p>
+        <p>{{ recipe?.user.bio }}</p>
+      </div>
+
       <CustomButton text="Recipe Completed!" type="neutral" effect="empty" icon="add"
         titleText="Click to complete the recipe and return home" @clicked="recipeDone" />
     </div>
@@ -98,6 +106,24 @@ export default {
 </template>
 
 <style scoped>
+.lastCat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.lastCat p {
+  text-align: justify;
+  margin: 10px;
+  font-family: "common";
+}
+
+.lastCat p:nth-child(1) {
+  font-size: 1.2em;
+}
+
 /* ----- transition for step list ------- */
 .list-move,
 /* apply transition to moving elements */

@@ -230,13 +230,25 @@ section {
 
 
 .login {
-  margin-top: 15px;
+  margin-top: 30px;
   color: var(--color-text);
+  font-family: "common";
   display: flex;
   justify-content: space-between;
 }
 
+.login a {
+  color: var(--color-accent);
+  transition: color .4s ease;
+}
 
+.login a:hover {
+  color: var(--color-accent-light)
+}
+
+.login a:active {
+  color: var(--color-text)
+}
 
 .button {
   width: 100%;

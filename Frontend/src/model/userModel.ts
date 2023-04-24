@@ -15,40 +15,42 @@ export class User {
 	 */
 	id: number;
 	username: string;
-	password: string;
+	// password: string;
 	email: string;
 	fname: string;
 	lname: string;
 	bio: string;
-	security_answer_1: string;
-	security_answer_2: string;
-	security_answer_3: string;
-	security_question_1: string;
-	security_question_2: string;
-	security_question_3: string;
+	// security_answer_1: string;
+	// security_answer_2: string;
+	// security_answer_3: string;
+	// security_question_1: string;
+	// security_question_2: string;
+	// security_question_3: string;
 	//profile_photo: string;
 	token: string;
 
 	//Creates a user
-	constructor(username: string, token: string, email: string,id: number,password: string, security_answer_1: string,security_answer_2: string,security_answer_3: string,security_question_1: string,security_question_2: string,security_question_3: string,) {
+	// constructor(username: string, token: string, email: string,id: number,password: string, security_answer_1: string,security_answer_2: string,security_answer_3: string,security_question_1: string,security_question_2: string,security_question_3: string,) {
+	constructor(
+		username: string,
+		token: string,
+		email: string,
+		id: number,
+		fname: string,
+		lname: string,
+		bio: string
+	) {
 		// We set the id automatically with the static field, so it is auto incrementing.
 		this.id = id;
 		//We set the security questions and answers that were input
-		this.security_answer_1 = security_answer_1;
-		this.security_answer_2 = security_answer_2;
-		this.security_answer_3 = security_answer_3;
-		this.security_question_1 = security_question_1;
-		this.security_question_2= security_question_2;
-		this.security_question_3 = security_question_3;
 
 		// We create a user from the properties passed in parameters.
 		this.username = username;
-		this.password = password;
 		this.email = email;
-		this.token=token;
-		this.fname = "";
-		this.lname = "";
-		this.bio = "";
+		this.token = token;
+		this.fname = fname;
+		this.lname = lname;
+		this.bio = bio;
 		//this.profile_photo ="/uploads/profile_images/default_profile_pic.jpg";
 		//this.setname();
 
@@ -62,4 +64,6 @@ export class User {
 		//	this.userList.find(user => user.username === this.currentUser.username).fname = this.currentUser.fname;
 		//}
 	}
+
+
 }

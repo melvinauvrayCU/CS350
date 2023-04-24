@@ -13,12 +13,12 @@ export default {
     },
 
     data(): {
-        fname: string|undefined
-        lname: string|undefined
-        username: string|undefined
-        email: string|undefined
+        fname: string | undefined
+        lname: string | undefined
+        username: string | undefined
+        email: string | undefined
         password: string
-        bio: string|undefined
+        bio: string | undefined
         messageText: string
         messageType: "success" | "warning",
 
@@ -43,20 +43,24 @@ export default {
 
     methods: {
         async updateProfile() {
-            if (this.fname !== "" && this.lname !== "" && this.username !== "") {
-                const temp = await API.instance.updateProfile();
+            if (this.fname !== ""
+                && this.lname !== ""
+                && this.username !== ""
+                && this.bio !== ""
+                && this.fname && this.lname && this.username && this.bio) {
+                const temp = await API.instance.updateProfile(this.fname, this.lname, this.username, this.bio);
 
                 if (temp === true) {
-                     this.messageType = "success";
-                     this.messageText = "Changes saved";
-                     setTimeout(() => {
-                         this.$router.push("/profile");
+                    this.messageType = "success";
+                    this.messageText = "Changes saved";
+                    setTimeout(() => {
+                        this.$router.push("/profile");
                     }, 1000);
 
 
                 } else {
-                     this.messageType = "warning";
-                     this.messageText = "Username already taken";
+                    this.messageType = "warning";
+                    this.messageText = "Username already taken";
                 }
 
             } else {

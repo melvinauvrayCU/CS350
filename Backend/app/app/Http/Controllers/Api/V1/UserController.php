@@ -54,13 +54,13 @@ class UserController extends Controller
      */
     public function show(Request $request)
     {
-        $user_id = $request -> input('user_id');
-        $user=User::find($user_id);
-        if(!$user){
-            $response=[
+        $user_id = $request->input('user_id');
+        $user = User::find($user_id);
+        if (!$user) {
+            $response = [
                 'error' => 'User not found'
             ];
-            return response($response,404);
+            return response($response, 404);
         }
         return response($user);
     }
@@ -71,54 +71,38 @@ class UserController extends Controller
      * @param  \App\Models\Recipe  $recipe
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$id)
+    public function edit(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'email' => 'required|string',
             'bio' => 'required|string',
             'fname' => 'required|string',
             'lname' => 'required|string',
-            'security_answer_1' => 'required|string',
-            'security_answer_2' => 'required|string',
-            'security_answer_3' => 'required|string',
-            'security_question_1' => 'required|string',
-            'security_question_2' => 'required|string',
-            'security_question_3' => 'required|string',
-
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             $response = [
                 'message' => 'Validations failed',
-                'errors' => $validator -> errors()
+                'errors' => $validator->errors()
             ];
-    
+
             return response($response, 422);
         }
 
-        
-            $user->update([
-                'name'=> $request->name,
-                'email' => $request -> email,
-                'bio' => $request -> bio,
-                'fname' => $request -> fname,
-                'lname' => $request -> lname,
-                'security_answer_1' => $request -> security_answer_1,
-                'security_answer_2' => $request -> security_answer_2,
-                'security_answer_3' => $request -> security_answer_3,
-                'security_question_1' => $request -> security_question_1,
-                'security_question_2' => $request -> security_question_2,
-                'security_question_3' => $request -> security_question_3,
 
-            ]);
-            $response = [
-                'user' => $user,
-                'message' => 'User updated',
-            ];
-    
-            return response($response, 201);
+        $user->update([
+            'name' => $request->name,
+            'bio' => $request->bio,
+            'fname' => $request->fname,
+            'lname' => $request->lname,
+        ]);
+        $response = [
+            'user' => $user,
+            'message' => 'User updated',
+        ];
+
+        return response($response, 201);
     }
 
     /**
@@ -134,7 +118,7 @@ class UserController extends Controller
 
     public function change_Password($id, Request $request)
     {
-        $user = User::findOrFail($id);       
+        $user = User::findOrFail($id);
         $request->validate([
             'security_question' => 'required',
             'security_answer' => 'required',
@@ -150,10 +134,10 @@ class UserController extends Controller
         ];
 
         if (!in_array($request->security_question, $security_questions)) {
-            $response=[
+            $response = [
                 'error' => 'Invalid security question'
             ];
-            return response($response,400);
+            return response($response, 400);
         }
 
         // Check if the provided security answer matches the user's stored security answer
@@ -161,25 +145,19 @@ class UserController extends Controller
         $security_answer_field = 'security_answer_' . ($security_question_index + 1);
 
         if ($user->$security_answer_field !== $request->security_answer) {
-            $response=[
+            $response = [
                 'error' => 'Security answer does not match'
             ];
-            return response($response,400);
+            return response($response, 400);
         }
 
         // Update the user's password and save to the database
         $user->password = bcrypt($request->new_password);
         $user->save();
 
-        $response=[
+        $response = [
             'message' => 'Password updated successfully'
         ];
-        return response($response,200);
-}
-
-
-
-
-
-
+        return response($response, 200);
+    }
 }

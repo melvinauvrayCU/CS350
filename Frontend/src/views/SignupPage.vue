@@ -3,8 +3,9 @@ import { API } from "@/model/apiCalls";
 import MessageComponent from "@/components/MessageComponent.vue";
 import PageTitle from "@/components/PageTitleComponent.vue";
 import InputField from "@/components/formComponents/InputFieldComponent.vue";
-import CustomButton from "@/components/formComponents/CustomButtonComponent.vue";
+import CustomButtonComponent from "@/components/formComponents/CustomButtonComponent.vue";
 import BackgroundIcons from "@/components/BackgroundIconsComponent.vue";
+import CustomSelectQuestionsComponent from "@/components/formComponents/CustomSelectQuestionsComponent.vue";
 
 export default {
   name: "CreateSignupPage",
@@ -12,85 +13,103 @@ export default {
     MessageComponent,
     PageTitle,
     InputField,
-    CustomButton,
-    BackgroundIcons
+    BackgroundIcons,
+    CustomSelectQuestionsComponent,
+    CustomButtonComponent,
   },
-
   data(): {
     email: string,
     username: string,
+    firstname: string,
+    lastname: string,
+    bio: string,
     password: string,
+    passwordCheck: string,
     messageText: string,
     messageType: "success" | "warning",
-    security_answer_1:string,
-    security_answer_2:string,
-    security_answer_3:string,
-    security_question_1:string,
-    security_question_2:string,
-    security_question_3:string,
-    questions:[]|void,
+    security_answer_1: string,
+    security_answer_2: string,
+    security_answer_3: string,
+    security_question_1: string,
+    security_question_2: string,
+    security_question_3: string,
+    securityQuestionsList: string[],
 
   } {
     // We are setting the title and description datas that will be linked to the form.
     // And a boolean created variable, which will be true when a user has logged in
     return {
       username: "",
+      firstname: "",
+      lastname: "",
+      bio: "",
       password: "",
+      passwordCheck: "",
       email: "",
       messageText: "",
       messageType: "success",
-      security_answer_1:"",
-      security_answer_2:"",
-      security_answer_3:"",
-      security_question_1:"",
-      security_question_2:"",
-      security_question_3:"",
-      questions:[],
+      security_answer_1: "",
+      security_answer_2: "",
+      security_answer_3: "",
+      security_question_1: "",
+      security_question_2: "",
+      security_question_3: "",
+      securityQuestionsList: [],
     };
-  },
-  async mounted(){
-    await this.getQuestions()
   },
   methods: {
     //method to signup as a user
     async signup() {
-      if (this.username !== "" && this.password !== "" && this.email !== "" && this.security_answer_1 !=="" && this.security_answer_2 !== "" && this.security_answer_3 !=="") {
+      if (this.username !== "" && this.password !== "" && this.email !== "" && this.security_answer_1 !== "" && this.security_answer_2 !== "" && this.security_answer_3 !== "" && this.security_question_1 !== "" && this.security_question_2 !== "" && this.security_question_3 !== ""
+        && this.firstname !== "" && this.lastname !== "" && this.bio !== ""
+      ) {
+        if (this.password === this.passwordCheck) {
+          //API call to signup a user
+          var signedUp = await API.instance.signup(this.email, this.username, this.password, this.security_answer_1, this.security_answer_2, this.security_answer_3, this.security_question_1, this.security_question_2, this.security_question_3,
+            this.firstname, this.lastname, this.bio);
 
-        //API call to signup a user
-        var signedUp = await API.instance.signup(this.email, this.username, this.password,this.security_answer_1,this.security_answer_2,this.security_answer_3,this.security_question_1,this.security_question_2,this.security_question_3);
+          //reset forms
+          this.username = "";
+          this.password = "";
+          this.email = "";
+          this.security_answer_1 = "";
+          this.security_answer_2 = "";
+          this.security_answer_3 = "";
 
-        //reset forms
-        this.username = "";
-        this.password = "";
-        this.email = "";
-        this.security_answer_1="";
-        this.security_answer_2="";
-        this.security_answer_3="";
-
-        if (signedUp === false) {
-
-          this.messageText = "Username or Email already in use";
-          this.messageType = "warning";
+          if (signedUp === false) {
+            this.messageText = "Username or Email already in use";
+            this.messageType = "warning";
+          } else {
+            this.$router.push({ name: "home", params: { messageTextParam: "Welcome!", messageTypeParam: "success" } });
+          }
         } else {
-
-          this.$router.push({ name: "home", params: { messageTextParam: "Welcome!", messageTypeParam: "success" } });
-
+          this.messageText = "Passwords do not match";
+          this.messageType = "warning";
         }
-
       } else {
         this.messageType = "warning";
-        this.messageText = "Please fill all the form";
+        this.messageText = "Please fill all of the form";
       }
     },
-    async getQuestions(){
-      this.questions = await API.instance.getSecurityQuestions();
-    }
+    checkPasswords() {
+      if (this.password !== '' && this.password !== this.passwordCheck) {
+        this.messageText = 'Passwords do not match';
+        this.messageType = 'warning';
+      } else {
+        this.messageText = '';
+        this.messageType = 'success';
+      }
+    },
   },
-};
-
-
-
-
+  async created() {
+    this.securityQuestionsList = await API.instance.getSecurityQuestions();
+  },
+  watch: {
+    passwordCheck() {
+      this.checkPasswords();
+    },
+  },
+}
 
 
 </script>
@@ -104,19 +123,50 @@ export default {
     <div class="border">
       <div class="CreateSignupPage">
 
-        <InputField id="email" inputType="email" labelText="Email:" max-length="200" placeholder="Email" v-model="email"
-          :mandatory="true" />
+        <div class="containerColumns">
+          <div>
+            <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username"
+              v-model="username" :mandatory="true" />
+            <InputField id="firstName" inputType="text" labelText="First name:" max-length="200" placeholder="First name"
+              v-model="firstname" :mandatory="true" />
+            <InputField id="lastName" inputType="text" labelText="Last name:" max-length="200" placeholder="Last name"
+              v-model="lastname" :mandatory="true" />
 
-        <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="username"
-          v-model="username" :mandatory="true" />
+            <InputField id="bio" inputType="textarea" initialHeight="100" maxLength="650" labelText="Bio:"
+              placeholder="Bio" v-model="bio" :mandatory="true" />
 
-        <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"
-          v-model="password" :mandatory="true" />
+            <InputField id="email" inputType="email" labelText="Email:" max-length="200" placeholder="Email"
+              v-model="email" :mandatory="true" />
+
+            <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"
+              v-model="password" :mandatory="true" />
+
+            <InputField id="checkPassword" inputType="password" labelText="Re-Enter Password:" max-length="200"
+              placeholder="Password" v-model="passwordCheck" :mandatory="true" />
+          </div>
+          <div>
+            <CustomSelectQuestionsComponent id="securityQuestion1" labelText="Select Security Question:"
+              :options="securityQuestionsList" v-model="security_question_1" :mandatory="true" />
+
+            <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+              v-model="security_answer_1" :mandatory="true" />
+
+            <CustomSelectQuestionsComponent id="securityQuestion2" labelText="Select Security Question:"
+              :options="securityQuestionsList" v-model="security_question_2" :mandatory="true" />
+            <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+              v-model="security_answer_2" :mandatory="true" />
+
+            <CustomSelectQuestionsComponent id="securityQuestion3" labelText="Select Security Question:"
+              :options="securityQuestionsList" v-model="security_question_3" :mandatory="true" />
+
+            <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
+              v-model="security_answer_3" :mandatory="true" />
+          </div>
+        </div>
 
 
 
-        <CustomButton titleText="Click to signup" text="Signup" effect="plain" @click="signup" />
-
+        <CustomButtonComponent titleText="Submit" text="Submit" effect="plain" @click="signup" />
 
         <div class="login">
           <p>
@@ -136,6 +186,17 @@ export default {
 
 
 <style scoped>
+.containerColumns {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.containerColumns div {
+  flex: 1;
+  padding: 10px;
+}
+
 section {
   display: flex;
   justify-content: center;
@@ -156,7 +217,7 @@ section {
 
 .border {
   position: relative;
-  width: 40%;
+  width: 75%;
   background: transparent;
   border: 2px solid var(--color-accent);
   border-radius: 20px;
@@ -167,34 +228,6 @@ section {
   margin-top: 30px;
 }
 
-.inputbox {
-  position: relative;
-  margin: 30px 0;
-  width: 310px;
-  border-bottom: 2px solid var(--color-text);
-
-}
-
-.inputbox label {
-  position: absolute;
-  top: 50%;
-  left: 5px;
-  transform: translateY(-50%);
-  color: var(--color-text);
-  font-size: 1em;
-  pointer-events: none;
-  transition: .5s;
-}
-
-.inputbox input {
-  width: 100%;
-  height: 50px;
-  border: none;
-  outline: none;
-  font-size: 1em;
-  padding: 0 35px 0 5px;
-  color: black;
-}
 
 .login {
   margin-top: 15px;
@@ -205,7 +238,7 @@ section {
 
 
 
-button {
+.button {
   width: 100%;
   height: 40px;
   border-radius: 40px;
@@ -219,9 +252,7 @@ button {
 
 }
 
-button:hover {
+.button:hover {
   box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 </style>
-    
-

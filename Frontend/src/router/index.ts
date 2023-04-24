@@ -41,6 +41,14 @@ const router = createRouter({
       }
     },
     {
+      path: "/forgotPassword",
+      name: "forgotPassword",
+      component: () => import("../views/ForgotPasswordPage.vue"),
+      meta: {
+        hideNavbar: true,
+      }
+    },
+    {
       path: "/profile",
       name: "profilepage",
       component: () => import("../views/ProfilePage.vue"),
@@ -76,6 +84,7 @@ router.beforeEach((to, from, next) => {
   if (to.name === "createRecipe" && !isAuthenticated) next({ name: "Login" });
   if (to.name === "profilepage" && !isAuthenticated) next({ name: "Login" });
   if (to.name === "pantry" && !isAuthenticated) next({ name: "Login" });
+  if (to.name === "profilepage" && !isAuthenticated) next({ name: "Login" });
   else next();
 });
 

@@ -8,11 +8,11 @@ export default {
             required: true
         },
         modelValue: {
-            type: Array,
+            type: String,
             required: true
         },
         options: {
-            type: Array,
+            type: Array<string>,
             required: true
         },
         mandatory: {
@@ -23,16 +23,12 @@ export default {
             type: String,
             required: true
         },
-        selectedQuestions: {
-            type: Array,
-            required: true,
-        },
     },
     data(): {
         isDropdownOpen: boolean,
-        securityQuestions: Array<[number,string]>,
-        securityQuestionsOriginal: Array<[number,string]>,
-        userSelectedQuestions: Array<string>,
+        securityQuestions: Array<string>,
+        securityQuestionsOriginal: Array<string>,
+        userSelectedQuestions: string,
         selectedQuestionsIds: number[],
         classError: string,
         lengthCounter: number,
@@ -41,23 +37,9 @@ export default {
     } {
         return {
             isDropdownOpen: false,
-            securityQuestions: [
-                [1, "What is the first name of your best friend in high school?"],
-                [2, "What is the name of your first pet?"],
-                [3, "Where did you go the first time you flew on a plane?"],
-                [4, "What was your high school mascot?"],
-                [5, "What was the name of your first boyfriend/girlfriend?"],
-                [6, "What is your mother's maiden name?"],
-            ],
-            securityQuestionsOriginal: [
-                [1, "What is the first name of your best friend in high school?"],
-                [2, "What is the name of your first pet?"],
-                [3, "Where did you go the first time you flew on a plane?"],
-                [4, "What was your high school mascot?"],
-                [5, "What was the name of your first boyfriend/girlfriend?"],
-                [6, "What is your mother's maiden name?"],
-            ],
-            userSelectedQuestions: [],
+            securityQuestions: [],
+            securityQuestionsOriginal: [],
+            userSelectedQuestions: "",
             selectedQuestionsIds: [],
             classError: "",
             lengthCounter: 0,
@@ -72,101 +54,75 @@ export default {
         closeDropdown() {
             this.isDropdownOpen = false;
         },
-        onSelectItem(item: [number, string]) {
-            const selectedQuestion = item[1];
+        onSelectItem(item: string) {
+            // const selectedQuestion = item;
 
-            // Check if the selected question is already in the userSelectedQuestions array
-            const selectedIndex = this.userSelectedQuestions.indexOf(selectedQuestion);
+            // // Check if the selected question is already in the userSelectedQuestions array
+            // const selectedIndex = this.userSelectedQuestions.indexOf(selectedQuestion);
 
-            if (selectedIndex !== -1) {
-                // If the selected question is already selected, remove it from the selectedQuestionsIds and userSelectedQuestions arrays
-                this.selectedQuestionsIds.splice(selectedIndex, 1);
-                this.userSelectedQuestions.splice(selectedIndex, 1);
+            // if (selectedIndex !== -1) {
+            //     // If the selected question is already selected, remove it from the selectedQuestionsIds and userSelectedQuestions arrays
+            //     this.selectedQuestionsIds.splice(selectedIndex, 1);
+            //     this.userSelectedQuestions.splice(selectedIndex, 1);
 
-                // Add the previously selected question back to the securityQuestions array
-                this.securityQuestions.push([this.selectedQuestionsIds[selectedIndex], selectedQuestion]);
-            } else {
-                // If the selected question is not already selected, add it to the selectedQuestionsIds and userSelectedQuestions arrays
-                this.selectedQuestionsIds.push(item[0]);
-                this.userSelectedQuestions.push(selectedQuestion);
-            }
+            //     // Add the previously selected question back to the securityQuestions array
+            //     this.securityQuestions.push(selectedQuestion);
+            // } else {
+            //     // If the selected question is not already selected, add it to the selectedQuestionsIds and userSelectedQuestions arrays
+            //     this.userSelectedQuestions.push(selectedQuestion);
+            // }
 
-            // Create a copy of the original securityQuestions array
-            const availableQuestions = [...this.securityQuestionsOriginal];
+            // // Create a copy of the original securityQuestions array
+            // const availableQuestions = [...this.securityQuestionsOriginal];
 
-            // Remove the selected question from the availableQuestions array
-            const index = availableQuestions.findIndex((q) => q[1] === selectedQuestion);
-            availableQuestions.splice(index, 1);
+            // // Remove the selected question from the availableQuestions array
+            // const index = availableQuestions.findIndex((q) => q[1] === selectedQuestion);
+            // availableQuestions.splice(index, 1);
 
-            // Update the securityQuestions data property with the new array
-            this.securityQuestions = availableQuestions;
+            // // Update the securityQuestions data property with the new array
+            // this.securityQuestions = availableQuestions;
+
+            this.userSelectedQuestions = item;
 
             // Update the modelValue prop and emit an input event
-            this.$emit("update:modelValue", this.selectedQuestionsIds);
-            this.$emit("input", this.selectedQuestionsIds);
-
+            this.$emit("update:modelValue", this.userSelectedQuestions);
             this.closeDropdown();
 
-            // Update the selectedQuestions array
-            this.$emit('update:selectedQuestions', this.userSelectedQuestions);
+            // // Update the selectedQuestions array
+            // this.$emit('update:selectedQuestions', this.userSelectedQuestions);
 
-        },
-        onInput(event: any) {
-            this.$emit("update:modelValue", event.target.value);
-
-            // Changing color of borders if input is empty and mandatory
-            if (event.target.value === "" && this.mandatory) {
-                this.classError = "errorBorder";
-                this.$emit("error", "This field is mandatory.");
-            } else {
-                this.classError = "";
-                this.$emit("error", "");
-            }
         }
-
-    },
-    created() {
-        this.lengthCounter = 0;
-        if (Array.isArray(this.modelValue)) {
-            this.lengthCounter = this.modelValue.length;
-        }
-    },
-    computed: {
-  availableQuestions() {
-    return this.securityQuestions.filter((question) => {
-      return !this.userSelectedQuestions.includes(question[1]);
-    });
-  }
-},
-
-    
+    }
 };
 
 </script>
 
 <template>
     <div class="CustomSelectField" v-click-outside="closeDropdown">
-      <label :for="id">{{ labelText }}<span v-if="mandatory && !inline" style="color: red;"> *</span>
-        <Transition>
-          <span style="color: red;" v-if="classError !== '' && !inline"> - This field is mandatory</span>
-        </Transition>
-      </label>
-      <button @click="toggleDropdown" :class="'noSelection' + (isDropdownOpen ? ' dropdownOpen' : '')">
-        {{ userSelectedQuestions.length > 0 ? userSelectedQuestions[userSelectedQuestions.length - 1] : 'Click to Select a Security Question...' }}
-      </button>
-      <transition name="openTransition">
-        <div v-if="isDropdownOpen" class="dropdownContainer">
-          <div class="dropdownListItems">
-            <transition-group name="listItemTransition">
-              <div class="dropdownItem" v-for="question in securityQuestions" :key="question[0]" @click="onSelectItem([question[0], question[1]])">
-                {{ question[1] }}
-              </div>
-            </transition-group>
-          </div>
-        </div>
-      </transition>
+        <label :for="id">{{ labelText }}<span v-if="mandatory && !inline" style="color: red;"> *</span>
+            <Transition>
+                <span style="color: red;" v-if="classError !== '' && !inline"> - This field is mandatory</span>
+            </Transition>
+        </label>
+        <button @click="toggleDropdown"
+            :class="(isDropdownOpen ? ' dropdownOpen' : '') + (userSelectedQuestions !== '' ? ' selected' : ' noSelection')">
+            {{ userSelectedQuestions !== '' ?
+                userSelectedQuestions : 'Click to Select a Security Question...' }}
+        </button>
+        <transition name="openTransition">
+            <div v-if="isDropdownOpen" class="dropdownContainer">
+                <div class="dropdownListItems">
+                    <transition-group name="listItemTransition">
+                        <div :class="'dropdownItem' + (question === userSelectedQuestions ? ' selectedItem' : '')"
+                            v-for="question in options" :key="question" @click="onSelectItem(question)">
+                            {{ question }}
+                        </div>
+                    </transition-group>
+                </div>
+            </div>
+        </transition>
     </div>
-  </template>
+</template>
 
 <style>
 .dropdownContainer .InputFieldComponent #searchInput {
@@ -185,6 +141,10 @@ export default {
 </style>
 
 <style scoped>
+.selected {
+    color: var(--color-text)
+}
+
 .CustomSelectField {
     margin: 20px 0;
     width: 100%;
@@ -270,6 +230,10 @@ export default {
     display: flex;
     align-items: center;
     /* transition: background-color .4s ease, color .4s ease; */
+}
+
+.selectedItem {
+    background-color: var(--color-accent-light);
 }
 
 .dropdownItem:hover,

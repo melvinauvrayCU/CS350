@@ -2,7 +2,7 @@ import { IngredientCat, Conversion, Unit } from "./PantryModels";
 import { Category } from "./categoryModel";
 import { Recipe, Ingredient } from "./recipeModel";
 import type { Step } from "./recipeModel";
-import type { User } from "./userModel";
+import { User } from "./userModel";
 import axios from "axios";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css"; // Import NProgress CSS
@@ -67,55 +67,6 @@ export class API {
 	}
 	/* ----------- End of Singleton design pattern ------------------------ */
 
-
-
-	/**
-	 * List of all recipes, this is temporary because we don't have the backend setup yet.
-	 * Its type is an array of Recipe class, defined in another file.
-	 * When backend is setup, datas will be stored in external database and will be retrieved using the different methods.
-	 * 
-	 * But for now we need to use that to act like a local database.
-	 * But obviously we will not have any persistency of our datas when reloading the website.
-	 */
-	recipeList: Recipe[] = [
-		new Recipe(0, "Americain burger", "The best burger you will ever eat", 2, [{
-			stepId: 0,
-			descriptionValue: "Cook the steak",
-			cooktimeValue: "12:00",
-			preptimeValue: "02:00",
-			ingredients: [new Ingredient("steak", 2, "Lbs")],
-			utensils: ["oven"]
-		},
-		{
-			stepId: 1,
-			descriptionValue: "Cook the onions",
-			cooktimeValue: "16:00",
-			preptimeValue: "02:00",
-			ingredients: [new Ingredient("onion", 1, "C"),
-			new Ingredient("butter", 1, "Tbsp")],
-			utensils: ["pan"]
-		},
-		{
-			stepId: 2,
-			descriptionValue: "Put steak and onions inside bread",
-			cooktimeValue: "00:00",
-			preptimeValue: "00:02",
-			ingredients: [new Ingredient("bread slice", 4, "")],
-			utensils: ["plate"]
-		}], 3, "https://www.photodoiso.fr/inc/image/oiseaux/1790.jpgT.jpg", ["Recommended", "Recent"], 0),
-		new Recipe(0, "French Burger", "A burger, but french", 1, [], 4, "", ["Highest Rated", "Frequently Cooked"], 0),
-		new Recipe(0, "Blueberry Pancakes", "Pancakes with blueberries", 3, [], 5, "", ["Recommended", "Highest Rated", "Recent", "Frequently Cooked"], 0),
-		new Recipe(0, "Pancakes", "Pancakes but plain", 3, [], 4, "", ["Highest Rated", "Recent"], 0),
-	];
-	// ingredientCatList: IngredientCat[] = [
-	// 	new IngredientCat("I", "Protein", ["Beef", "Chicken"]),
-	// 	new IngredientCat("I", "Dairy", ["Milk", "Cheese"]),
-	// 	new IngredientCat("U", "Silverware", ["Spoon", "Knife"]),
-	// 	new IngredientCat("U", "Electric Appliances", ["Blender", "Food Proccessor"]),
-	// ];
-	utensilCatList: IngredientCat[] = [
-
-	];
 	alergies: string[] = [
 		"Milk",
 	];
@@ -135,56 +86,10 @@ export class API {
 	];
 	conversion: Conversion = new Conversion(0, "", "");
 
-	/*
-	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
-	and if a user is not defined then we need tell the user they need to sign up
-	*/
-
-
 	/** 
 	 * variable to check if a user is logged in or not 
 	 */
 	loggedIn: boolean = false;
-
-	/**
-	 * Auto generated security questions to ask new users
-	 * Used for resetting password
-	 */
-	securityQuestions: String[] = [
-		new String("What is the first name of your best friend in high school?"),
-		new String("What is the name of your first pet?"),
-		new String("Where did you go the first time you flew on a plane?"),
-		new String("What was your high school mascot?"),
-		new String("What was the name of your first boyfriend/girlfriend?"),
-		new String("What is your mother's maiden name?"),
-
-	];
-
-	/**
-	 * List of all Categories, this is temporary because we don't have the backend setup yet.
-	 * Its type is an array of Category class, defined in another file.
-	 * Will have a title and an array of recipes associated with category
-	 */
-	// categoryList: Category[] = [
-	// 	new Category("Recommended", "Recommended", this.recipeList),
-	// 	new Category("Highest Rated", "Highest Rated", this.recipeList),
-	// 	new Category("Recent", "Recent", this.recipeList),
-	// 	new Category("Frequently Cooked", "Frequently Cooked", this.recipeList,),
-	// ];
-
-
-	utensilList: string[] = [
-		"Chef's knife",
-		"Cutting board",
-		"Mixing bowls",
-		"Wooden spoon",
-		"Measuring cups and spoons",
-		"Whisk",
-		"Tongs",
-		"Spatula",
-		"Oven mitts",
-		"Colander",
-	];
 
 	private _apiUrl: string = "https://www.api.cs350.melvinauvray.com/api/v1";
 	private _apiUrlshort: string = "https://www.api.cs350.melvinauvray.com/api";
@@ -837,19 +742,27 @@ export class API {
 	 */
 
 
-	async login (email:string, password: string): Promise<boolean> {
-		try{
-		const response = await axios.post(this._apiUrlshort+"/login", {
-			email: email,
-			password: password,
-		});
-		console.log(response);
-		this.currentUser= response.data.user;
-		return true;
-	}catch (error: any){
-		console.log(error);
-		return false;
-	}
+	async login(email: string, password: string): Promise<boolean> {
+		try {
+			const response = await axios.post(this._apiUrlshort + "/login", {
+				email: email,
+				password: password,
+			});
+			console.log(response);
+			this.currentUser = new User(
+				response.data.user.name,
+				response.data.token,
+				response.data.user.email,
+				response.data.user.id,
+				response.data.user.fname,
+				response.data.user.lname,
+				response.data.user.bio
+			);
+			return true;
+		} catch (error: any) {
+			console.log(error);
+			return false;
+		}
 
 	}
 
@@ -863,24 +776,38 @@ export class API {
 	 */
 	currentUser: User | null = null;
 
-	async signup(email: string, username: string, password: string,security_answer_1:string,security_answer_2:string,security_answer_3:string,security_question_1:string,security_question_2:string,security_question_3:string): Promise<boolean> {
-		try{
-		const response = await axios.post(this._apiUrlshort + "/register",{
-			name: username,
-			email: email,
-			password: password,
-			password_confirmation: password,
-			security_answer_1: security_answer_1,
-			security_answer_2: security_answer_2,
-			security_answer_3: security_answer_3,
-			security_question_1:security_question_1,
-			security_question_2:security_question_2,
-			security_question_3:security_question_3
-		});
-		console.log(response);
-		this.currentUser= response.data.user;
-		return true;
-		}catch(error: any){
+	async signup(email: string, username: string, password: string, security_answer_1: string, security_answer_2: string, security_answer_3: string, security_question_1: string, security_question_2: string, security_question_3: string,
+		firstname: string,
+		lastname: string,
+		bio: string): Promise<boolean> {
+		try {
+			const response = await axios.post(this._apiUrlshort + "/register", {
+				name: username,
+				bio: bio,
+				fname: firstname,
+				lname: lastname,
+				email: email,
+				password: password,
+				password_confirmation: password,
+				security_answer_1: security_answer_1,
+				security_answer_2: security_answer_2,
+				security_answer_3: security_answer_3,
+				security_question_1: security_question_1,
+				security_question_2: security_question_2,
+				security_question_3: security_question_3
+			});
+			console.log(response);
+			this.currentUser = new User(
+				response.data.user.name,
+				response.data.token,
+				response.data.user.email,
+				response.data.user.id,
+				response.data.user.fname,
+				response.data.user.lname,
+				response.data.user.bio
+			);
+			return true;
+		} catch (error: any) {
 			return false;
 		}
 	}
@@ -895,7 +822,7 @@ export class API {
 
 	async logout() {
 		try {
-
+			console.error(this.currentUser)
 			const response = await axios.post(this._apiUrlshort + "/logout", null, {
 				headers: { Authorization: `Bearer ${this.currentUser?.token}` }
 			});
@@ -913,26 +840,27 @@ export class API {
 	/**
 	 * Goes through the users attributes and updates the first name, last name, username, and bio
 	 */
-	
-	async updateProfile(): Promise<boolean>{
-		try{
+
+	async updateProfile(): Promise<boolean> {
+		try {
 			const user_id = this.currentUser?.id;
-			const response = await axios.put(`{this._apiUrlshort}+ "/user/${user_id}/edit`,this.currentUser,{
-				headers:{
-					Authorization: `Bearer ${this.currentUser?.token}`}
-				});
-				console.log(this.currentUser);
-				console.log(response.data);
-		return true;
-		}catch(error: any){
+			const response = await axios.put(`{this._apiUrlshort}+ "/user/${user_id}/edit`, this.currentUser, {
+				headers: {
+					Authorization: `Bearer ${this.currentUser?.token}`
+				}
+			});
+			console.log(this.currentUser);
+			console.log(response.data);
+			return true;
+		} catch (error: any) {
 			throw new Error(error.response.data.message);
 			return false;
 		}
 	}
 
-	async changePassword( newPassword: string, securityQuestion: string, securityAnswer: string): Promise<void> {
+	async changePassword(newPassword: string, securityQuestion: string, securityAnswer: string): Promise<void> {
 		const user_id = this.currentUser?.id;
-		const token= this.currentUser?.token;
+		const token = this.currentUser?.token;
 		try {
 			const response = await axios.put(`${this._apiUrlshort}/user/${user_id}/change_password`, {
 				newPassword,
@@ -943,23 +871,21 @@ export class API {
 					Authorization: `Bearer ${token}`
 				}
 			});
-			console.log(this.currentUser?.password);
 			return response.data;
 		} catch (error: any) {
 			throw new Error(error.response.data.message);
 		}
 	}
 
-	async getSecurityQuestions(): Promise<void>{
-		try{
+	async getSecurityQuestions(): Promise<string[]> {
+		try {
 			const response = await axios.get(`${this._apiUrlshort}/security-questions`);
-			return response.data;
-		}catch(error: any){
-			throw new Error(error.response.data.message);
+			console.error("getSecurityQuestions request", response)
+			return response.data.data;
+		} catch (error: any) {
+			return [];
 		}
 	}
-	
-		
 
 
 
@@ -1033,23 +959,6 @@ export class API {
 		return returnDatas;
 	}
 
-	checkQuestion(username: string, question: string, answer: string): Boolean {
-		const user = this.userList.find(user => user.username === username);
-	
-		if (!user){
-			throw new Error(`User '${username}' not found`);
-		}	
-		const securityQuestion = user.securityQuestions.find(q => q.question === question);
-		if (!securityQuestion) {
-			throw new Error(`Security question not found`);
-		}
-		if (securityQuestion.answer === answer) {
-			return true;
-		} else {
-			throw new Error(`Incorrect answer to security question`);
-		}
-	}
-	
 	/**
 	 * Reset password
 	 */

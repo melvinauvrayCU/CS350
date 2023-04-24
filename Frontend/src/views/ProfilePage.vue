@@ -10,7 +10,6 @@ export default {
         PageTitle,
         CustomButton,
     },
-
     data(): {
         fname: string
         lname: string
@@ -18,10 +17,7 @@ export default {
         email: string
         password: string
         bio: string
-
-
-    } 
-    {
+    } {
         return {
             fname: "",
             lname: "",
@@ -29,58 +25,34 @@ export default {
             email: "",
             password: "",
             bio: "",
-
-
-
         };
     },
-
-
-    methods: {
-
-        async getUser() {
-            var user = await API.instance.getUser();
-            if(user){
-
-                this.username = user.username;
-                this.fname = user.fname;
-                this.lname = user.lname;
-                this.bio = user.bio;
-                this.email = user.email;
-            }
-            
+    created() {
+        var user = API.instance.getUser();
+        if (user) {
+            this.username = user.username;
+            this.fname = user.fname;
+            this.lname = user.lname;
+            this.bio = user.bio;
+            this.email = user.email;
         }
-
     },
 };
-
-
-
 </script>
-
-
 
 <template>
     <section>
-        {{ getUser() }}
-
-
         <div class="image">
             <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
                 alt="blank user icon">
-
         </div>
-
-
         <div class="gets">
             <div class="gets">
-
                 <PageTitle :text=fname />
                 <PageTitle :text=lname />
             </div>
 
             <div class="gets">
-
                 <h3>@{{ username }}</h3>
             </div>
 

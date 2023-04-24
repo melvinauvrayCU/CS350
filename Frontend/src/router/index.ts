@@ -84,6 +84,7 @@ router.beforeEach((to, from, next) => {
   if (to.name === "createRecipe" && !isAuthenticated) next({ name: "Login" });
   if (to.name === "profilepage" && !isAuthenticated) next({ name: "Login" });
   if (to.name === "pantry" && !isAuthenticated) next({ name: "Login" });
+  if (to.name === "profilepage" && !isAuthenticated) next({ name: "Login" });
   else next();
 });
 

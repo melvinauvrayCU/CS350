@@ -40,7 +40,6 @@ export default {
 
 
         // reset forms
-        this.username = "";
         this.password = "";
 
         if (ifLoggedin === true) {
@@ -72,7 +71,7 @@ export default {
     <div class="border">
       <div class="CreateLoginPage">
 
-        <InputField id="username" inputType="text" labelText="Username:" max-length="200" placeholder="Username or Email"
+        <InputField id="username" inputType="text" labelText="Email:" max-length="200" placeholder="Email"
           v-model="username" :mandatory="true" />
 
         <InputField id="password" inputType="password" labelText="Password:" max-length="200" placeholder="Password"

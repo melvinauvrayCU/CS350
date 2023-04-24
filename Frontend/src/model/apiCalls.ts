@@ -841,10 +841,16 @@ export class API {
 	 * Goes through the users attributes and updates the first name, last name, username, and bio
 	 */
 
-	async updateProfile(): Promise<boolean> {
+	async updateProfile(fname: string, lname: string, username: string,
+		bio: string): Promise<boolean> {
 		try {
 			const user_id = this.currentUser?.id;
-			const response = await axios.put(`{this._apiUrlshort}+ "/user/${user_id}/edit`, this.currentUser, {
+			const response = await axios.put(`{this._apiUrlshort}+ "/user/${user_id}/edit`, {
+				name: username,
+				bio: bio,
+				fname: fname,
+				lname: lname
+			}, {
 				headers: {
 					Authorization: `Bearer ${this.currentUser?.token}`
 				}
@@ -963,13 +969,13 @@ export class API {
 	 * Reset password
 	 */
 	resetPassword(username: string, newPassword: string) {
-		const userIndex = this.userList.findIndex(user => user.username === username);
-		if (userIndex > -1) {
-			this.userList[userIndex].password = newPassword;
-			return "success";
-		} else {
-			return "failure";
-		}
+		// const userIndex = this.userList.findIndex(user => user.username === username);
+		// if (userIndex > -1) {
+		// 	this.userList[userIndex].password = newPassword;
+		// 	return "success";
+		// } else {
+		// 	return "failure";
+		// }
 	}
 
 }

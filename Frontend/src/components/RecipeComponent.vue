@@ -84,12 +84,12 @@ export default {
             <!-- Hence, we will emit a signal to the parent component saying that we want to delete the recipe,  -->
             <!-- and we don't forget to attach the id of the recipe we want to delete. -->
             <div class="recipebuttons">
-                <CustomButton v-if="isUserAuthenticated && recipe.user.id === currentUser?.id" text="Delete" type="neutral"
+                <CustomButton v-if="isUserAuthenticated && recipe.user?.id === currentUser?.id" text="Delete" type="neutral"
                     effect="plain" icon="trash" titleText="Click to delete the recipe"
                     @click="(event) => showModal(event)" />
 
 
-                <CustomButton v-if="isUserAuthenticated && recipe.user.id === currentUser?.id" text="Edit" type="neutral"
+                <CustomButton v-if="isUserAuthenticated && recipe.user?.id === currentUser?.id" text="Edit" type="neutral"
                     effect="plain" icon="edit" titleText="Click to edit the recipe" @click="(event) => editRecipe(event)" />
             </div>
         </div>

@@ -17,9 +17,9 @@ export class Recipe {
 	rating: number;
 	tags: string[];
 	imageUrl: string;
-	user: User;
+	user: User | null;
 
-	constructor(id: number, title: string, description: string, numberPeople: number, recipeSteps: Step[], rating: number, imageUrl: string, tags: string[] = [], user: User) {
+	constructor(id: number, title: string, description: string, numberPeople: number, recipeSteps: Step[], rating: number, imageUrl: string, tags: string[] = [], user: User | null) {
 		// We set the id automatically with the static field, so it is auto incrementing.
 		// this.id = Recipe.idCounter;
 		// Recipe.idCounter++;

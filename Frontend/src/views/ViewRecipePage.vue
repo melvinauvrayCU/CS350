@@ -92,10 +92,9 @@ export default {
 
       <PageSeparator title="About the author"></PageSeparator>
       <div class="lastCat">
-        <p><strong style="font-weight: bold;font-family: 'title';">{{ recipe?.user.fname + ' ' + recipe?.user.lname
-        }}</strong> (@{{
-  recipe?.user.username }})</p>
-        <p>{{ recipe?.user.bio }}</p>
+        <p><strong style="font-weight: bold;font-family: 'title';">{{ recipe?.user?.fname + ' ' + recipe?.user?.lname
+        }}</strong> (@{{ recipe?.user?.username }})</p>
+        <p>{{ recipe?.user?.bio }}</p>
       </div>
 
       <CustomButton text="Recipe Completed!" type="neutral" effect="empty" icon="add"

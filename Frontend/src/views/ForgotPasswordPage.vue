@@ -7,161 +7,163 @@ import CustomButtonComponent from "@/components/formComponents/CustomButtonCompo
 import BackgroundIconsComponent from "@/components/BackgroundIconsComponent.vue";
 
 export default {
-    name: "ForgotPasswordPage",
-    components: {
+  name: "ForgotPasswordPage",
+  components: {
     MessageComponent,
     PageTitleComponent,
     InputFieldComponent,
     CustomButtonComponent,
     BackgroundIconsComponent
-},
+  },
 
-    data(): {
-        username: string,
-        password: string,
-        securityQuestion: string,
-        securityAnswer: string,
-        answerCheck: string,
-        passwordCheck: string,
-        showSecurityForm: boolean,
-        showResetPasswordForm: boolean,
-        messageText: string,
-        messageType: "success" | "warning",
-    } {
-        return {
-            username: "",
-            password: "",
-            securityQuestion: "",
-            securityAnswer: "",
-            answerCheck: "",
-            passwordCheck: "",
-            showResetPasswordForm: false,
-            showSecurityForm: false,
-            messageText: "",
-            messageType: "success"
-        };
-    },
-    methods: {
-      async generateSecurityQuestion() {
-        const user = await API.instance.findUser(this.username);
-          if (user) {
-            const questions = user.securityQuestions.map(q => q.question);
-            const randomIndex = Math.floor(Math.random() * questions.length);
-            this.securityQuestion = questions[randomIndex];
-            this.securityAnswer = user.securityQuestions[randomIndex].answer;
-            this.showSecurityForm = true;
+  data(): {
+    username: string,
+    password: string,
+    securityQuestion: string,
+    securityAnswer: string,
+    answerCheck: string,
+    passwordCheck: string,
+    showSecurityForm: boolean,
+    showResetPasswordForm: boolean,
+    messageText: string,
+    messageType: "success" | "warning",
+  } {
+    return {
+      username: "",
+      password: "",
+      securityQuestion: "",
+      securityAnswer: "",
+      answerCheck: "",
+      passwordCheck: "",
+      showResetPasswordForm: false,
+      showSecurityForm: false,
+      messageText: "",
+      messageType: "success"
+    };
+  },
+  methods: {
+    async generateSecurityQuestion() {
+      // const user = await API.instance.findUser(this.username);
+      //   if (user) {
+      //     const questions = user.securityQuestions.map(q => q.question);
+      //     const randomIndex = Math.floor(Math.random() * questions.length);
+      //     this.securityQuestion = questions[randomIndex];
+      //     this.securityAnswer = user.securityQuestions[randomIndex].answer;
+      //     this.showSecurityForm = true;
 
-          } else {
-            this.securityQuestion = "Unable to generate security question.";
-          }
-      },
-      async checkSecurityQuestion() {
-        const user = await API.instance.findUser(this.username);
-        if (user) {
-          const securityQuestion = user.securityQuestions.find(q => q.question === this.securityQuestion);
-          if (securityQuestion && securityQuestion.answer === this.answerCheck) {
-                this.showResetPasswordForm = true;
-          } else {
-            this.showResetPasswordForm = false;
-            this.messageType = "warning";
-            this.messageText = "Sorry, that is not the correct answer to the security question. Try again.";
-          }
-       } else {
-          this.showResetPasswordForm = false;
-          this.messageType = "warning";
-          this.messageText = "User not found.";
-        }
-      },
+      //   } else {
+      //     this.securityQuestion = "Unable to generate security question.";
+      //   }
+    },
+    async checkSecurityQuestion() {
+      //   const user = await API.instance.findUser(this.username);
+      //   if (user) {
+      //     const securityQuestion = user.securityQuestions.find(q => q.question === this.securityQuestion);
+      //     if (securityQuestion && securityQuestion.answer === this.answerCheck) {
+      //           this.showResetPasswordForm = true;
+      //     } else {
+      //       this.showResetPasswordForm = false;
+      //       this.messageType = "warning";
+      //       this.messageText = "Sorry, that is not the correct answer to the security question. Try again.";
+      //     }
+      //  } else {
+      //     this.showResetPasswordForm = false;
+      //     this.messageType = "warning";
+      //     this.messageText = "User not found.";
+      //   }
+    },
 
-      async resetPassword() {
-        const passwordsMatch = this.password === this.passwordCheck;
-        if (passwordsMatch) {
-          const result = await API.instance.resetPassword(this.username, this.password);
-          if (result === "success") {
-            this.messageType = "success";
-            this.messageText = "Your password has been reset."
-            await API.instance.login(this.username, this.password);
-            setTimeout(() => {
-              this.$router.push({ name: 'Login' });
-            }, 4000); 
-          
-          } else {
-            this.messageType = "warning";
-            this.messageText = "Could not reset password."
-          }
-        } else {
-          this.messageType = "warning";
-          this.messageText = "The passwords you entered do not match. Please try again.";
-      }
+    async resetPassword() {
+      //   const passwordsMatch = this.password === this.passwordCheck;
+      //   if (passwordsMatch) {
+      //     const result = await API.instance.resetPassword(this.username, this.password);
+      //     if (result === "success") {
+      //       this.messageType = "success";
+      //       this.messageText = "Your password has been reset."
+      //       await API.instance.login(this.username, this.password);
+      //       setTimeout(() => {
+      //         this.$router.push({ name: 'Login' });
+      //       }, 4000); 
+
+      //     } else {
+      //       this.messageType = "warning";
+      //       this.messageText = "Could not reset password."
+      //     }
+      //   } else {
+      //     this.messageType = "warning";
+      //     this.messageText = "The passwords you entered do not match. Please try again.";
+      // }
     },
-    },
+  },
 };
 
 
 </script>
 
 <template>
-    <section>
-        <PageTitleComponent text="Forgot Password"/>
-      <div class="border">
-        <div class="ForgotPasswordPage">
+  <section>
+    <PageTitleComponent text="Forgot Password" />
+    <div class="border">
+      <div class="ForgotPasswordPage">
 
-            <div v-if="!showSecurityForm">
-              <div class="username-input">
-                <InputFieldComponent id="username" inputType="text" labelText="Enter Your Username or Email:" max-length="200" placeholder="Username or Email"
-                v-model="username" :mandatory="true" />
-              </div>
-              <div class="next-button">
-                <CustomButtonComponent titleText="Submit User" text="Next" effect="plain" @click="generateSecurityQuestion"/>
-              </div>
-            </div>
-
-            <div v-if="!showResetPasswordForm">
-              <div v-if="showSecurityForm">
-                <div class="secuirty-question">
-                  <InputFieldComponent id="securityQuestion" inputType="password" :labelText="`${securityQuestion}`" max-length="200" placeholder="Answer"
-                    v-model="answerCheck" :mandatory="true" />
-                </div>
-                <div class="submit-button">
-                  <CustomButtonComponent titleText="Submit Answer" text="Submit" effect="plain" @click="checkSecurityQuestion" />
-                </div>
-              </div>
-            </div>
-            
-            <div v-if="showResetPasswordForm">
-              <div class="new-password">
-                <InputFieldComponent id="newpassword" inputType="password" labelText="New Password:" max-length="200" placeholder="New Password"
-                  v-model="password" :mandatory="true" />
-                <InputFieldComponent id="newPasswordCheck" inputType="password" labelText="Re-enter New Password:" max-length="200" placeholder="New Password"
-                  v-model="passwordCheck" :mandatory="true" />
-              </div>
-              <div class="reset-button">
-                <CustomButtonComponent titleText="reset password" text="Reset Password" effect="plain" @click="resetPassword" />
-              </div>
-              
-            </div>
-         
-          <div class="login">
-            <p>
-              <router-link to="login">Login</router-link>
-            </p>
+        <div v-if="!showSecurityForm">
+          <div class="username-input">
+            <InputFieldComponent id="username" inputType="text" labelText="Enter Your Username or Email:" max-length="200"
+              placeholder="Username or Email" v-model="username" :mandatory="true" />
           </div>
-  
-          <div class="create">
-            <p>
-              Don't have an account?
-              <router-link to="signup">Sign up</router-link>
-            </p>
+          <div class="next-button">
+            <CustomButtonComponent titleText="Submit User" text="Next" effect="plain" @click="generateSecurityQuestion" />
           </div>
-  
-  
         </div>
+
+        <div v-if="!showResetPasswordForm">
+          <div v-if="showSecurityForm">
+            <div class="secuirty-question">
+              <InputFieldComponent id="securityQuestion" inputType="password" :labelText="`${securityQuestion}`"
+                max-length="200" placeholder="Answer" v-model="answerCheck" :mandatory="true" />
+            </div>
+            <div class="submit-button">
+              <CustomButtonComponent titleText="Submit Answer" text="Submit" effect="plain"
+                @click="checkSecurityQuestion" />
+            </div>
+          </div>
+        </div>
+
+        <div v-if="showResetPasswordForm">
+          <div class="new-password">
+            <InputFieldComponent id="newpassword" inputType="password" labelText="New Password:" max-length="200"
+              placeholder="New Password" v-model="password" :mandatory="true" />
+            <InputFieldComponent id="newPasswordCheck" inputType="password" labelText="Re-enter New Password:"
+              max-length="200" placeholder="New Password" v-model="passwordCheck" :mandatory="true" />
+          </div>
+          <div class="reset-button">
+            <CustomButtonComponent titleText="reset password" text="Reset Password" effect="plain"
+              @click="resetPassword" />
+          </div>
+
+        </div>
+
+        <div class="login">
+          <p>
+            <router-link to="login">Login</router-link>
+          </p>
+        </div>
+
+        <div class="create">
+          <p>
+            Don't have an account?
+            <router-link to="signup">Sign up</router-link>
+          </p>
+        </div>
+
+
       </div>
-      <MessageComponent :type="messageType" v-model="messageText" />
-      <BackgroundIconsComponent />
-  
-    </section>
-  </template>
+    </div>
+    <MessageComponent :type="messageType" v-model="messageText" />
+    <BackgroundIconsComponent />
+
+  </section>
+</template>
 
 <style scoped>
 section {
@@ -244,7 +246,5 @@ section {
   width: 100%;
 }
 
-.submit-button {
-
-}
+.submit-button {}
 </style>

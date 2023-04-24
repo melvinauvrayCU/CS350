@@ -58,7 +58,7 @@ export default {
                 </div>
                 <div class="containerButtons">
                     <div class="containerButton">
-                        <CustomButton type="neutral" effect="plain" icon="timer" text="Start Coooktime"
+                        <CustomButton type="neutral" effect="plain" icon="timer" text="Start Cooktime"
                             titleText="Start the cooktime timer"
                             @clicked="$emit('startTimer', { 'stepIndex': stepIndex, 'time': stepObject.cooktimeValue, 'cooktime': true })" />
                     </div>

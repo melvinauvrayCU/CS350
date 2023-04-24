@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             UtensilSeeder::class,
             IngredientCategorySeeder::class,
             UtensilCategorySeeder::class,
-            RecipeSeeder::class
+            RecipeSeeder::class,
+            SecurityQuestionsSeeder::class,
         ]);
 
         // \App\Models\User::factory()->create([

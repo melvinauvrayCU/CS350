@@ -20,7 +20,8 @@ export default {
         bio: string
 
 
-    } {
+    } 
+    {
         return {
             fname: "",
             lname: "",
@@ -29,19 +30,25 @@ export default {
             password: "",
             bio: "",
 
+
+
         };
     },
 
+
     methods: {
 
-        getUser() {
-            var user = API.instance.getUser();
+        async getUser() {
+            var user = await API.instance.getUser();
+            if(user){
 
-            this.username = user.username;
-            this.fname = user.fname;
-            this.lname = user.lname;
-            this.bio = user.bio;
-            this.email = user.email;
+                this.username = user.username;
+                this.fname = user.fname;
+                this.lname = user.lname;
+                this.bio = user.bio;
+                this.email = user.email;
+            }
+            
         }
 
     },
@@ -67,13 +74,13 @@ export default {
 
         <div class="gets">
             <div class="gets">
-                
+
                 <PageTitle :text=fname />
                 <PageTitle :text=lname />
             </div>
 
             <div class="gets">
-                
+
                 <h3>@{{ username }}</h3>
             </div>
 
@@ -83,20 +90,19 @@ export default {
             </div>
 
         </div>
+        <div class="bio">
+            <PageTitle text="Bio:" />
+            <p> {{ bio }}</p>
+        </div>
+
+
+
 
         <div id="button">
             <RouterLink to="/editprofile">
                 <CustomButton type="neutral" effect='plain' text="Edit Profile" titleText="Edit Profile" />
             </RouterLink>
         </div>
-
-
-
-        <div class="bio">
-            <PageTitle text="Bio:" />
-            <p> {{ bio }}</p>
-        </div>
-
 
 
 

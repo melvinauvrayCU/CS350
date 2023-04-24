@@ -28,6 +28,13 @@ export default {
     userSecurityAnswers: string[],
     securityQuestions: string[],
     messageType: "success" | "warning",
+    security_answer_1:string,
+    security_answer_2:string,
+    security_answer_3:string,
+    security_question_1:string,
+    security_question_2:string,
+    security_question_3:string,
+    questions:[]|void,
 
   } {
     // We are setting the title and description datas that will be linked to the form.
@@ -41,6 +48,13 @@ export default {
       selectedQuestions: [],
       userSecurityAnswers: [],
       messageType: "success",
+      security_answer_1:"",
+      security_answer_2:"",
+      security_answer_3:"",
+      security_question_1:"",
+      security_question_2:"",
+      security_question_3:"",
+      questions:[],
       securityQuestions: [
         "What is the first name of your best friend in high school?",
         "What is the name of your first pet?",
@@ -51,18 +65,24 @@ export default {
       ]
     };
   },
+  async mounted(){
+    await this.getQuestions()
+  },
   methods: {
     //method to signup as a user
     signup() {
-      if (this.username !== "" && this.password !== "" && this.email !== "" && this.securityQuestions.length === 3 && this.userSecurityAnswers.length === 3) {
-        if (this.password === this.passwordCheck) {
-            //API call to signup a user
-            var signedUp = API.instance.signup(this.email, this.username, this.password, this.selectedQuestions, this.userSecurityAnswers);
+      if (this.username !== "" && this.password !== "" && this.email !== "") {
 
-            //reset forms
-            this.username = "";
-            this.password = "";
-            this.email = "";
+        //API call to signup a user
+        var signedUp = API.instance.signup(this.email, this.username, this.password);
+
+        //reset forms
+        this.username = "";
+        this.password = "";
+        this.email = "";
+        this.security_answer_1="";
+        this.security_answer_2="";
+        this.security_answer_3="";
 
             if (signedUp === false) {
 
@@ -81,6 +101,9 @@ export default {
         this.messageType = "warning";
         this.messageText = "Please fill all of the form";
       }
+    },
+    async getQuestions(){
+      this.questions = await API.instance.getSecurityQuestions();
       },
       checkPasswords() {
         if (this.password !== '' && this.password !== this.passwordCheck) {
@@ -91,7 +114,7 @@ export default {
           this.messageType = 'success';
         }
       },
-  },
+
   computed: {
       availableSecurityQuestions() {
         return this.securityQuestions.filter((question) => {
@@ -101,9 +124,10 @@ export default {
   watch: {
     passwordCheck() {
       this.checkPasswords();
-    },
+    }, 
   },  
-};
+},
+
 
 </script>
 

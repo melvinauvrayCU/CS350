@@ -28,11 +28,11 @@ export default {
 }
 
 h2 {
-    font-family: common;
+    font-family: "title";
     color: var(--color-text);
     font-size: 1.8em;
     margin-bottom: 5px;
-    font-weight: 500;
+    font-weight: bold;
     text-shadow: 2px solid black;
 }
 </style>

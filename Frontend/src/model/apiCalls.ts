@@ -2,7 +2,7 @@ import { IngredientCat, Conversion, Unit } from "./PantryModels";
 import { Category } from "./categoryModel";
 import { Recipe, Ingredient } from "./recipeModel";
 import type { Step } from "./recipeModel";
-import { User } from "./userModel";
+import type { User } from "./userModel";
 import axios from "axios";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css"; // Import NProgress CSS
@@ -139,65 +139,7 @@ export class API {
 	Making a few users so that we can test to make sure that if I put in the wrong password it will not work
 	and if a user is not defined then we need tell the user they need to sign up
 	*/
-	userList: User[] = [
-		new User("Ava.Megyeri", "Password", "megyeram@clarkson.edu", [
-			{
-				question: "What is the first name of your best friend in high school?",
-				answer: "Bella"
-			},
-			{
-				question: "What is the name of your first pet?",
-				answer: "Max"
-			},
-			{
-				question: "What was your high school mascot?",
-				answer: "Eagles"
-			},
-		]),
-		new User("petesupreme", "password1", "dorovip@clarkson.edu", [
-			{
-				question: "What is the name of your first pet?",
-				answer: "Chloe",
-			},
-			{
-				question: "Where did you go the first time you flew on a plane?",
-				answer: "Florida",
-			},
-			{
-				question: "What is your mother's maiden name?",
-				answer: "Smith"
-			},
-		]),
-		new User("a", "a", "a@clarkson.edu", [
-			{
-				question:"What is the first name of your best friend in high school?",
-				answer:"a"
-			},
-			{
-				question:"What was the name of your first boyfriend/girlfriend?",
-				answer:"a"
-			},
-			{
-				question:"What is your mother's maiden name?",
-				answer:"a"
-			},
-		]),
-		new User("Melvin Auvray", "melvin", "auvraym@clarkson.edu", [
-			{
-				question:"What is the name of your first pet?",
-				answer:"Fluffy"
-			},
-			{
-				question:"Where did you go the first time you flew on a plane?",
-				answer:"California"
-			},
-			{
-				question:"What is the first name of your best friend in high school?",
-				answer:"Lilly"
-			},
-		]),
-	];
-	currentUser: User = new User("", "", "",[]);
+
 
 	/** 
 	 * variable to check if a user is logged in or not 
@@ -245,7 +187,7 @@ export class API {
 	];
 
 	private _apiUrl: string = "https://www.api.cs350.melvinauvray.com/api/v1";
-
+	private _apiUrlshort: string = "https://www.api.cs350.melvinauvray.com/api";
 	// * ------------------- Start of the API call methods ------------------------
 
 	/**
@@ -437,7 +379,8 @@ export class API {
 			formData.append('description', recipe.description);
 			formData.append('number_people', recipe.numberPeople.toString());
 			formData.append('rating', recipe.rating.toString());
-			formData.append('user_id', this.currentUser.id.toString());
+			if (this.currentUser)
+				formData.append('user_id', this.currentUser.id.toString());
 
 			// Add the recipe steps to the FormData object
 			recipe.recipeSteps.forEach((recipeStep, index) => {
@@ -479,16 +422,19 @@ export class API {
 			const formData = new FormData();
 			const responseImg = await fetch(recipe.imageUrl); // This is probably a terrible way to pass an image through 2 local files
 			const imageData = await responseImg.blob();
-			if (imageData.size !== 0) {
+			if (imageData.type == 'image/jpeg') {
 				const imageFile = new File([imageData], 'image.jpg', { type: 'image/jpeg' });
 				formData.append('image_url', imageFile);
+			} else {
+				formData.append('image_url', '');
 			}
 
 			formData.append('title', recipe.title);
 			formData.append('description', recipe.description);
 			formData.append('number_people', recipe.numberPeople.toString());
 			formData.append('rating', recipe.rating.toString());
-			formData.append('user_id', this.currentUser.id.toString());
+			if (this.currentUser)
+				formData.append('user_id', this.currentUser.id.toString());
 
 			// Add the recipe steps to the FormData object
 			recipe.recipeSteps.forEach((recipeStep, index) => {
@@ -539,7 +485,7 @@ export class API {
 			*/
 			const response = await axios.get(this._apiUrl + "/ingredientcategories", {
 				params: {
-					userId: this.currentUser.id,
+					userId: this.currentUser?.id,
 				}
 			});
 
@@ -569,7 +515,7 @@ export class API {
 			*/
 			const response = await axios.get(this._apiUrl + "/utensilcategories", {
 				params: {
-					userId: this.currentUser.id,
+					userId: this.currentUser?.id,
 				}
 			});
 			/**
@@ -667,7 +613,7 @@ export class API {
 			*/
 			const response = await axios.post(this._apiUrl + "/ingredientcategories", {
 				name: name,
-				userId: this.currentUser.id
+				userId: this.currentUser?.id
 			});
 			/**
 			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
@@ -831,7 +777,7 @@ export class API {
 			*/
 			const response = await axios.post(this._apiUrl + "/utensilcategories", {
 				name: name,
-				userId: this.currentUser.id
+				userId: this.currentUser?.id
 			});
 			/**
 			 * As the returning datas may not exactly the format we want to have, we apply an extra format on them with this map method
@@ -889,17 +835,21 @@ export class API {
 	 * @param username username 
 	 * @param password password 
 	 */
-	login(username: string, password: string): boolean {
-		if (this.userList.find(user => user.password === password && (user.username === username || user.email === username))) {
-			console.warn(`Welcome back ${username}`);
-			const temp = this.userList.find(user => user.username === username || user.email === username);
-			if (temp !== undefined) this.currentUser = temp;
-			this.loggedIn = true;
-			return true;
-		} else {
-			console.warn("Error!");
-			return false;
-		}
+
+
+	async login (email:string, password: string): Promise<boolean> {
+		try{
+		const response = await axios.post(this._apiUrlshort+"/login", {
+			email: email,
+			password: password,
+		});
+		console.log(response);
+		this.currentUser= response.data.user;
+		return true;
+	}catch (error: any){
+		console.log(error);
+		return false;
+	}
 
 	}
 
@@ -911,36 +861,50 @@ export class API {
 	 * @param password password the user creates
 	 * @param email email the user puts it
 	 */
-	signup(email: string, username: string, password: string, securityQuestions: string[], securityAnswers: string[]): boolean {
-		if (this.userList.find(user => user.email === email) || this.userList.find(user => user.username === username)) {
-			console.log("Email or username already taken");
+	currentUser: User | null = null;
+
+	async signup(email: string, username: string, password: string,security_answer_1:string,security_answer_2:string,security_answer_3:string,security_question_1:string,security_question_2:string,security_question_3:string): Promise<boolean> {
+		try{
+		const response = await axios.post(this._apiUrlshort + "/register",{
+			name: username,
+			email: email,
+			password: password,
+			password_confirmation: password,
+			security_answer_1: security_answer_1,
+			security_answer_2: security_answer_2,
+			security_answer_3: security_answer_3,
+			security_question_1:security_question_1,
+			security_question_2:security_question_2,
+			security_question_3:security_question_3
+		});
+		console.log(response);
+		this.currentUser= response.data.user;
+		return true;
+		}catch(error: any){
 			return false;
-		} else {
-
-			this.userList.push(new User(email, username, password,[
-				{question: securityQuestions[0], answer: securityAnswers[0]},
-				{question: securityQuestions[1], answer: securityAnswers[1]}, 
-				{question: securityQuestions[2], answer: securityAnswers[2]}
-			]));
-			console.log("User created!");
-			this.loggedIn = true;
-			return true;
 		}
-
-
 	}
 
 	/**
 	 * checks if the user is logged in or not
 	 * 
 	 */
-	isLoggedIn(): boolean {
-		return this.loggedIn;
+	isLoggedIn() {
+		return !(this.currentUser == null);
 	}
 
-	logout(): boolean {
-		this.loggedIn = false;
-		return true;
+	async logout() {
+		try {
+
+			const response = await axios.post(this._apiUrlshort + "/logout", null, {
+				headers: { Authorization: `Bearer ${this.currentUser?.token}` }
+			});
+			console.log(response);
+			console.log({ Authorization: `Bearer ${this.currentUser?.token}` });
+			return response.data;
+		} catch (error: any) {
+			throw new Error(error.response.data.message);
+		}
 	}
 
 
@@ -949,41 +913,62 @@ export class API {
 	/**
 	 * Goes through the users attributes and updates the first name, last name, username, and bio
 	 */
-	updateProfile(fname: string, lname: string, username: string, bio: string): boolean {
-		if (this.userList.find(user => user.username === username)) {
-			if (this.currentUser.username === username) {
-				this.currentUser.fname = fname;
-				this.currentUser.lname = lname;
-				this.currentUser.username = username;
-				this.currentUser.bio = bio;
-				return true;
-
-			}
-
-			console.log("username already taken");
+	
+	async updateProfile(): Promise<boolean>{
+		try{
+			const user_id = this.currentUser?.id;
+			const response = await axios.put(`{this._apiUrlshort}+ "/user/${user_id}/edit`,this.currentUser,{
+				headers:{
+					Authorization: `Bearer ${this.currentUser?.token}`}
+				});
+				console.log(this.currentUser);
+				console.log(response.data);
+		return true;
+		}catch(error: any){
+			throw new Error(error.response.data.message);
 			return false;
 		}
-
-		this.currentUser.fname = fname;
-		this.currentUser.lname = lname;
-		this.currentUser.username = username;
-		this.currentUser.bio = bio;
-
-
-		return true;
-
 	}
+
+	async changePassword( newPassword: string, securityQuestion: string, securityAnswer: string): Promise<void> {
+		const user_id = this.currentUser?.id;
+		const token= this.currentUser?.token;
+		try {
+			const response = await axios.put(`${this._apiUrlshort}/user/${user_id}/change_password`, {
+				newPassword,
+				securityQuestion,
+				securityAnswer,
+			}, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			});
+			console.log(this.currentUser?.password);
+			return response.data;
+		} catch (error: any) {
+			throw new Error(error.response.data.message);
+		}
+	}
+
+	async getSecurityQuestions(): Promise<void>{
+		try{
+			const response = await axios.get(`${this._apiUrlshort}/security-questions`);
+			return response.data;
+		}catch(error: any){
+			throw new Error(error.response.data.message);
+		}
+	}
+	
+		
+
+
 
 	/**
 	 * Returns the current user to easily get their attributes
 	 */
 
-	getUser(): User {
+	getUser() {
 		return this.currentUser;
-	}
-
-	findUser(username: string): User | undefined {
-		return this.userList.find(user => user.username === username);
 	}
 
 	/**

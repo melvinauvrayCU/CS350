@@ -1033,14 +1033,6 @@ export class API {
 		return returnDatas;
 	}
 
-		/**
-	 * Security Questions / Answers
-	 */
-
-	getSecurityQuestions(){
-		return this.securityQuestions;
-	}
-
 	checkQuestion(username: string, question: string, answer: string): Boolean {
 		const user = this.userList.find(user => user.username === username);
 	

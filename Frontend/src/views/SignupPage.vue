@@ -17,15 +17,12 @@ export default {
     CustomSelectQuestionsComponent,
     CustomButtonComponent,
   },
-
   data(): {
     email: string,
     username: string,
     password: string,
     passwordCheck: string,
     messageText: string,
-    selectedQuestions: string[],
-    userSecurityAnswers: string[],
     securityQuestions: string[],
     messageType: "success" | "warning",
     security_answer_1:string,
@@ -34,27 +31,25 @@ export default {
     security_question_1:string,
     security_question_2:string,
     security_question_3:string,
-    questions:[]|void,
+    selectedQuestions:[]|void,
 
   } {
     // We are setting the title and description datas that will be linked to the form.
     // And a boolean created variable, which will be true when a user has logged in
     return {
-      username: "",
+      username:"",
       password: "",
       passwordCheck: "",
       email: "",
       messageText: "",
-      selectedQuestions: [],
-      userSecurityAnswers: [],
       messageType: "success",
-      security_answer_1:"",
-      security_answer_2:"",
-      security_answer_3:"",
-      security_question_1:"",
-      security_question_2:"",
-      security_question_3:"",
-      questions:[],
+      security_answer_1: "",
+      security_answer_2: "",
+      security_answer_3: "",
+      security_question_1: "",
+      security_question_2: "",
+      security_question_3: "",
+      selectedQuestions:[],
       securityQuestions: [
         "What is the first name of your best friend in high school?",
         "What is the name of your first pet?",
@@ -65,34 +60,28 @@ export default {
       ]
     };
   },
-  async mounted(){
-    await this.getQuestions()
-  },
   methods: {
     //method to signup as a user
-    signup() {
-      if (this.username !== "" && this.password !== "" && this.email !== "") {
+    async signup() {
+      if (this.username !== "" && this.password !== "" && this.email !== "" && this.security_answer_1 !== "" && this.security_answer_2 !== "" && this.security_answer_3 !== "" && this.security_question_1 !== "" && this.security_question_2 !== "" && this.security_question_3 !== "") {
+          if (this.password === this.passwordCheck) {
+              //API call to signup a user
+              var signedUp = API.instance.signup(this.email, this.username, this.password, this.security_answer_1, this.security_answer_2, this.security_answer_3, this.security_question_1, this.security_question_2, this.security_question_3);
 
-        //API call to signup a user
-        var signedUp = API.instance.signup(this.email, this.username, this.password);
+              //reset forms
+              this.username = "";
+              this.password = "";
+              this.email = "";
+              this.security_answer_1="";
+              this.security_answer_2="";
+              this.security_answer_3="";
 
-        //reset forms
-        this.username = "";
-        this.password = "";
-        this.email = "";
-        this.security_answer_1="";
-        this.security_answer_2="";
-        this.security_answer_3="";
-
-            if (signedUp === false) {
-
-            this.messageText = "Username or Email already in use";
-            this.messageType = "warning";
+              if (await signedUp === false) {
+              this.messageText = "Username or Email already in use";
+              this.messageType = "warning";
           } else {
-
-            this.$router.push({ name: "home", params: { messageTextParam: "Welcome!", messageTypeParam: "success" } });
-
-          }
+              this.$router.push({ name: "home", params: { messageTextParam: "Welcome!", messageTypeParam: "success" } });
+            }
         } else {
           this.messageText = "Passwords do not match";
           this.messageType = "warning";
@@ -102,10 +91,7 @@ export default {
         this.messageText = "Please fill all of the form";
       }
     },
-    async getQuestions(){
-      this.questions = await API.instance.getSecurityQuestions();
-      },
-      checkPasswords() {
+    checkPasswords() {
         if (this.password !== '' && this.password !== this.passwordCheck) {
           this.messageText = 'Passwords do not match';
           this.messageType = 'warning';
@@ -114,19 +100,25 @@ export default {
           this.messageType = 'success';
         }
       },
-
+      async getQuestions(){
+      this.selectedQuestions = await API.instance.getSecurityQuestions();
+      },
+  },
   computed: {
       availableSecurityQuestions() {
         return this.securityQuestions.filter((question) => {
         return !this.selectedQuestions.includes(question);});
       }
   },
+  async mounted(){
+    await this.getQuestions()
+  },
   watch: {
     passwordCheck() {
       this.checkPasswords();
     }, 
   },  
-},
+}
 
 
 </script>
@@ -153,23 +145,23 @@ export default {
           v-model="passwordCheck" :mandatory="true" />
 
           <CustomSelectQuestionsComponent id="securityQuestion1" labelText="Select Security Question:" :options="availableSecurityQuestions"
-            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions"/>
+            :modelValue="security_question_1" :mandatory="true" :selected-questions="selectedQuestions"/>
 
 
           <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
-          v-model="userSecurityAnswers[0]" :mandatory="true" />
+          v-model="security_answer_1" :mandatory="true" />
 
           <CustomSelectQuestionsComponent id="securityQuestion2" labelText="Select Security Question:" :options="availableSecurityQuestions"
-            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" />
+            :modelValue="security_question_2" :mandatory="true" :selected-questions="selectedQuestions" />
 
           <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
-          v-model="userSecurityAnswers[1]" :mandatory="true" />
+          v-model="security_answer_2" :mandatory="true" />
 
           <CustomSelectQuestionsComponent id="securityQuestion3" labelText="Select Security Question:" :options="availableSecurityQuestions"
-            :modelValue="selectedQuestions" :mandatory="true" :selected-questions="selectedQuestions" />
+            :modelValue="security_question_3" :mandatory="true" :selected-questions="selectedQuestions" />
 
           <InputField id="securityAnswer1" inputType="text" labelText="Answer:" max-length="200" placeholder="Answer"
-          v-model="userSecurityAnswers[2]" :mandatory="true" />
+          v-model="security_answer_3" :mandatory="true" />
 
           <CustomButtonComponent titleText="Submit" text="Submit" effect="plain" @click="signup"/>
 

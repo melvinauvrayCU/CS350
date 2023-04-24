@@ -39,7 +39,7 @@ class RecipeController extends Controller
             $recipes = $recipes->with('user');
         }
 
-        return new RecipeCollection($recipes->get()->appends($request->query()));
+        return new RecipeCollection($recipes->get()->addQuery('includeUser', $includeUser));
     }
 
     /**

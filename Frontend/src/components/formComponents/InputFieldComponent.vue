@@ -118,10 +118,15 @@ export default {
             </option>
         </select>
 
+        <input autocomplete="off" v-else-if="inputType == 'time'" :type="inputType" :value="modelValue"
+            @input="onInput" :placeholder="placeholder"
+            :class="classList + (icon !== '' ? ' ' + icon : '') + (classError ? ' ' + classError : '')" :min="min"
+            :max="max" :id="id" step="1"/>
+
         <input autocomplete="off" v-else-if="inputType !== 'textarea'" :type="inputType" :value="modelValue"
             @input="onInput" :placeholder="placeholder"
             :class="classList + (icon !== '' ? ' ' + icon : '') + (classError ? ' ' + classError : '')" :min="min"
-            :max="max" :id="id" />
+            :max="max" :id="id"/>
 
 
         <textarea v-else :id="id" :value="modelValue" @input="onInput" :class="classList + classError"

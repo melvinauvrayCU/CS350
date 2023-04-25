@@ -49,7 +49,7 @@ export default {
         },
         enterPressed() {
             if (this.filteredList().length === 0) {
-                const newIngredient: Ingredient = { id: this.fullItemsList[this.fullItemsList.length - 1].id + 1, name: this.searchText, quantity: undefined, unit: "g" };
+                const newIngredient: Ingredient = { id: (this.fullItemsList.length !== 0) ? this.fullItemsList[this.fullItemsList.length - 1].id + 1 : 0, name: this.searchText, quantity: undefined, unit: "g" };
                 let tempModelValue = this.modelValue;
                 tempModelValue.push(newIngredient);
                 this.fullItemsList.push(newIngredient);

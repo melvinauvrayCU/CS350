@@ -184,6 +184,11 @@ export default {
   </section>
 </template>
 
+<style>
+.CreateSignupPage .dropdownContainer {
+  width: calc(100% - 20px) !important;
+}
+</style>
 
 <style scoped>
 .containerColumns {

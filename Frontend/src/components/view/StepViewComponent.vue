@@ -52,17 +52,21 @@ export default {
 
 
             <div class="stepTimes">
-                <div v-if="stepObject.cooktimeValue !== '00:00'"> Cooktime: {{ stepObject.cooktimeValue }}
+                <div v-if="stepObject.cooktimeValue !== '00:00' && stepObject.cooktimeValue !== '00:00:00'"> Cooktime: {{
+                    stepObject.cooktimeValue }}
                 </div>
-                <div v-if="stepObject.preptimeValue !== '00:00'"> Preptime: {{ stepObject.preptimeValue }}
+                <div v-if="stepObject.preptimeValue !== '00:00' && stepObject.preptimeValue !== '00:00:00'"> Preptime: {{
+                    stepObject.preptimeValue }}
                 </div>
                 <div class="containerButtons">
-                    <div class="containerButton" v-if="stepObject.cooktimeValue !== '00:00'">
+                    <div class="containerButton"
+                        v-if="stepObject.cooktimeValue !== '00:00' && stepObject.cooktimeValue !== '00:00:00'">
                         <CustomButton type="neutral" effect="plain" icon="timer" text="Start Cooktime"
                             titleText="Start the cooktime timer"
                             @clicked="$emit('startTimer', { 'stepIndex': stepIndex, 'time': stepObject.cooktimeValue, 'cooktime': true })" />
                     </div>
-                    <div class="containerButton" v-if="stepObject.preptimeValue !== '00:00'">
+                    <div class="containerButton"
+                        v-if="stepObject.preptimeValue !== '00:00' && stepObject.preptimeValue !== '00:00:00'">
                         <CustomButton type="neutral" effect="plain" icon="timer" text="Start Preptime"
                             titleText="Start the preptime timer"
                             @clicked="$emit('startTimer', { 'stepIndex': stepIndex, 'time': stepObject.preptimeValue, 'cooktime': false })" />

@@ -31,3 +31,8 @@ h1 {
     font-weight: bold;
     color: var(--dk-gr);
 }
+
+iframe, object {
+    width: 100%;
+    height: calc(100vh - 145px)
+}
